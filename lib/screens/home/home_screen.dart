@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+import '../../components/side_menu.dart';
 import '../../constants.dart';
 import '../../models/side_menu_button.dart';
-import '../../side_menu.dart';
 import '../../utils/rive_utils.dart';
 import 'components/body.dart';
 import 'components/my_button_nav_bar.dart';
