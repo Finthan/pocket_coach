@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:fl_1/components/side_menu.dart';
-import 'package:fl_1/utils/rive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import '../../constants.dart';
 import '../../models/side_menu_button.dart';
+import '../../side_menu.dart';
+import '../../utils/rive_utils.dart';
 import 'components/body.dart';
 import 'components/my_button_nav_bar.dart';
 

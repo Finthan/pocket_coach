@@ -1,9 +1,9 @@
-import 'package:fl_1/utils/rive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
 import '../../../constants.dart';
 import '../models/rive_asset.dart';
+import '../utils/rive_utils.dart';
 import 'info_card.dart';
 import 'side_menu_tile.dart';
 

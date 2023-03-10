@@ -1,7 +1,7 @@
-import 'package:fl_1/screens/details/details_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import '../../details/details_screen.dart';
 
 class RecomendsPlants extends StatelessWidget {
   const RecomendsPlants({
