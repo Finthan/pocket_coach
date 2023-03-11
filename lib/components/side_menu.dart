@@ -4,6 +4,7 @@ import 'package:rive/rive.dart';
 
 import '../../../constants.dart';
 import '../models/rive_asset.dart';
+import '../screens/side_screens/nutrition_information/nutrition_information.dart';
 import '../screens/side_screens/settings/settings.dart';
 import '../screens/side_screens/statistics/statistics.dart';
 import '../utils/rive_utils.dart';
@@ -67,7 +68,8 @@ class _SideMenuState extends State<SideMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Settings(),
+                              builder: (context) =>
+                                  const NutritionInformation(),
                             ),
                           );
                           break;
