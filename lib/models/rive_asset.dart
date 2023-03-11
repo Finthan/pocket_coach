@@ -43,18 +43,24 @@ List<RiveAsset> sideMenus = [
     "assets/RiveAssets/icons.riv",
     artboard: "HOME",
     stateMachineName: "HOME_interactivity",
-    title: "Основное окно",
+    title: "Информация о питании",
   ),
   RiveAsset(
     "assets/RiveAssets/icons.riv",
-    artboard: "TIMER",
-    stateMachineName: "TIMER_Interactivity",
-    title: "Таймер",
+    artboard: "CHAT",
+    stateMachineName: "CHAT_Interactivity",
+    title: "HELP",
   ),
   RiveAsset(
     "assets/RiveAssets/icons.riv",
     artboard: "SETTINGS",
     stateMachineName: "SETTINGS_Interactivity",
     title: "Настройки",
+  ),
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "LIKE/STAR",
+    stateMachineName: "STAR_Interactivity",
+    title: "Статистика",
   ),
 ];

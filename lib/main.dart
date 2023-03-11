@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_coach/screens/app/app.dart';
 
 import 'constants.dart';
-import 'screens/home/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primaryColor: kNavBarIconColor,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kPrimaryColor),
       ),
-      home: const HomeScreen(),
+      home: const App(),
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_coach/screens/side_screens/help/help.dart';
 import 'package:rive/rive.dart';
 
 import '../../../constants.dart';
 import '../models/rive_asset.dart';
+import '../screens/side_screens/settings/settings.dart';
 import '../utils/rive_utils.dart';
 import 'info_card.dart';
 import 'side_menu_tile.dart';
@@ -58,6 +60,41 @@ class _SideMenuState extends State<SideMenu> {
                     });
                     setState(() {
                       selectedMenu = menu;
+
+                      switch (menu.artboard) {
+                        case "HOME":
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Settings(),
+                            ),
+                          );
+                          break;
+                        case "CHAT":
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Help(),
+                            ),
+                          );
+                          break;
+                        case "SETTINGS":
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Settings(),
+                            ),
+                          );
+                          break;
+                        case "LIKE/STAR":
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Settings(),
+                            ),
+                          );
+                          break;
+                      }
                     });
                   },
                   isActive: selectedMenu == menu,

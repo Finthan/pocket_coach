@@ -12,3 +12,5 @@ const kBackgroundColor = Color.fromRGBO(94, 117, 128, 1);
 const kBackgroundSideColor = Color.fromRGBO(76, 93, 101, 1);
 
 const kDefaultPadding = 20.0;
+
+var numberScreen = 0;
