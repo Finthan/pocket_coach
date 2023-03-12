@@ -49,7 +49,34 @@ List<RiveAsset> sideMenus = [
     "assets/RiveAssets/icons.riv",
     artboard: "CHAT",
     stateMachineName: "CHAT_Interactivity",
-    title: "HELP",
+    title: "Помощь",
+  ),
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "SETTINGS",
+    stateMachineName: "SETTINGS_Interactivity",
+    title: "Настройки",
+  ),
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "LIKE/STAR",
+    stateMachineName: "STAR_Interactivity",
+    title: "Статистика",
+  ),
+];
+
+List<RiveAsset> sideScreens = [
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "HOME",
+    stateMachineName: "HOME_interactivity",
+    title: "Питание",
+  ),
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "CHAT",
+    stateMachineName: "CHAT_Interactivity",
+    title: "Помощь",
   ),
   RiveAsset(
     "assets/RiveAssets/icons.riv",

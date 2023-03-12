@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_coach/models/rive_asset.dart';
+
+import '../../components_side/app_bar_side_screens.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
@@ -9,8 +12,9 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[],
+          AppBarSideScreens(
+            menu: sideMenus[2],
+            riveOnInit: (artboard) {},
           ),
         ],
       ),
