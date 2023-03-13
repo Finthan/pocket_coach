@@ -78,7 +78,6 @@ class RecomandPlantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.only(
         left: kDefaultPadding,
@@ -120,7 +119,7 @@ class RecomandPlantCard extends StatelessWidget {
                                   kTextColor), //Theme.of(context).textTheme.bodyMedium,
                         ),
                         TextSpan(
-                          text: "$country".toUpperCase(),
+                          text: country.toUpperCase(),
                           style: TextStyle(
                             color: kPrimaryColor.withOpacity(0.5),
                           ),
