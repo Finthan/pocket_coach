@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_coach/screens/side_screens/help/help.dart';
 import 'package:rive/rive.dart';
 
 import '../../../constants.dart';
 import '../models/rive_asset.dart';
+import '../screens/side_screens/help/help.dart';
 import '../screens/side_screens/nutrition_information/nutrition_information.dart';
 import '../screens/side_screens/settings/settings.dart';
 import '../screens/side_screens/statistics/statistics.dart';

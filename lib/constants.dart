@@ -15,6 +15,15 @@ const kButtonBackSideSrceens = Color.fromRGBO(237, 243, 246, 1);
 const kTextSideScreens = Color.fromRGBO(255, 255, 255, 1);
 const kButtonSideScreens = Color.fromRGBO(94, 117, 128, 1);
 
+const kSwitch = Color.fromRGBO(211, 221, 225, 1);
+
 const kDefaultPadding = 20.0;
 
 var numberScreen = 0;
+
+var enableNotifications = true;
+var trainingReminder = true;
+var nightMode = true;
+var compressPhotos = true;
+var compressVideo = true;
+var locationData = true;

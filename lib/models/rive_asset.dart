@@ -91,3 +91,30 @@ List<RiveAsset> sideScreens = [
     title: "Статистика",
   ),
 ];
+
+List<RiveAsset> sideSettingsScreensIcons = [
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "HOME",
+    stateMachineName: "HOME_interactivity",
+    title: "Уведомления",
+  ),
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "CHAT",
+    stateMachineName: "CHAT_Interactivity",
+    title: "Аккаунт",
+  ),
+  // RiveAsset(
+  //   "assets/RiveAssets/icons.riv",
+  //   artboard: "SETTINGS",
+  //   stateMachineName: "SETTINGS_Interactivity",
+  //   title: "Внешний вид",
+  // ),
+  RiveAsset(
+    "assets/RiveAssets/icons.riv",
+    artboard: "LIKE/STAR",
+    stateMachineName: "STAR_Interactivity",
+    title: "Приложение",
+  ),
+];
