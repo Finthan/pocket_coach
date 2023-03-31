@@ -27,8 +27,8 @@ class IconCard extends StatelessWidget {
             blurRadius: 22,
             color: kPrimaryColor.withOpacity(0.22),
           ),
-          BoxShadow(
-            offset: const Offset(-15, -15),
+          const BoxShadow(
+            offset: Offset(-15, -15),
             blurRadius: 20,
             color: kBackgroundColor,
           ),

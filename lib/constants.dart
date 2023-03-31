@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color.fromRGBO(2, 158, 151, 100);
+const kPrimaryColor = Color.fromRGBO(2, 158, 150, 1);
 const kNavBarIconColor = Color.fromRGBO(3, 235, 223, 1);
 
 const kTextColor = Color.fromRGBO(144, 162, 170, 100);
 const kTextColorBackground = Color.fromARGB(255, 245, 239, 239);
 const kTextColorBox = Color.fromRGBO(144, 162, 170, 80);
 
-const kSideColorMenu = Color.fromRGBO(176, 189, 194, 1);
+const kSideColorMenu = Color.fromRGBO(132, 145, 150, 1);
 const kBackgroundColor = Color.fromRGBO(94, 117, 128, 1);
 const kBackgroundSideColor = Color.fromRGBO(76, 93, 101, 1);
 
 const kButtonBackSideSrceens = Color.fromRGBO(237, 243, 246, 1);
 const kTextSideScreens = Color.fromRGBO(255, 255, 255, 1);
 const kButtonSideScreens = Color.fromRGBO(94, 117, 128, 1);
+const kCheckMessage = Color.fromRGBO(188, 196, 200, 1);
+const kIconMessage = Color.fromRGBO(195, 201, 205, 1);
 
 const kSwitch = Color.fromRGBO(211, 221, 225, 1);
 
@@ -27,3 +29,19 @@ var nightMode = true;
 var compressPhotos = true;
 var compressVideo = true;
 var locationData = true;
+
+class User {
+  late int id;
+  late String username;
+  late int age;
+  late String lastMessage;
+  late String time;
+
+  User(id, username, [age, lastMessage, time]) {
+    this.id = id;
+    this.username = username;
+    this.age = age;
+    this.lastMessage = lastMessage;
+    this.time = time;
+  }
+}
