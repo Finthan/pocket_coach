@@ -17,6 +17,9 @@ const kButtonSideScreens = Color.fromRGBO(94, 117, 128, 1);
 const kCheckMessage = Color.fromRGBO(188, 196, 200, 1);
 const kIconMessage = Color.fromRGBO(195, 201, 205, 1);
 
+const kWiteColor = Color.fromRGBO(255, 255, 255, 1);
+const kTextChat = Color.fromRGBO(217, 221, 225, 1);
+
 const kSwitch = Color.fromRGBO(211, 221, 225, 1);
 
 const kDefaultPadding = 20.0;
@@ -29,19 +32,3 @@ var nightMode = true;
 var compressPhotos = true;
 var compressVideo = true;
 var locationData = true;
-
-class User {
-  late int id;
-  late String username;
-  late int age;
-  late String lastMessage;
-  late String time;
-
-  User(id, username, [age, lastMessage, time]) {
-    this.id = id;
-    this.username = username;
-    this.age = age;
-    this.lastMessage = lastMessage;
-    this.time = time;
-  }
-}
