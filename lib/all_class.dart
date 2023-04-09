@@ -35,3 +35,11 @@ class Training {
 
   Training(this.nameIcon, this.name, this.date);
 }
+
+class Workout {
+  late String dateTime;
+  late String countWorkout;
+  late String workout;
+
+  Workout(this.dateTime, this.countWorkout, this.workout);
+}

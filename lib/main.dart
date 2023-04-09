@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:pocket_coach/screens/app/app.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 import 'constants.dart';
 
@@ -13,6 +16,24 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        SfGlobalLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('zh'),
+        Locale('he'),
+        Locale('ru'),
+        Locale('fr', 'BE'),
+        Locale('fr', 'CA'),
+        Locale('ja'),
+        Locale('de'),
+        Locale('hi'),
+        Locale('ar'),
+      ],
+      locale: const Locale('ru'),
       debugShowCheckedModeBanner: false,
       title: 'Pocket coach',
       theme: ThemeData(

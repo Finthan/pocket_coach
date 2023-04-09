@@ -235,23 +235,23 @@ List<Message> workout = [
 
 List<Training> training = [
   Training(
-    "Ноги",
-    "Тренировка ног1",
+    "assets/images/workout_g.png",
+    "Тренировка груди",
     "27.05.2023",
   ),
   Training(
-    "Ноги",
-    "Тренировка ног2",
+    "assets/images/workout_n.png",
+    "Тренировка ног",
     "27.05.2023",
   ),
   Training(
-    "Ноги",
-    "Тренировка ног3",
+    "assets/images/workout_n.png",
+    "Тренировка ног",
     "27.05.2023",
   ),
   Training(
-    "Ноги",
-    "Тренировка ног4",
+    "assets/images/workout_n.png",
+    "Тренировка ног",
     "27.05.2023",
   ),
 ];

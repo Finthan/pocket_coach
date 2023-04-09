@@ -34,6 +34,9 @@ dependencies:
   rive: ^0.10.2
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.1
+  syncfusion_flutter_calendar: ^21.1.38
+  flutter_localization: ^0.1.10
+  syncfusion_localizations: ^21.1.38
 
 dev_dependencies:
   flutter_test:

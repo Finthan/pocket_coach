@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color.fromRGBO(2, 158, 150, 1);
 const kNavBarIconColor = Color.fromRGBO(3, 235, 223, 1);
+const kCalendarColor = Color.fromRGBO(2, 211, 201, 1);
 
 const kTextColor = Color.fromRGBO(144, 162, 170, 100);
 const kTextColorBackground = Color.fromARGB(255, 245, 239, 239);

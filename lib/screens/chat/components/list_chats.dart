@@ -43,18 +43,18 @@ class ListChats extends StatelessWidget {
           children: [
             Text(
               users[i].lastMessage,
-              style: TextStyle(color: kTextSideScreens),
+              style: const TextStyle(color: kTextSideScreens),
             ),
             users[i].isRead
                 ? Container(
-                    child: Text(
-                      users[i].unReadMessage,
-                      style: TextStyle(color: kTextSideScreens),
-                    ),
                     decoration: BoxDecoration(
                         border: Border.all(width: 1, color: kPrimaryColor),
                         borderRadius: BorderRadius.circular(50),
                         color: kPrimaryColor),
+                    child: Text(
+                      users[i].unReadMessage,
+                      style: const TextStyle(color: kTextSideScreens),
+                    ),
                   )
                 : Container(),
           ],
