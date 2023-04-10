@@ -31,7 +31,9 @@ class _ListWorkoutState extends State<ListWorkout> {
   Widget build(BuildContext context) {
     final DateTime todayDay = DateTime.now();
     var weekList = ["", "", ""];
-    var weekInt = [0, 0, 0];
+    var week = [0, 0, 0];
+    var day;
+    var month;
     DateTime trainingWeek = DateTime.parse(widget.training[0].dateTime);
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < training.length; j++) {
@@ -39,34 +41,39 @@ class _ListWorkoutState extends State<ListWorkout> {
             todayDay.month <=
                 DateTime.parse(widget.training[j].dateTime).month &&
             todayDay.day <= DateTime.parse(widget.training[j].dateTime).day &&
-            weekInt[0] != DateTime.parse(widget.training[j].dateTime).weekday &&
-            weekInt[1] != DateTime.parse(widget.training[j].dateTime).weekday) {
+            week[0] != DateTime.parse(widget.training[j].dateTime).weekday &&
+            week[1] != DateTime.parse(widget.training[j].dateTime).weekday) {
           trainingWeek = DateTime.parse(widget.training[j].dateTime);
-          weekInt[i] = DateTime.parse(widget.training[j].dateTime).weekday;
+          week[i] = DateTime.parse(widget.training[j].dateTime).weekday;
+          day = DateTime.parse(widget.training[j].dateTime).day;
+          month = DateTime.parse(widget.training[j].dateTime).month;
+          print(trainingWeek);
           break;
         }
+        print(i);
       }
       switch (trainingWeek.weekday) {
         case 1:
-          weekList[i] = "Понедельник";
+          weekList[i] = "Понедельник $day.$month";
           break;
         case 2:
-          weekList[i] = "Вторник";
+          weekList[i] = "Вторник $day.$month";
           break;
         case 3:
-          weekList[i] = "Среда";
+          weekList[i] = "Среда $day.$month";
           break;
         case 4:
-          weekList[i] = "Четверг";
+          weekList[i] = "Четверг $day.$month";
           break;
         case 5:
-          weekList[i] = "Пятница";
+          weekList[i] = "Пятница $day.$month";
           break;
         case 6:
-          weekList[i] = "Суббота";
+          weekList[i] = "Суббота $day.$month";
           break;
       }
     }
+    print(weekList);
     return ListView(
       children: [
         Container(
@@ -125,7 +132,7 @@ class _ListWorkoutState extends State<ListWorkout> {
             subtitle: Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: Text(
-                  "${weekList[j]} ${DateTime.parse(widget.training[j].dateTime).day}.${DateTime.parse(widget.training[j].dateTime).month}",
+                  weekList[j],
                   style: const TextStyle(color: kTextSideScreens),
                 )),
           ),
