@@ -25,21 +25,25 @@ class Message {
   late String message;
   late String time;
 
-  Message(this.isMe, this.message, this.time);
+  Message(
+    this.isMe,
+    this.message,
+    this.time,
+  );
 }
 
 class Training {
   late String nameIcon;
   late String name;
-  late String date;
-
-  Training(this.nameIcon, this.name, this.date);
-}
-
-class Workout {
   late String dateTime;
-  late String countWorkout;
-  late String workout;
+  late List<String> workout;
+  late int colors;
 
-  Workout(this.dateTime, this.countWorkout, this.workout);
+  Training(
+    this.nameIcon,
+    this.name,
+    this.dateTime,
+    this.workout,
+    this.colors,
+  );
 }

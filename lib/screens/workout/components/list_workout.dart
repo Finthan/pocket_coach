@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../all_class.dart';
 import '../../../constants.dart';
+import '../../../info.dart';
 
 class ListWorkout extends StatefulWidget {
   const ListWorkout({super.key, required this.training});
@@ -28,6 +29,44 @@ class _ListWorkoutState extends State<ListWorkout> {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime todayDay = DateTime.now();
+    var weekList = ["", "", ""];
+    var weekInt = [0, 0, 0];
+    DateTime trainingWeek = DateTime.parse(widget.training[0].dateTime);
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < training.length; j++) {
+        if (todayDay.year <= DateTime.parse(widget.training[j].dateTime).year &&
+            todayDay.month <=
+                DateTime.parse(widget.training[j].dateTime).month &&
+            todayDay.day <= DateTime.parse(widget.training[j].dateTime).day &&
+            weekInt[0] != DateTime.parse(widget.training[j].dateTime).weekday &&
+            weekInt[1] != DateTime.parse(widget.training[j].dateTime).weekday) {
+          trainingWeek = DateTime.parse(widget.training[j].dateTime);
+          weekInt[i] = DateTime.parse(widget.training[j].dateTime).weekday;
+          break;
+        }
+      }
+      switch (trainingWeek.weekday) {
+        case 1:
+          weekList[i] = "Понедельник";
+          break;
+        case 2:
+          weekList[i] = "Вторник";
+          break;
+        case 3:
+          weekList[i] = "Среда";
+          break;
+        case 4:
+          weekList[i] = "Четверг";
+          break;
+        case 5:
+          weekList[i] = "Пятница";
+          break;
+        case 6:
+          weekList[i] = "Суббота";
+          break;
+      }
+    }
     return ListView(
       children: [
         Container(
@@ -86,7 +125,7 @@ class _ListWorkoutState extends State<ListWorkout> {
             subtitle: Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: Text(
-                  widget.training[j].date,
+                  "${weekList[j]} ${DateTime.parse(widget.training[j].dateTime).day}.${DateTime.parse(widget.training[j].dateTime).month}",
                   style: const TextStyle(color: kTextSideScreens),
                 )),
           ),
@@ -158,50 +197,43 @@ class _ListWorkoutState extends State<ListWorkout> {
   }
 
   Map<DateTime, List<Appointment>> getAppointments() {
-    final List<String> _subjectCollection = <String>[];
-    _subjectCollection.add('Ноги');
-    _subjectCollection.add('Руки');
-    _subjectCollection.add('Грудь');
-    _subjectCollection.add('Бицепс');
-    _subjectCollection.add('Трицепс');
-
-    final List<Color> _colorCollection = <Color>[];
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-
     final Random random = Random();
     var _dataCollection = <DateTime, List<Appointment>>{};
     final DateTime today = DateTime.now();
     final DateTime rangeStartDate =
-        DateTime(today.year, today.month, 1).add(const Duration(days: -30));
+        DateTime(today.year, today.month, today.day);
     final DateTime rangeEndDate = DateTime(today.year, today.month, today.day)
         .add(const Duration(days: 30));
-    print(today);
+
     for (DateTime i = rangeStartDate;
         i.isBefore(rangeEndDate);
-        i = i.add(const Duration(days: 2))) {
-      final DateTime date = i;
-      final int count = 2;
-      for (int j = 0; j < count; j++) {
-        final DateTime startDate = DateTime(date.year, date.month, date.day);
-        final int duration = 2;
-        final Appointment meeting = Appointment(
-            subject: _subjectCollection[random.nextInt(5)],
-            startTime: startDate,
-            endTime:
-                startDate.add(Duration(hours: duration == 0 ? 1 : duration)),
-            color: _colorCollection[random.nextInt(5)],
-            isAllDay: false);
+        i = i.add(const Duration(days: 1))) {
+      DateTime date = i;
 
-        if (_dataCollection.containsKey(date)) {
-          final List<Appointment> meetings = _dataCollection[date]!;
-          meetings.add(meeting);
-          _dataCollection[date] = meetings;
-        } else {
-          _dataCollection[date] = [meeting];
+      for (var j = 0; j < training.length; j++) {
+        int count = widget.training[j].workout.length;
+        DateTime trainingTime = DateTime.parse(widget.training[j].dateTime);
+
+        if (DateTime(date.year, date.month, date.day) ==
+            DateTime(trainingTime.year, trainingTime.month, trainingTime.day)) {
+          for (int k = 0; k < count; k++) {
+            final DateTime startDate =
+                DateTime(date.year, date.month, date.day);
+            final Appointment meeting = Appointment(
+              subject: widget.training[j].workout[k].toString(),
+              startTime: startDate,
+              endTime: startDate,
+              color: Color(widget.training[j].colors),
+              isAllDay: false,
+            );
+            if (_dataCollection.containsKey(date)) {
+              final List<Appointment> meetings = _dataCollection[date]!;
+              meetings.add(meeting);
+              _dataCollection[date] = meetings;
+            } else {
+              _dataCollection[date] = [meeting];
+            }
+          }
         }
       }
     }
