@@ -1,15 +1,14 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../../all_class.dart';
 import '../../../constants.dart';
 import '../../../info.dart';
+import 'workout.dart';
 
 class ListWorkout extends StatefulWidget {
-  const ListWorkout({super.key, required this.training});
-
-  final List<Training> training;
+  const ListWorkout({
+    super.key,
+  });
 
   @override
   State<ListWorkout> createState() => _ListWorkoutState();
@@ -17,7 +16,8 @@ class ListWorkout extends StatefulWidget {
 
 late Map<DateTime, List<Appointment>> _dataCollection;
 
-class _ListWorkoutState extends State<ListWorkout> {
+class _ListWorkoutState extends State<ListWorkout>
+    with SingleTickerProviderStateMixin {
   late var _calendarDataSource;
 
   @override
@@ -29,51 +29,67 @@ class _ListWorkoutState extends State<ListWorkout> {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime todayDay = DateTime.now();
+    final DateTime todayDay = DateTime.parse("2023-04-17 00:00:00Z");
     var weekList = ["", "", ""];
-    var week = [0, 0, 0];
+    var nameWorkout = [
+      "Нет запланированной тренировки",
+      "Нет запланированной тренировки",
+      "Нет запланированной тренировки"
+    ];
+    var iconWorkout = [
+      "assets/images/icon_no.png",
+      "assets/images/icon_no.png",
+      "assets/images/icon_no.png",
+    ];
     var day;
     var month;
-    DateTime trainingWeek = DateTime.parse(widget.training[0].dateTime);
+    var week = [0, 0, 0];
+    DateTime trainingWeek = DateTime.parse(training[0].dateTime);
     for (var i = 0; i < 3; i++) {
+      day = 0;
+      month = 0;
       for (var j = 0; j < training.length; j++) {
-        if (todayDay.year <= DateTime.parse(widget.training[j].dateTime).year &&
-            todayDay.month <=
-                DateTime.parse(widget.training[j].dateTime).month &&
-            todayDay.day <= DateTime.parse(widget.training[j].dateTime).day &&
-            week[0] != DateTime.parse(widget.training[j].dateTime).weekday &&
-            week[1] != DateTime.parse(widget.training[j].dateTime).weekday) {
-          trainingWeek = DateTime.parse(widget.training[j].dateTime);
-          week[i] = DateTime.parse(widget.training[j].dateTime).weekday;
-          day = DateTime.parse(widget.training[j].dateTime).day;
-          month = DateTime.parse(widget.training[j].dateTime).month;
-          print(trainingWeek);
+        if (todayDay.year <= DateTime.parse(training[j].dateTime).year &&
+            todayDay.month <= DateTime.parse(training[j].dateTime).month &&
+            todayDay.day <= DateTime.parse(training[j].dateTime).day &&
+            week[0] != DateTime.parse(training[j].dateTime).weekday &&
+            week[1] != DateTime.parse(training[j].dateTime).weekday) {
+          trainingWeek = DateTime.parse(training[j].dateTime);
+          week[i] = DateTime.parse(training[j].dateTime).weekday;
+          day = DateTime.parse(training[j].dateTime).day;
+          month = DateTime.parse(training[j].dateTime).month;
+          nameWorkout[i] = training[j].name;
+          iconWorkout[i] = training[j].nameIcon;
           break;
         }
-        print(i);
       }
-      switch (trainingWeek.weekday) {
-        case 1:
-          weekList[i] = "Понедельник $day.$month";
-          break;
-        case 2:
-          weekList[i] = "Вторник $day.$month";
-          break;
-        case 3:
-          weekList[i] = "Среда $day.$month";
-          break;
-        case 4:
-          weekList[i] = "Четверг $day.$month";
-          break;
-        case 5:
-          weekList[i] = "Пятница $day.$month";
-          break;
-        case 6:
-          weekList[i] = "Суббота $day.$month";
-          break;
+      if (todayDay.day == day && todayDay.month == month) {
+        weekList[i] = "Сегодня";
+      } else if (todayDay.day + 1 == day && todayDay.month == month) {
+        weekList[i] = "Завтра";
+      } else if (day != 0) {
+        switch (trainingWeek.weekday) {
+          case 1:
+            weekList[i] = "Понедельник $day.$month";
+            break;
+          case 2:
+            weekList[i] = "Вторник $day.$month";
+            break;
+          case 3:
+            weekList[i] = "Среда $day.$month";
+            break;
+          case 4:
+            weekList[i] = "Четверг $day.$month";
+            break;
+          case 5:
+            weekList[i] = "Пятница $day.$month";
+            break;
+          case 6:
+            weekList[i] = "Суббота $day.$month";
+            break;
+        }
       }
     }
-    print(weekList);
     return ListView(
       children: [
         Container(
@@ -86,7 +102,7 @@ class _ListWorkoutState extends State<ListWorkout> {
           child: const Text(
             "Планируемые тренировки",
             style: TextStyle(
-              color: kWiteColor,
+              color: kWhiteColor,
               fontSize: 20,
             ),
           ),
@@ -98,44 +114,66 @@ class _ListWorkoutState extends State<ListWorkout> {
             height: 1,
           ),
         ),
-        for (var j = 0; j < 3; j++)
-          ListTile(
-            contentPadding: const EdgeInsets.only(top: 5, left: 20),
-            leading: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 5),
-                    blurRadius: 2,
-                    color: kPrimaryColor.withOpacity(0.80),
+
+        // SvgPicture.asset(
+        //                   "assets/icons/back_arrow.svg",
+        //                   color: kNavBarIconColor,
+        //                 ),
+        //TODO Поменять PNG на SVG
+        for (var i = 0; i < 3; i++)
+          GestureDetector(
+            onTap: () {
+              if (weekList[i] == "Сегодня" && i == 0) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Workout(
+                      title: nameWorkout[i],
+                      id: training[i].id,
+                    ),
                   ),
-                ],
-                image: DecorationImage(
-                  alignment: Alignment.center,
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    widget.training[j].nameIcon,
+                );
+              }
+            },
+            child: ListTile(
+              contentPadding: const EdgeInsets.only(top: 5, left: 20),
+              leading: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 5),
+                      blurRadius: 2,
+                      color: kPrimaryColor.withOpacity(0.80),
+                    ),
+                  ],
+                  image: DecorationImage(
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      iconWorkout[i],
+                    ),
                   ),
                 ),
               ),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(right: 10, bottom: 5),
-              child: Text(
-                widget.training[j].name,
-                style: const TextStyle(color: kTextSideScreens),
-              ),
-            ),
-            subtitle: Padding(
-                padding: const EdgeInsets.only(right: 10),
+              title: Padding(
+                padding: const EdgeInsets.only(right: 10, bottom: 5),
                 child: Text(
-                  weekList[j],
+                  nameWorkout[i],
                   style: const TextStyle(color: kTextSideScreens),
-                )),
+                ),
+              ),
+              subtitle: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text(
+                    weekList[i],
+                    style: const TextStyle(color: kTextSideScreens),
+                  )),
+            ),
           ),
+        //TODO Break
         Container(
           height: 55,
           alignment: Alignment.topLeft,
@@ -146,7 +184,7 @@ class _ListWorkoutState extends State<ListWorkout> {
           child: const Text(
             "График тренировок",
             style: TextStyle(
-              color: kWiteColor,
+              color: kWhiteColor,
               fontSize: 20,
             ),
           ),
@@ -164,7 +202,7 @@ class _ListWorkoutState extends State<ListWorkout> {
             firstDayOfWeek: 1,
             headerStyle: const CalendarHeaderStyle(
               textStyle: TextStyle(
-                color: kWiteColor,
+                color: kWhiteColor,
                 fontSize: 20,
               ),
               textAlign: TextAlign.center,
@@ -173,14 +211,14 @@ class _ListWorkoutState extends State<ListWorkout> {
             monthViewSettings: const MonthViewSettings(
                 appointmentDisplayCount: 3,
                 showTrailingAndLeadingDates: true,
-                dayFormat: 'EEE',
+                dayFormat: 'EE',
                 monthCellStyle: MonthCellStyle(
                   textStyle: TextStyle(color: kCalendarColor),
                 ),
                 appointmentDisplayMode:
                     MonthAppointmentDisplayMode.appointment),
             dataSource: _calendarDataSource,
-            todayHighlightColor: kPrimaryColor,
+            todayHighlightColor: kCalendarColor,
             cellBorderColor: kPrimaryColor,
             headerHeight: 50,
             loadMoreWidgetBuilder:
@@ -204,22 +242,20 @@ class _ListWorkoutState extends State<ListWorkout> {
   }
 
   Map<DateTime, List<Appointment>> getAppointments() {
-    final Random random = Random();
     var _dataCollection = <DateTime, List<Appointment>>{};
     final DateTime today = DateTime.now();
     final DateTime rangeStartDate =
         DateTime(today.year, today.month, today.day);
     final DateTime rangeEndDate = DateTime(today.year, today.month, today.day)
         .add(const Duration(days: 30));
-
     for (DateTime i = rangeStartDate;
         i.isBefore(rangeEndDate);
         i = i.add(const Duration(days: 1))) {
       DateTime date = i;
 
       for (var j = 0; j < training.length; j++) {
-        int count = widget.training[j].workout.length;
-        DateTime trainingTime = DateTime.parse(widget.training[j].dateTime);
+        int count = training[j].workout.length;
+        DateTime trainingTime = DateTime.parse(training[j].dateTime);
 
         if (DateTime(date.year, date.month, date.day) ==
             DateTime(trainingTime.year, trainingTime.month, trainingTime.day)) {
@@ -227,10 +263,10 @@ class _ListWorkoutState extends State<ListWorkout> {
             final DateTime startDate =
                 DateTime(date.year, date.month, date.day);
             final Appointment meeting = Appointment(
-              subject: widget.training[j].workout[k].toString(),
+              subject: training[j].workout[k].toString(),
               startTime: startDate,
               endTime: startDate,
-              color: Color(widget.training[j].colors),
+              color: Color(training[j].colors),
               isAllDay: false,
             );
             if (_dataCollection.containsKey(date)) {

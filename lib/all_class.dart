@@ -33,6 +33,7 @@ class Message {
 }
 
 class Training {
+  late int id;
   late String nameIcon;
   late String name;
   late String dateTime;
@@ -40,6 +41,7 @@ class Training {
   late int colors;
 
   Training(
+    this.id,
     this.nameIcon,
     this.name,
     this.dateTime,

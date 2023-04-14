@@ -235,6 +235,7 @@ List<Message> workout = [
 
 List<Training> training = [
   Training(
+    1,
     "assets/images/workout_g.png",
     "Тренировка груди",
     "2023-04-03 00:00:00Z",
@@ -242,6 +243,7 @@ List<Training> training = [
     0xFF0F8644,
   ),
   Training(
+    2,
     "assets/images/workout_n.png",
     "Тренировка спины",
     "2023-04-05 00:00:00Z",
@@ -249,6 +251,7 @@ List<Training> training = [
     0xFF8B1FA9,
   ),
   Training(
+    3,
     "assets/images/workout_n.png",
     "Тренировка рук",
     "2023-04-07 00:00:00Z",
@@ -256,6 +259,7 @@ List<Training> training = [
     0xFFD20100,
   ),
   Training(
+    4,
     "assets/images/workout_n.png",
     "Тренировка плеч",
     "2023-04-10 00:00:00Z",
@@ -263,6 +267,7 @@ List<Training> training = [
     0xFFFC571D,
   ),
   Training(
+    5,
     "assets/images/workout_n.png",
     "Тренировка ног",
     "2023-04-12 00:00:00Z",
@@ -270,6 +275,7 @@ List<Training> training = [
     0xFF36B37B,
   ),
   Training(
+    6,
     "assets/images/workout_g.png",
     "Тренировка груди",
     "2023-04-14 00:00:00Z",
@@ -277,6 +283,7 @@ List<Training> training = [
     0xFF0F8644,
   ),
   Training(
+    7,
     "assets/images/workout_g.png",
     "Тренировка спины",
     "2023-04-17 00:00:00Z",
@@ -284,6 +291,7 @@ List<Training> training = [
     0xFF8B1FA9,
   ),
   Training(
+    8,
     "assets/images/workout_n.png",
     "Тренировка рук",
     "2023-04-19 00:00:00Z",
@@ -291,6 +299,7 @@ List<Training> training = [
     0xFFD20100,
   ),
   Training(
+    9,
     "assets/images/workout_n.png",
     "Тренировка плеч",
     "2023-04-21 00:00:00Z",
@@ -298,6 +307,7 @@ List<Training> training = [
     0xFFFC571D,
   ),
   Training(
+    10,
     "assets/images/workout_n.png",
     "Тренировка ног",
     "2023-04-24 00:00:00Z",
@@ -305,13 +315,15 @@ List<Training> training = [
     0xFF36B37B,
   ),
   Training(
-    "assets/images/workout_n.png",
+    11,
+    "assets/images/workout_g.png",
     "Тренировка груди",
     "2023-04-26 00:00:00Z",
     ["Грудь"],
     0xFF0F8644,
   ),
   Training(
+    12,
     "assets/images/workout_n.png",
     "Тренировка спины",
     "2023-04-28 00:00:00Z",
@@ -319,6 +331,7 @@ List<Training> training = [
     0xFF8B1FA9,
   ),
   Training(
+    13,
     "assets/images/workout_n.png",
     "Тренировка рук",
     "2023-05-01 00:00:00Z",
@@ -326,6 +339,7 @@ List<Training> training = [
     0xFFD20100,
   ),
   Training(
+    14,
     "assets/images/workout_g.png",
     "Тренировка плеч",
     "2023-05-03 00:00:00Z",
@@ -333,6 +347,7 @@ List<Training> training = [
     0xFFFC571D,
   ),
   Training(
+    15,
     "assets/images/workout_n.png",
     "Тренировка ног",
     "2023-05-05 00:00:00Z",
@@ -340,6 +355,7 @@ List<Training> training = [
     0xFF36B37B,
   ),
   Training(
+    16,
     "assets/images/workout_g.png",
     "Тренировка груди",
     "2023-05-08 00:00:00Z",
@@ -347,6 +363,7 @@ List<Training> training = [
     0xFF0F8644,
   ),
   Training(
+    17,
     "assets/images/workout_g.png",
     "Тренировка спины",
     "2023-05-10 00:00:00Z",
@@ -354,6 +371,7 @@ List<Training> training = [
     0xFF8B1FA9,
   ),
   Training(
+    18,
     "assets/images/workout_n.png",
     "Тренировка рук",
     "2023-05-12 00:00:00Z",
@@ -361,6 +379,7 @@ List<Training> training = [
     0xFFD20100,
   ),
   Training(
+    19,
     "assets/images/workout_n.png",
     "Тренировка плеч",
     "2023-05-15 00:00:00Z",
@@ -368,6 +387,7 @@ List<Training> training = [
     0xFFFC571D,
   ),
   Training(
+    20,
     "assets/images/workout_n.png",
     "Тренировка ног",
     "2023-05-17 00:00:00Z",

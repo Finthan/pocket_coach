@@ -18,6 +18,7 @@ class Main extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         SfGlobalLocalizations.delegate,
       ],
@@ -28,6 +29,19 @@ class Main extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Pocket coach',
       theme: ThemeData(
+        colorScheme: const ColorScheme(
+          brightness: Brightness.light,
+          primary: kPrimaryColor,
+          onPrimary: kWhiteColor,
+          secondary: Colors.white,
+          onSecondary: Colors.white,
+          error: Colors.white,
+          onError: Colors.white,
+          background: Colors.white,
+          onBackground: Colors.white,
+          surface: Colors.white,
+          onSurface: kWhiteColor,
+        ),
         scaffoldBackgroundColor: kBackgroundColor,
         primaryColor: kNavBarIconColor,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kPrimaryColor),
