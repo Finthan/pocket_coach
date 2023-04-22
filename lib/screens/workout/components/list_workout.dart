@@ -29,7 +29,7 @@ class _ListWorkoutState extends State<ListWorkout>
 
   @override
   Widget build(BuildContext context) {
-    final DateTime todayDay = DateTime.parse("2023-04-17 00:00:00Z");
+    final DateTime todayDay = DateTime.now();
     var weekList = ["", "", ""];
     var nameWorkout = [
       "Нет запланированной тренировки",
@@ -123,7 +123,7 @@ class _ListWorkoutState extends State<ListWorkout>
         for (var i = 0; i < 3; i++)
           GestureDetector(
             onTap: () {
-              if (weekList[i] == "Сегодня" && i == 0) {
+              if (i == 0) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(

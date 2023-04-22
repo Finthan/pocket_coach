@@ -19,8 +19,22 @@ class Workout extends StatefulWidget {
 class _WorkoutState extends State<Workout> {
   int _currentStep = 0;
 
+  int i = 0;
+  int countWidget = 6;
+  int countWorkout = 6;
+  var countTrue = true;
+
   @override
   Widget build(BuildContext context) {
+    if (countWidget <= 5) {
+      setState(() {
+        countTrue = false;
+      });
+    } else {
+      setState(() {
+        countTrue = true;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -34,136 +48,84 @@ class _WorkoutState extends State<Workout> {
       ),
       body: Stepper(
         steps: [
-          Step(
-            state: _currentStep > 0 ? StepState.complete : StepState.disabled,
-            isActive: _currentStep == 0,
-            title: const Text(
-              "Step 1",
-              style: TextStyle(color: kWhiteColor),
-            ),
-            content: Column(
-              children: [
-                Container(
-                  // padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-                  width: 500,
-                  height: 400,
-                  decoration: const BoxDecoration(
-                    color: kWorkoutColor,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: const Text(
-                    "Content step dfndf ndfnd lknfl dknflk df k d n f d k f d k f dkfdkfn 1 ",
-                    style: TextStyle(color: kWhiteColor),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Step(
-            state: _currentStep > 1 ? StepState.complete : StepState.disabled,
-            isActive: _currentStep == 1,
-            title: const Text(
-              "Step 2",
-              style: TextStyle(color: kWhiteColor),
-            ),
-            content: Container(
-              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-              width: 500,
-              height: 400,
-              decoration: const BoxDecoration(
-                color: kWorkoutColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: const Text(
-                "Content stepdfndfndfndlknfldknflkdfkdnfdkfdkfdkfdkfn 1",
+          for (i = 0; i < countWorkout; i++)
+            Step(
+              state: _currentStep > i ? StepState.complete : StepState.disabled,
+              isActive: _currentStep == i,
+              title: const Text(
+                "Step 1",
                 style: TextStyle(color: kWhiteColor),
               ),
-            ),
-          ),
-          Step(
-            state: _currentStep > 2 ? StepState.complete : StepState.disabled,
-            isActive: _currentStep == 2,
-            title: const Text(
-              "Step 3",
-              style: TextStyle(color: kWhiteColor),
-            ),
-            content: Container(
-              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-              width: 500,
-              height: 400,
-              decoration: const BoxDecoration(
-                color: kWorkoutColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: const Text(
-                "Content stepdfndfndfndlknfldknflkdfkdnfdkfdkfdkfdkfn 1",
-                style: TextStyle(color: kWhiteColor),
-              ),
-            ),
-          ),
-          Step(
-            state: _currentStep > 3 ? StepState.complete : StepState.disabled,
-            isActive: _currentStep == 3,
-            title: const Text(
-              "Step 4",
-              style: TextStyle(color: kWhiteColor),
-            ),
-            content: Container(
-              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-              width: 500,
-              height: 400,
-              decoration: const BoxDecoration(
-                color: kWorkoutColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: const Text(
-                "Content stepdfndfndfndlknfldknflkdfkdnfdkfdkfdkfdkfn 1",
-                style: TextStyle(color: kWhiteColor),
-              ),
-            ),
-          ),
-          Step(
-            state: _currentStep > 4 ? StepState.complete : StepState.disabled,
-            isActive: _currentStep == 4,
-            title: const Text(
-              "Step 5",
-              style: TextStyle(color: kWhiteColor),
-            ),
-            content: Container(
-              padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
-              width: 500,
-              height: 400,
-              decoration: const BoxDecoration(
-                color: kWorkoutColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Column(
-                children: const [
-                  Text(
-                    "Content s te pdfndfndfndlk nfldknflkdfk dnfdkfdkfd kfdkfn 1",
-                    style: TextStyle(color: kWhiteColor),
+              content: Column(
+                children: [
+                  Container(
+                    // padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+                    width: 500,
+                    height: 200,
+                    decoration: const BoxDecoration(
+                      color: kWorkoutColor,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Video",
+                        style: TextStyle(color: kWhiteColor),
+                      ),
+                    ),
                   ),
-                  Text(
-                    "Content stepdfndfndfndlknfldknflkdfkdnfdkfdkfdkfdkfn 1",
-                    style: TextStyle(color: kWhiteColor),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: countTrue
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.start,
+                      children: [
+                        for (var j = 0; j < countWidget; j++)
+                          Padding(
+                            padding: countTrue
+                                ? const EdgeInsets.only(right: 0)
+                                : const EdgeInsets.only(right: 10),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                color: kWorkoutColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: const Text(
+                                "Image",
+                                style: TextStyle(color: kWhiteColor),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                  Text(
-                    "Content stepdfndfndfndlknfldknflkdfkdnfdkfdkfdkfdkfn 1",
-                    style: TextStyle(color: kWhiteColor),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 5, top: 20),
+                    child: const Text(
+                      "Вес и колчество повторений: 15 кг, 4 подхода",
+                      style: TextStyle(color: kWhiteColor),
+                    ),
                   ),
-                  Text(
-                    "Content stepdfndfndfndlknfldknflkdfkdnfdkfdkfdkfdkfn 1",
-                    style: TextStyle(color: kWhiteColor),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 5, top: 15),
+                    child: const Text(
+                      "Сколько сделал:",
+                      style: TextStyle(color: kWhiteColor),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
         ],
         currentStep: _currentStep,
         onStepContinue: () {
           setState(() {
-            if (_currentStep != 4) {
+            if (_currentStep != i - 1) {
               _currentStep += 1;
             } else {
               print("Завершение тренировки");

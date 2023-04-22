@@ -5,14 +5,24 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 import 'constants.dart';
+import 'screens/auth_registration.dart/auth_registration_screen.dart';
 
 void main() {
   runApp(const Main());
 }
 
-class Main extends StatelessWidget {
+class Main extends StatefulWidget {
   const Main({super.key});
 
+  @override
+  State<Main> createState() => _MainState();
+}
+
+var isAuth = false;
+var login = "";
+var password = "";
+
+class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,7 +56,7 @@ class Main extends StatelessWidget {
         primaryColor: kNavBarIconColor,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kPrimaryColor),
       ),
-      home: const App(),
+      home: isAuth ? const App() : const AuthRegistrationScreen(),
     );
   }
 }
