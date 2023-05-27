@@ -8,6 +8,7 @@ import 'package:rive/rive.dart';
 import '../../components/animated_bar.dart';
 import '../../components/side_menu.dart';
 import '../../constants.dart';
+import '../../functions/get_functions.dart';
 import '../../models/rive_asset.dart';
 import '../../models/side_menu_button.dart';
 import '../../utils/rive_utils.dart';
@@ -65,6 +66,10 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      getTutors();
+    });
+
     return Scaffold(
       backgroundColor: kBackgroundSideColor,
       body: Stack(

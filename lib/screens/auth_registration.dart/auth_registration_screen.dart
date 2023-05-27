@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
 import '../../main.dart';
+import '../../all_class.dart';
 
 class AuthRegistrationScreen extends StatefulWidget {
   const AuthRegistrationScreen({super.key});
@@ -10,6 +14,8 @@ class AuthRegistrationScreen extends StatefulWidget {
   State<AuthRegistrationScreen> createState() => _AuthRegistrationScreenState();
 }
 
+Me me = Me(id: "-0");
+
 class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   var isRegist = false;
 
@@ -17,10 +23,31 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   final _passwordTextController = TextEditingController();
   final _mailTextController = TextEditingController();
 
-  void _auth() {
+  Future<void> _auth() async {
     print("auth");
-    if (_loginTextController.text == "Nikita" &&
-        _passwordTextController.text == "Nikita") {
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'auth',
+      'object': 'login',
+      'login': '${_loginTextController.text}',
+      'pass': '${_passwordTextController.text}'
+    });
+
+    dynamic getTutorsList = await http.get(uri);
+    var decodedResponse =
+        jsonDecode(utf8.decode(getTutorsList.bodyBytes)) as Map;
+    String jsonString = jsonEncode(decodedResponse['data']);
+    print(jsonString);
+
+    try {
+      final json = await jsonDecode(jsonString) as dynamic;
+      me = json(Me.fromJson);
+      print(me.id);
+    } catch (error) {
+      print(error);
+    }
+
+    if (me.id != "-0") {
       setState(() {
         isAuth = true;
         runApp(const Main());

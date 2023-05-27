@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../constants.dart';
+import '../../auth_registration.dart/auth_registration_screen.dart';
 
-class HeaderWithSearchBox extends StatelessWidget {
+class HeaderWithSearchBox extends StatefulWidget {
   const HeaderWithSearchBox({
     super.key,
     required this.size,
@@ -12,10 +13,15 @@ class HeaderWithSearchBox extends StatelessWidget {
   final Size size;
 
   @override
+  State<HeaderWithSearchBox> createState() => _HeaderWithSearchBoxState();
+}
+
+class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: kDefaultPadding * 2.5),
-      height: size.height * 0.2,
+      height: widget.size.height * 0.2,
       child: Stack(children: <Widget>[
         Container(
           padding: const EdgeInsets.only(
@@ -23,7 +29,7 @@ class HeaderWithSearchBox extends StatelessWidget {
             right: kDefaultPadding,
             bottom: 45 + kDefaultPadding,
           ),
-          height: size.height * 0.2 - 15,
+          height: widget.size.height * 0.2 - 15,
           decoration: const BoxDecoration(
             color: kPrimaryColor,
             borderRadius: BorderRadius.only(
@@ -34,7 +40,7 @@ class HeaderWithSearchBox extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Text(
-                "Привет Никита!",
+                "Привет User_${me.id}!",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

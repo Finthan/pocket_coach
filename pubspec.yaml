@@ -38,6 +38,10 @@ dependencies:
   flutter_localization: ^0.1.10
   syncfusion_localizations: ^21.1.38
   pedantic_mono: ^1.21.1
+  json_annotation: ^4.8.1
+  requests: ^4.4.1
+  http: ^0.13.6
+  html: ^0.15.0
 
 dev_dependencies:
   flutter_test:

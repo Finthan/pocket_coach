@@ -5,7 +5,16 @@ import 'image_and_icon.dart';
 import 'title_and_price.dart';
 
 class Body extends StatelessWidget {
-  const Body({super.key});
+  const Body({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.country,
+    required this.price,
+  });
+
+  final String image, title, country;
+  final int price;
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +22,11 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          ImageAndIcons(size: size),
-          const TitleAndPrice(title: "Анжелика", country: "Russia", price: 440),
+          ImageAndIcons(
+            size: size,
+            image: image,
+          ),
+          TitleAndPrice(title: title, country: country, price: price),
           const SizedBox(
             height: kDefaultPadding / 2,
           ),
