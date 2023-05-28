@@ -24,7 +24,7 @@ class _CoachMan extends State<CoachMan> {
             Coach(
               image: "assets/images/men_${i + 1}.jpg",
               title: listOfTutors[i].name,
-              country: listOfTutors[i].typeOfTraining,
+              TypeOfTraning: listOfTutors[i].typeOfTraining,
               press: () {
                 Navigator.push(
                   context,
@@ -40,44 +40,6 @@ class _CoachMan extends State<CoachMan> {
               },
               price: int.parse(listOfTutors[i].cost),
             ),
-          // Coach(
-          //   image: "assets/images/men_2.jpg",
-          //   title: "Андрей",
-          //   country: "Тренер",
-          //   press: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => const DetailsScreen(
-          //           title: "Андрей",
-          //           country: "Тренер",
-          //           image: "assets/images/men_2.jpg",
-          //           price: 600,
-          //         ),
-          //       ),
-          //     );
-          //   },
-          //   price: 600,
-          // ),
-          // Coach(
-          //   image: "assets/images/men_3.jpeg",
-          //   title: "Василий",
-          //   country: "Тренер",
-          //   press: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => const DetailsScreen(
-          //           title: "Василий",
-          //           country: "Тренер",
-          //           image: "assets/images/men_3.jpeg",
-          //           price: 550,
-          //         ),
-          //       ),
-          //     );
-          //   },
-          //   price: 550,
-          // ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pocket_coach/screens/auth_registration.dart/auth_registration_screen.dart';
 import 'package:pocket_coach/screens/home/home_screen.dart';
 import 'package:pocket_coach/screens/workout/workout_screen.dart';
 import 'package:rive/rive.dart';
@@ -66,10 +67,15 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      var list = getTutors();
-      print(list);
-    });
+    if (isClient) {
+      setState(() {
+        getTutors();
+      });
+    } else {
+      setState(() {
+        getClients();
+      });
+    }
 
     return Scaffold(
       backgroundColor: kBackgroundSideColor,

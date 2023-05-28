@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import '../../auth_registration.dart/auth_registration_screen.dart';
 import 'coach_woman.dart';
 import 'header_with_search_box.dart';
 import 'coach_man.dart';
@@ -27,19 +28,27 @@ class _BodyState extends State<Body> {
               color: kPrimaryColor,
             ),
             HeaderWithSearchBox(size: size),
-            TitleWithMoreBtn(
-              title: "Тренер мужчина",
-              press: () {},
-            ),
-            CoachMan(),
-            TitleWithMoreBtn(
-              title: "Тренер женщина",
-              press: () {},
-            ),
-            CoachWoman(),
-            const SizedBox(
-              height: kDefaultPadding,
-            ),
+            isClient
+                ? Column(
+                    children: [
+                      TitleWithMoreBtn(
+                        title: "Тренер мужчина",
+                        press: () {},
+                      ),
+                      CoachMan(),
+                      TitleWithMoreBtn(
+                        title: "Тренер женщина",
+                        press: () {},
+                      ),
+                      CoachWoman(),
+                      const SizedBox(
+                        height: kDefaultPadding,
+                      )
+                    ],
+                  )
+                : Column(
+                    children: [],
+                  )
           ],
         ),
       ),

@@ -3,6 +3,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../constants.dart';
 import '../../../info.dart';
+import '../../auth_registration.dart/auth_registration_screen.dart';
+import 'create_workout.dart';
 import 'workout.dart';
 
 class ListWorkout extends StatefulWidget {
@@ -34,7 +36,7 @@ class _ListWorkoutState extends State<ListWorkout>
     var nameWorkout = [
       "Нет запланированной тренировки",
       "Нет запланированной тренировки",
-      "Нет запланированной тренировки"
+      "Нет запланированной тренировки",
     ];
     var iconWorkout = [
       "assets/images/icon_no.png",
@@ -92,87 +94,125 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     return ListView(
       children: [
-        Container(
-          height: 55,
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.only(
-            top: 15,
-            left: 20,
-          ),
-          child: const Text(
-            "Планируемые тренировки",
-            style: TextStyle(
-              color: kWhiteColor,
-              fontSize: 20,
-            ),
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 17, right: 17),
-          child: Divider(
-            color: kPrimaryColor,
-            height: 1,
-          ),
-        ),
+        isClient
+            ? Column(
+                children: [
+                  Container(
+                    height: 55,
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.only(
+                      top: 15,
+                      left: 20,
+                    ),
+                    child: const Text(
+                      "Планируемые тренировки",
+                      style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 17, right: 17),
+                    child: Divider(
+                      color: kPrimaryColor,
+                      height: 1,
+                    ),
+                  ),
 
-        // SvgPicture.asset(
-        //                   "assets/icons/back_arrow.svg",
-        //                   color: kNavBarIconColor,
-        //                 ),
-        //TODO Поменять PNG на SVG
-        for (var i = 0; i < 3; i++)
-          GestureDetector(
-            onTap: () {
-              if (i == 0) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Workout(
-                      title: nameWorkout[i],
-                      id: training[i].id,
+                  // SvgPicture.asset(
+                  //                   "assets/icons/back_arrow.svg",
+                  //                   color: kNavBarIconColor,
+                  //                 ),
+                  //TODO Поменять PNG на SVG
+                  for (var i = 0; i < 3; i++)
+                    GestureDetector(
+                      onTap: () {
+                        if (i == 0) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Workout(
+                                title: nameWorkout[i],
+                                id: training[i].id,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.only(top: 5, left: 20),
+                        leading: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 5),
+                                blurRadius: 2,
+                                color: kPrimaryColor.withOpacity(0.80),
+                              ),
+                            ],
+                            image: DecorationImage(
+                              alignment: Alignment.center,
+                              fit: BoxFit.cover,
+                              image: AssetImage(
+                                iconWorkout[i],
+                              ),
+                            ),
+                          ),
+                        ),
+                        title: Padding(
+                          padding: const EdgeInsets.only(right: 10, bottom: 5),
+                          child: Text(
+                            nameWorkout[i],
+                            style: const TextStyle(color: kTextSideScreens),
+                          ),
+                        ),
+                        subtitle: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Text(
+                              weekList[i],
+                              style: const TextStyle(color: kTextSideScreens),
+                            )),
+                      ),
                     ),
-                  ),
-                );
-              }
-            },
-            child: ListTile(
-              contentPadding: const EdgeInsets.only(top: 5, left: 20),
-              leading: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(0, 5),
-                      blurRadius: 2,
-                      color: kPrimaryColor.withOpacity(0.80),
-                    ),
-                  ],
-                  image: DecorationImage(
-                    alignment: Alignment.center,
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      iconWorkout[i],
+                ],
+              )
+            : Container(
+                padding:
+                    EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 40),
+                child: Center(
+                  child: TextButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.only(
+                                left: 15, top: 15, bottom: 15)),
+                        backgroundColor:
+                            MaterialStateProperty.all(kPrimaryColor)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateWorkout(),
+                        ),
+                      );
+                    },
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Создать тренировку",
+                          style:
+                              TextStyle(color: kTextSideScreens, fontSize: 15),
+                          textAlign: TextAlign.left),
                     ),
                   ),
                 ),
               ),
-              title: Padding(
-                padding: const EdgeInsets.only(right: 10, bottom: 5),
-                child: Text(
-                  nameWorkout[i],
-                  style: const TextStyle(color: kTextSideScreens),
-                ),
-              ),
-              subtitle: Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Text(
-                    weekList[i],
-                    style: const TextStyle(color: kTextSideScreens),
-                  )),
-            ),
-          ),
+
         //TODO Break
         Container(
           height: 55,

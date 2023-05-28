@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../constants.dart';
+import '../../../../main.dart';
 import '../../../../models/rive_asset.dart';
 import 'button_settings.dart';
 
@@ -61,9 +62,25 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
                 },
               ),
             if (widget.menu.title == "Аккаунт")
-              const ButtonSettings(text: "Сменить пользователя"),
+              ButtonSettings(
+                text: "Сменить пользователя",
+                press: () {},
+              ),
             if (widget.menu.title == "Аккаунт")
-              const ButtonSettings(text: "Поменять пароль"),
+              ButtonSettings(
+                text: "Поменять пароль",
+                press: () {},
+              ),
+            if (widget.menu.title == "Аккаунт")
+              ButtonSettings(
+                text: "Выйти с аккаунта",
+                press: () {
+                  setState(() {
+                    isAuth = false;
+                    runApp(const Main());
+                  });
+                },
+              ),
             // if (widget.menu.title == "Внешний вид")
             //   SwitchListTile.adaptive(
             //     title: const Text(

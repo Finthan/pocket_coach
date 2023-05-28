@@ -1,44 +1,40 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../../../constants.dart';
 
-class Coach extends StatelessWidget {
-  const Coach({
+class ClientWidget extends StatelessWidget {
+  const ClientWidget({
     super.key,
-    required this.image,
     required this.title,
-    required this.TypeOfTraning,
-    required this.price,
+    required this.age,
+    required this.cardnumber,
+    required this.gender,
     required this.press,
   });
 
-  final String image, title, TypeOfTraning;
-  final int price;
+  final String title, age, cardnumber, gender;
   final void Function() press;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        left: kDefaultPadding,
-        top: kDefaultPadding / 2,
-        bottom: kDefaultPadding * 2.5,
+        left: 20,
+        top: 20,
+        bottom: 20,
       ),
-      //width: size.width * 0.4,
-      width: 210,
       child: Column(
         children: <Widget>[
-          Image.asset(image),
-          GestureDetector(
-            onTap: press,
+          Container(
             child: Container(
+              height: 100,
+              width: 200,
               padding: const EdgeInsets.all(kDefaultPadding / 2),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(0, 10),
@@ -56,12 +52,10 @@ class Coach extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: "$title\n".toUpperCase(),
-                            style: TextStyle(
-                                color:
-                                    kTextColor), //Theme.of(context).textTheme.bodyMedium,
+                            style: const TextStyle(color: kTextColor),
                           ),
                           TextSpan(
-                            text: TypeOfTraning.toUpperCase(),
+                            text: cardnumber.toUpperCase(),
                             style: TextStyle(
                               color: kPrimaryColor.withOpacity(0.5),
                             ),
@@ -72,7 +66,7 @@ class Coach extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '₽$price',
+                    '$age',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
@@ -82,6 +76,31 @@ class Coach extends StatelessWidget {
               ),
             ),
           ),
+          GestureDetector(
+              onTap: press,
+              child: Container(
+                height: 50,
+                width: 200,
+                padding: const EdgeInsets.all(kDefaultPadding / 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 10),
+                      blurRadius: 50,
+                      color: kPrimaryColor.withOpacity(0.23),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Text("Выбрать пользователя"),
+                  ],
+                ),
+              ))
         ],
       ),
     );

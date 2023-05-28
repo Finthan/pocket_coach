@@ -1,27 +1,119 @@
 class Me {
   final String id;
-  final String? username;
-  final int? age;
-  final String? lastMessage;
-  final String? time;
-  final String? status;
-  final String? unReadMessage;
-  final bool? isRead;
 
-  Me({
-    required this.id,
-    this.username,
-    this.age,
-    this.lastMessage,
-    this.time,
-    this.status,
-    this.unReadMessage,
-    this.isRead,
-  });
+  Me({required this.id});
 
   factory Me.fromJson(Map<String, dynamic> json) {
-    return Me(
+    return Me(id: json['id'] as String);
+  }
+}
+
+class Tutor {
+  final String id;
+  final String gender;
+  final String typeOfTraining;
+  final String age;
+  final String name;
+  final String cost;
+
+  Tutor({
+    required this.id,
+    required this.gender,
+    required this.typeOfTraining,
+    required this.age,
+    required this.name,
+    required this.cost,
+  });
+
+  factory Tutor.fromJson(Map<String, dynamic> json) {
+    return Tutor(
+      id: json['id_user'] as String,
+      gender: json['gender'] as String,
+      typeOfTraining: json['type_of_training'] as String,
+      name: json['name'] as String,
+      age: json['age'] as String,
+      cost: json['cost'] as String,
+    );
+  }
+}
+
+class Client {
+  final String id;
+  final String gender;
+  final String cardnumber;
+  final String age;
+  final String name;
+
+  Client({
+    required this.id,
+    required this.gender,
+    required this.cardnumber,
+    required this.age,
+    required this.name,
+  });
+
+  factory Client.fromJson(Map<String, dynamic> json) {
+    return Client(
+      id: json['id_user'] as String,
+      gender: json['gender'] as String,
+      cardnumber: json['cardnumber'] as String,
+      name: json['name'] as String,
+      age: json['age'] as String,
+    );
+  }
+}
+
+class Tutors {
+  final String id;
+  final String gender;
+  final String typeOfTraining;
+  final String age;
+  final String name;
+  final String cost;
+
+  Tutors({
+    required this.id,
+    required this.gender,
+    required this.typeOfTraining,
+    required this.age,
+    required this.name,
+    required this.cost,
+  });
+
+  factory Tutors.fromJson(Map<String, dynamic> json) {
+    return Tutors(
       id: json['id'] as String,
+      gender: json['gender'] as String,
+      typeOfTraining: json['type_of_training'] as String,
+      name: json['name'] as String,
+      age: json['age'] as String,
+      cost: json['cost'] as String,
+    );
+  }
+}
+
+class Clients {
+  final String id;
+  final String gender;
+  final String cardnumber;
+  final String age;
+  final String name;
+
+  Clients({
+    required this.id,
+    required this.gender,
+    required this.cardnumber,
+    required this.age,
+    required this.name,
+  });
+
+  factory Clients.fromJson(Map<String, dynamic> json) {
+    return Clients(
+      id: json['id'] as String,
+      gender: json['gender'] as String,
+      cardnumber: json['cardnumber'] as String,
+      name: json['name'] as String,
+      age: json['age'] as String,
     );
   }
 }
@@ -46,35 +138,6 @@ class User {
     required this.unReadMessage,
     required this.isRead,
   });
-}
-
-class Tutor {
-  final String id;
-  final String gender;
-  final String typeOfTraining;
-  final String age;
-  final String name;
-  final String cost;
-
-  Tutor({
-    required this.id,
-    required this.gender,
-    required this.typeOfTraining,
-    required this.age,
-    required this.name,
-    required this.cost,
-  });
-
-  factory Tutor.fromJson(Map<String, dynamic> json) {
-    return Tutor(
-      id: json['id'] as String,
-      gender: json['gender'] as String,
-      typeOfTraining: json['type_of_training'] as String,
-      name: json['name'] as String,
-      age: json['age'] as String,
-      cost: json['cost'] as String,
-    );
-  }
 }
 
 class Message {

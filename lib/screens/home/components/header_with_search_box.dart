@@ -39,13 +39,24 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
           ),
           child: Row(
             children: <Widget>[
-              Text(
-                "Привет User_${me[0].id}!",
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              isClient
+                  ? Text(
+                      "Привет ${clientMe[0].name}!",
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                    )
+                  : Text(
+                      "Привет ${tutorMe[0].name}!",
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
-              ),
+
               const Spacer(),
               //Image.asset("assets/images/logo.png"),
               Image.asset("assets/images/icon.png")

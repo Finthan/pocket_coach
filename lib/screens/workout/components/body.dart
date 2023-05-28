@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
 import 'list_workout.dart';
 
 class Body extends StatefulWidget {

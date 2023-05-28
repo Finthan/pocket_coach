@@ -23,7 +23,7 @@ class _CoachWomanState extends State<CoachWoman> {
           Coach(
             image: "assets/images/women_1.jpg",
             title: "Анастасия",
-            country: "Тренер",
+            TypeOfTraning: "Тренер",
             press: () {
               Navigator.push(
                 context,
@@ -42,7 +42,7 @@ class _CoachWomanState extends State<CoachWoman> {
           Coach(
             image: "assets/images/women_2.jpg",
             title: "Виталина",
-            country: "Тренер",
+            TypeOfTraning: "Тренер",
             press: () {
               Navigator.push(
                 context,
