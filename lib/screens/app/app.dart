@@ -67,7 +67,8 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      getTutors();
+      var list = getTutors();
+      print(list);
     });
 
     return Scaffold(

@@ -25,7 +25,7 @@ class Coach extends StatelessWidget {
         bottom: kDefaultPadding * 2.5,
       ),
       //width: size.width * 0.4,
-      width: 180,
+      width: 210,
       child: Column(
         children: <Widget>[
           Image.asset(image),
@@ -50,7 +50,7 @@ class Coach extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   SizedBox(
-                    width: 120,
+                    width: 140,
                     child: RichText(
                       text: TextSpan(
                         children: [

@@ -14,40 +14,60 @@ class AuthRegistrationScreen extends StatefulWidget {
   State<AuthRegistrationScreen> createState() => _AuthRegistrationScreenState();
 }
 
-Me me = Me(id: "-0");
+List<dynamic> me = [
+  Me(id: "-0"),
+];
 
 class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   var isRegist = false;
-
   final _loginTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _mailTextController = TextEditingController();
 
   Future<void> _auth() async {
-    print("auth");
+    var login = utf8.encode(_loginTextController.text);
+    var pass = utf8.encode(_passwordTextController.text);
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'auth',
       'object': 'login',
-      'login': '${_loginTextController.text}',
-      'pass': '${_passwordTextController.text}'
+      'login': '$login',
+      'pass': '$pass',
     });
 
-    dynamic getTutorsList = await http.get(uri);
-    var decodedResponse =
-        jsonDecode(utf8.decode(getTutorsList.bodyBytes)) as Map;
+    // Uri checkClient = Uri.http('gymapp.amadeya.net', '/api.php', {
+    //   'apiv': '1',
+    //   'action': 'auth',
+    //   'object': 'checkclient',
+    //   'id': '${me[0].id}',
+    // });
+    // Uri checkTutor = Uri.http('gymapp.amadeya.net', '/api.php', {
+    //   'apiv': '1',
+    //   'action': 'auth',
+    //   'object': 'checktutor',
+    //   'id': '${me[0].id}',
+    // });
+
+    dynamic auth = await http.get(uri);
+    var decodedResponse = jsonDecode(utf8.decode(auth.bodyBytes)) as Map;
     String jsonString = jsonEncode(decodedResponse['data']);
-    print(jsonString);
 
     try {
       final json = await jsonDecode(jsonString) as dynamic;
-      me = json(Me.fromJson);
-      print(me.id);
+      me = json
+          .map((dynamic e) => Me.fromJson(e as Map<String, dynamic>))
+          .toList();
+      // dynamic check_client = await http.get(checkClient);
+      // dynamic check_tutor = await http.get(checkTutor);
+
+      // print(check_client);
+      // print("//////");
+      // print(check_tutor);
     } catch (error) {
       print(error);
     }
-
-    if (me.id != "-0") {
+//gymapp.amadeya.net/api.php?apiv=1&action=auth&object=registertutor&login=Nik&pass=Никита$age=18$gender=М$name=Никита$cost=400$type_of_training=Бодибилдинг
+    if (me[0].id != "-0") {
       setState(() {
         isAuth = true;
         runApp(const Main());

@@ -32,13 +32,13 @@ class _CoachMan extends State<CoachMan> {
                     builder: (context) => DetailsScreen(
                       title: listOfTutors[i].name,
                       country: listOfTutors[i].typeOfTraining,
-                      image: "assets/images/men_$i.jpg",
-                      price: 500,
+                      image: "assets/images/men_${i + 1}.jpg",
+                      price: int.parse(listOfTutors[i].cost),
                     ),
                   ),
                 );
               },
-              price: 500,
+              price: int.parse(listOfTutors[i].cost),
             ),
           // Coach(
           //   image: "assets/images/men_2.jpg",

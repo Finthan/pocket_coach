@@ -40,7 +40,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
           child: Row(
             children: <Widget>[
               Text(
-                "Привет User_${me.id}!",
+                "Привет User_${me[0].id}!",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

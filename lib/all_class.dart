@@ -54,7 +54,7 @@ class Tutor {
   final String typeOfTraining;
   final String age;
   final String name;
-  final String? cost;
+  final String cost;
 
   Tutor({
     required this.id,
@@ -62,7 +62,7 @@ class Tutor {
     required this.typeOfTraining,
     required this.age,
     required this.name,
-    this.cost,
+    required this.cost,
   });
 
   factory Tutor.fromJson(Map<String, dynamic> json) {
@@ -72,6 +72,7 @@ class Tutor {
       typeOfTraining: json['type_of_training'] as String,
       name: json['name'] as String,
       age: json['age'] as String,
+      cost: json['cost'] as String,
     );
   }
 }
