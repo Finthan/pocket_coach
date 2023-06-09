@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../all_class.dart';
 import '../../../constants.dart';
 import '../../../functions/get_functions.dart';
+import '../../auth_registration.dart/auth_registration_screen.dart';
 import 'client_widget.dart';
 
 class ClientsWidget extends StatefulWidget {
@@ -17,6 +21,9 @@ class ClientsWidget extends StatefulWidget {
 class _ClientsWidget extends State<ClientsWidget>
     with SingleTickerProviderStateMixin {
   final _timeTextController = TextEditingController();
+
+  final _workoutTextController = TextEditingController();
+
   final _nameExercises1TextController = TextEditingController();
   final _nameExercises2TextController = TextEditingController();
   final _nameExercises3TextController = TextEditingController();
@@ -129,26 +136,16 @@ class _ClientsWidget extends State<ClientsWidget>
     dynamic listClientForWorkout;
     var countWork = 0;
     var time = "";
-    List<String> nameExercises;
-    setState(() {
-      try {
-        countWork = int.parse(_countTextController.text);
-        print(countWork);
-      } catch (e) {
-        print(e);
-      }
-
-      try {
-        time = _timeTextController.text;
-        print(time);
-      } catch (e) {
-        print(e);
-      }
-
-      try {} catch (e) {
-        print(e);
-      }
-    });
+    var nameWorkout = "";
+    List<dynamic> workoutList = [
+      WorkoutList(
+        idTutor: '',
+        idClient: '',
+        nameWorkout: '',
+        workoutDate: '',
+      ),
+    ];
+    // List<String> nameExercises;
     return Stepper(
       steps: [
         Step(
@@ -166,8 +163,8 @@ class _ClientsWidget extends State<ClientsWidget>
                   ClientWidget(
                     title: listOfClients[i].name,
                     press: () {
-                      listClientForWorkout = listOfClients[i];
-                      print(listClientForWorkout.cardnumber);
+                      listClientForWorkout = listOfClients[i].cardnumber;
+                      print(listClientForWorkout);
                     },
                     age: listOfClients[i].age,
                     cardnumber: listOfClients[i].cardnumber,
@@ -203,7 +200,7 @@ class _ClientsWidget extends State<ClientsWidget>
                   decoration: const InputDecoration(
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                    hintText: "27.05.2023_10:25:00",
+                    hintText: "2023-05-28",
                     hintStyle: TextStyle(color: kTextChat),
                     isCollapsed: true,
                     filled: true,
@@ -252,7 +249,7 @@ class _ClientsWidget extends State<ClientsWidget>
               Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: TextField(
-                  controller: list[i],
+                  controller: _workoutTextController,
                   decoration: const InputDecoration(
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 10, vertical: 13),
@@ -282,7 +279,7 @@ class _ClientsWidget extends State<ClientsWidget>
             child: Row(
               children: [
                 if (countWork != 0)
-                  for (var i = 1; i < countWork + 1; i++)
+                  for (var i = 0; i < countWork; i++)
                     Padding(
                       padding: EdgeInsets.only(left: 18, top: 15, bottom: 10),
                       child: Align(
@@ -464,10 +461,36 @@ class _ClientsWidget extends State<ClientsWidget>
       currentStep: _currentStep,
       onStepContinue: () {
         setState(() {
+          // dynamic auth = await http.get(uri);
+          // var decodedResponse =
+          //     jsonDecode(utf8.decode(auth.bodyBytes)) as Map;
+          // String jsonString = jsonEncode(decodedResponse['data']);
+
+          // try {
+          //   final json = await jsonDecode(jsonString) as dynamic;
+          //   workoutList = json
+          //       .map((dynamic e) =>
+          //           WorkoutList.fromJson(e as Map<String, dynamic>))
+          //       .toList();
+          // } catch (error) {}
+          // _currentStep += 1;
+          //ввести данные по тренировкам
           if (_currentStep != 3) {
             _currentStep += 1;
-          } else {
-            print("Завершение тренировки");
+          } else if (_currentStep == 3) {
+            print("listClientForWorkout = $listClientForWorkout");
+            Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+              'apiv': '1',
+              'action': 'set',
+              'object': 'createworkout',
+              'id_tutor': '${tutorMe[0].id}',
+              'id_client': '${listClientForWorkout}',
+              'name_workout': '${_workoutTextController.text}',
+              'workout_date': '$time',
+              'approach': '{${approaches}}',
+              'repetition': '{{repetition}}',
+              'muscle_group': '{${muscle_group}}',
+            });
           }
         });
       },

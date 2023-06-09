@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 import '../../auth_registration.dart/auth_registration_screen.dart';
+import 'client_man.dart';
 import 'coach_woman.dart';
 import 'header_with_search_box.dart';
 import 'coach_man.dart';
@@ -32,22 +33,20 @@ class _BodyState extends State<Body> {
                 ? Column(
                     children: [
                       TitleWithMoreBtn(
-                        title: "Тренер мужчина",
+                        title: "Тренера",
                         press: () {},
                       ),
-                      CoachMan(),
-                      TitleWithMoreBtn(
-                        title: "Тренер женщина",
-                        press: () {},
-                      ),
-                      CoachWoman(),
-                      const SizedBox(
-                        height: kDefaultPadding,
-                      )
+                      CoachMan()
                     ],
                   )
                 : Column(
-                    children: [],
+                    children: [
+                      TitleWithMoreBtn(
+                        title: "Все клиенты",
+                        press: () {},
+                      ),
+                      ClientMan(),
+                    ],
                   )
           ],
         ),

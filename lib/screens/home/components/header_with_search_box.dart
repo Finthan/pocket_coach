@@ -41,6 +41,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
             children: <Widget>[
               isClient
                   ? Text(
+                      //"Привет User_${tutorMe[0].id}!",
                       "Привет ${clientMe[0].name}!",
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(

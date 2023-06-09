@@ -3,6 +3,7 @@ import 'package:rive/rive.dart';
 
 import '../../../constants.dart';
 import '../models/rive_asset.dart';
+import '../screens/auth_registration.dart/auth_registration_screen.dart';
 import '../screens/side_screens/help/help.dart';
 import '../screens/side_screens/nutrition_information/nutrition_information.dart';
 import '../screens/side_screens/settings/settings.dart';
@@ -31,10 +32,16 @@ class _SideMenuState extends State<SideMenu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const InfoCard(
-                name: 'Никита',
-                status: 'Тренируемый',
-              ),
+              isClient
+                  ? InfoCard(
+                      name: '${clientMe[0].name}',
+                      status: '${clientMe[0].cardnumber}',
+                    )
+                  : InfoCard(
+                      name: '${tutorMe[0].name}',
+                      status: '${tutorMe[0].typeOfTraining}',
+                    ),
+
               Padding(
                 padding: const EdgeInsets.only(left: 17, top: 25, bottom: 15),
                 child: Text(

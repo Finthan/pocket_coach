@@ -140,6 +140,34 @@ class User {
   });
 }
 
+// 'id_tutor': '',
+// 'id_client': '',
+// 'name_workout': '',
+// 'workout_date': '',
+
+class WorkoutList {
+  final String idTutor;
+  final String idClient;
+  final String nameWorkout;
+  final String workoutDate;
+
+  WorkoutList({
+    required this.idTutor,
+    required this.idClient,
+    required this.nameWorkout,
+    required this.workoutDate,
+  });
+
+  factory WorkoutList.fromJson(Map<String, dynamic> json) {
+    return WorkoutList(
+      idTutor: json['id_tutor'] as String,
+      idClient: json['id_client'] as String,
+      nameWorkout: json['name_workout'] as String,
+      workoutDate: json['workout_date'] as String,
+    );
+  }
+}
+
 class Message {
   late bool isMe;
   late String message;
