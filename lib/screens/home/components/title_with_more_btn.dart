@@ -28,7 +28,7 @@ class TitleWithMoreBtn extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all(kPrimaryColor)),
             onPressed: press,
             child: const Text(
-              "Больше",
+              "Обновить",
               style: TextStyle(color: Colors.white),
             ),
           ),

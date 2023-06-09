@@ -16,7 +16,7 @@ List<Tutors> listOfTutors = [
   ),
 ];
 
-void getTutors() async {
+Future<void> getTutors() async {
   Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
     'apiv': '1',
     'action': 'get',
@@ -25,10 +25,9 @@ void getTutors() async {
   getTutorsList = await http.get(uri);
   var decodedResponse = jsonDecode(utf8.decode(getTutorsList.bodyBytes)) as Map;
   String jsonString = jsonEncode(decodedResponse['data']);
-  print(jsonString);
   try {
-    print(1);
     final json = await jsonDecode(jsonString) as List<dynamic>;
+
     listOfTutors = json
         .map((dynamic e) => Tutors.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -47,7 +46,7 @@ List<Clients> listOfClients = [
   ),
 ];
 
-void getClients() async {
+Future<void> getClients() async {
   Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
     'apiv': '1',
     'action': 'get',

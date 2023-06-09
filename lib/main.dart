@@ -1,4 +1,4 @@
-import 'package:pocket_coach/screens/app/app.dart';
+import 'package:pocket_coach/screens/app/main_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -57,7 +57,7 @@ class _MainState extends State<Main> {
         primaryColor: kNavBarIconColor,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kPrimaryColor),
       ),
-      home: isAuth ? const App() : const AuthRegistrationScreen(),
+      home: isAuth ? MainApp() : const AuthRegistrationScreen(),
     );
   }
 }

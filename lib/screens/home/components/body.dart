@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import '../../../functions/get_functions.dart';
+import '../../../main.dart';
+import '../../../models/client_man.dart';
+import '../../../models/coach_man.dart';
 import '../../auth_registration.dart/auth_registration_screen.dart';
-import 'client_man.dart';
-import 'coach_woman.dart';
+
 import 'header_with_search_box.dart';
-import 'coach_man.dart';
 import 'title_with_more_btn.dart';
 
 class Body extends StatefulWidget {
@@ -43,6 +45,11 @@ class _BodyState extends State<Body> {
                     children: [
                       TitleWithMoreBtn(
                         title: "Все клиенты",
+                        press: () {},
+                      ),
+                      ClientMan(),
+                      TitleWithMoreBtn(
+                        title: "Остальные клиенты",
                         press: () {},
                       ),
                       ClientMan(),

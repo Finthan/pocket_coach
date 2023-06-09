@@ -75,10 +75,34 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
               ButtonSettings(
                 text: "Выйти с аккаунта",
                 press: () {
-                  setState(() {
-                    isAuth = false;
-                    runApp(const Main());
-                  });
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              isAuth = false;
+                              runApp(const Main());
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Text('Выйти'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Text('Отмена'),
+                        ),
+                      ],
+                      title: Text('Выйти из аккаунта?'),
+                      contentPadding: EdgeInsets.all(20.0),
+                    ),
+                  );
                 },
               ),
             // if (widget.menu.title == "Внешний вид")

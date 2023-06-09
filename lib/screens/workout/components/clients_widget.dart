@@ -145,7 +145,8 @@ class _ClientsWidget extends State<ClientsWidget>
         workoutDate: '',
       ),
     ];
-    // List<String> nameExercises;
+    List<String> nameExercises;
+
     return Stepper(
       steps: [
         Step(

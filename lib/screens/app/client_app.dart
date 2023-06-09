@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pocket_coach/screens/auth_registration.dart/auth_registration_screen.dart';
+import 'package:pocket_coach/functions/get_functions.dart';
 import 'package:pocket_coach/screens/home/home_screen.dart';
 import 'package:pocket_coach/screens/workout/workout_screen.dart';
 import 'package:rive/rive.dart';
@@ -9,26 +9,24 @@ import 'package:rive/rive.dart';
 import '../../components/animated_bar.dart';
 import '../../components/side_menu.dart';
 import '../../constants.dart';
-import '../../functions/get_functions.dart';
 import '../../models/rive_asset.dart';
 import '../../models/side_menu_button.dart';
 import '../../utils/rive_utils.dart';
-import '../chat/chat_screen.dart';
 
-class App extends StatefulWidget {
-  const App({super.key});
+class ClientApp extends StatefulWidget {
+  const ClientApp({super.key});
 
   @override
-  State<App> createState() => _AppState();
+  State<ClientApp> createState() => _ClientAppState();
 }
 
 List navBarButton = [
   const HomeScreen(),
-  const ChatScreen(),
   const WorkoutScreen(),
 ];
 
-class _AppState extends State<App> with SingleTickerProviderStateMixin {
+class _ClientAppState extends State<ClientApp>
+    with SingleTickerProviderStateMixin {
   late SMIBool isMenuClosed;
 
   late AnimationController _animationController;
@@ -67,16 +65,6 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (isClient) {
-      setState(() {
-        getTutors();
-      });
-    } else {
-      setState(() {
-        getClients();
-      });
-    }
-
     return Scaffold(
       backgroundColor: kBackgroundSideColor,
       body: Stack(
@@ -154,7 +142,7 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
             ],
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               ...List.generate(
                 buttomNavs.length,

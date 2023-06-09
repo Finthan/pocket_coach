@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 import '../../../models/coach.dart';
-import '../../details/details_screen.dart';
+import '../screens/details/details_screen.dart';
 
 class CoachWoman extends StatefulWidget {
   const CoachWoman({

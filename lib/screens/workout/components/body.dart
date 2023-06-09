@@ -21,7 +21,7 @@ class _BodyState extends State<Body> {
             style: TextStyle(fontSize: 24),
           ),
         ),
-        centerTitle: false,
+        centerTitle: true,
       ),
       body: const ListWorkout(),
     );

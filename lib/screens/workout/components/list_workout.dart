@@ -43,55 +43,60 @@ class _ListWorkoutState extends State<ListWorkout>
       "assets/images/icon_no.png",
       "assets/images/icon_no.png",
     ];
-    var day;
-    var month;
-    var week = [0, 0, 0];
-    DateTime trainingWeek = DateTime.parse(training[0].dateTime);
-    for (var i = 0; i < 3; i++) {
-      day = 0;
-      month = 0;
-      for (var j = 0; j < training.length; j++) {
-        if (todayDay.year <= DateTime.parse(training[j].dateTime).year &&
-            todayDay.month <= DateTime.parse(training[j].dateTime).month &&
-            todayDay.day <= DateTime.parse(training[j].dateTime).day &&
-            week[0] != DateTime.parse(training[j].dateTime).weekday &&
-            week[1] != DateTime.parse(training[j].dateTime).weekday) {
-          trainingWeek = DateTime.parse(training[j].dateTime);
-          week[i] = DateTime.parse(training[j].dateTime).weekday;
-          day = DateTime.parse(training[j].dateTime).day;
-          month = DateTime.parse(training[j].dateTime).month;
-          nameWorkout[i] = training[j].name;
-          iconWorkout[i] = training[j].nameIcon;
-          break;
+    if (isClient) {
+      print("отображение тренировок");
+      var day;
+      var month;
+      var week = [0, 0, 0];
+      DateTime trainingWeek = DateTime.parse(training[0].dateTime);
+      for (var i = 0; i < 3; i++) {
+        day = 0;
+        month = 0;
+        for (var j = 0; j < training.length; j++) {
+          if (todayDay.year <= DateTime.parse(training[j].dateTime).year &&
+              todayDay.month <= DateTime.parse(training[j].dateTime).month &&
+              todayDay.day <= DateTime.parse(training[j].dateTime).day &&
+              week[0] != DateTime.parse(training[j].dateTime).weekday &&
+              week[1] != DateTime.parse(training[j].dateTime).weekday) {
+            trainingWeek = DateTime.parse(training[j].dateTime);
+            week[i] = DateTime.parse(training[j].dateTime).weekday;
+            day = DateTime.parse(training[j].dateTime).day;
+            month = DateTime.parse(training[j].dateTime).month;
+            nameWorkout[i] = training[j].name;
+            iconWorkout[i] = training[j].nameIcon;
+            break;
+          }
         }
-      }
-      if (todayDay.day == day && todayDay.month == month) {
-        weekList[i] = "Сегодня";
-      } else if (todayDay.day + 1 == day && todayDay.month == month) {
-        weekList[i] = "Завтра";
-      } else if (day != 0) {
-        switch (trainingWeek.weekday) {
-          case 1:
-            weekList[i] = "Понедельник $day.$month";
-            break;
-          case 2:
-            weekList[i] = "Вторник $day.$month";
-            break;
-          case 3:
-            weekList[i] = "Среда $day.$month";
-            break;
-          case 4:
-            weekList[i] = "Четверг $day.$month";
-            break;
-          case 5:
-            weekList[i] = "Пятница $day.$month";
-            break;
-          case 6:
-            weekList[i] = "Суббота $day.$month";
-            break;
+        print(" ${nameWorkout[0]} ${nameWorkout[1]} ${nameWorkout[2]}");
+        if (todayDay.day == day && todayDay.month == month) {
+          weekList[i] = "Сегодня";
+        } else if (todayDay.day + 1 == day && todayDay.month == month) {
+          weekList[i] = "Завтра";
+        } else if (day != 0) {
+          switch (trainingWeek.weekday) {
+            case 1:
+              weekList[i] = "Понедельник $day.$month";
+              break;
+            case 2:
+              weekList[i] = "Вторник $day.$month";
+              break;
+            case 3:
+              weekList[i] = "Среда $day.$month";
+              break;
+            case 4:
+              weekList[i] = "Четверг $day.$month";
+              break;
+            case 5:
+              weekList[i] = "Пятница $day.$month";
+              break;
+            case 6:
+              weekList[i] = "Суббота $day.$month";
+              break;
+          }
         }
       }
     }
+
     return ListView(
       children: [
         isClient

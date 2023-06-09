@@ -26,12 +26,6 @@ List<RiveAsset> buttomNavs = [
   ),
   RiveAsset(
     "assets/RiveAssets/icons.riv",
-    artboard: "CHAT",
-    stateMachineName: "CHAT_Interactivity",
-    title: "Chat",
-  ),
-  RiveAsset(
-    "assets/RiveAssets/icons.riv",
     artboard: "USER",
     stateMachineName: "USER_Interactivity",
     title: "User",
