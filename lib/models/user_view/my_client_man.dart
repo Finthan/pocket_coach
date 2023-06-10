@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../all_class.dart';
-import '../main.dart';
-import '../screens/workout/workout_screen.dart';
+import '../../all_class.dart';
+import '../../info.dart';
+import '../../main.dart';
+import '../../screens/workout/workout_screen.dart';
 import '../../../constants.dart';
 
-class ClientMan extends StatefulWidget {
-  const ClientMan({
+class MyClientMan extends StatefulWidget {
+  const MyClientMan({
     super.key,
   });
 
   @override
-  State<ClientMan> createState() => _ClientMan();
+  State<MyClientMan> createState() => _MyClientMan();
 }
 
-class _ClientMan extends State<ClientMan> {
+class _MyClientMan extends State<MyClientMan> {
   void initState() {
     super.initState();
-    getClients();
+    getMyClients();
   }
 
   List<Clients> listOfClients = [
@@ -32,42 +33,40 @@ class _ClientMan extends State<ClientMan> {
     ),
   ];
 
-  Future<void> getClients() async {
+  Future<void> getMyClients() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
-      'object': 'clients',
+      'object': 'myclients',
+      'id_user': me[0].id.toString(),
     });
     try {
       myClientsList = await http.get(uri);
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print('myClients $error');
     }
     String jsonString = "";
     if (myClientsList.statusCode == 200 && isAuth == true) {
-      //print("isAuth");
-      // setState(() {
       var decodedResponse =
           jsonDecode(utf8.decode(myClientsList.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
-      // });
     }
 
     try {
-      //print(jsonString);
       final json = await jsonDecode(jsonString) as List<dynamic>;
       listOfClients = json
           .map((dynamic e) => Clients.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (error) {
-      print(error);
+      print('ошибка форматирования json myClients $error');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print('проверка id_user ${me[0].id.toString()}');
     return FutureBuilder(
-        future: getClients(),
+        future: getMyClients(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(

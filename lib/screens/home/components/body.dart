@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_coach/models/user_view/my_client_man.dart';
+import 'package:pocket_coach/models/user_view/coach_man.dart';
 
 import '../../../constants.dart';
-import '../../../models/client_man.dart';
-import '../../../models/coach_man.dart';
+import '../../../models/user_view/all_client_man.dart';
 import '../../auth_registration.dart/auth_registration_screen.dart';
 
 import 'header_with_search_box.dart';
@@ -45,12 +46,12 @@ class _BodyState extends State<Body> {
                         title: "Все клиенты",
                         press: () {},
                       ),
-                      const ClientMan(),
+                      const MyClientMan(),
                       TitleWithMoreBtn(
                         title: "Остальные клиенты",
                         press: () {},
                       ),
-                      const ClientMan(),
+                      const AllClientMan(),
                     ],
                   )
           ],

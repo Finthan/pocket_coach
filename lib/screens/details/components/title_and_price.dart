@@ -6,11 +6,11 @@ class TitleAndPrice extends StatelessWidget {
   const TitleAndPrice({
     super.key,
     required this.title,
-    required this.country,
+    required this.status,
     required this.price,
   });
 
-  final String title, country;
+  final String title, status;
   final int price;
 
   @override
@@ -32,7 +32,7 @@ class TitleAndPrice extends StatelessWidget {
                       ),
                 ),
                 TextSpan(
-                  text: country,
+                  text: status,
                   style: const TextStyle(
                     fontSize: 20,
                     color: kPrimaryColor,
@@ -44,7 +44,7 @@ class TitleAndPrice extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            '\$$price',
+            '₽$price',
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: kPrimaryColor,
                 ),

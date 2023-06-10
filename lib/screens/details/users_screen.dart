@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'components/body.dart';
 
-class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({
+class UsersScreen extends StatefulWidget {
+  const UsersScreen({
     super.key,
-    required this.image,
     required this.title,
-    required this.country,
+    required this.image,
+    required this.status,
     required this.price,
   });
 
-  final String image, title, country;
+  final String image, title, status;
   final int price;
 
   @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
+  State<UsersScreen> createState() => _UsersScreenState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class _UsersScreenState extends State<UsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Body(
         title: widget.title,
-        country: widget.country,
+        status: widget.status,
         price: widget.price,
         image: widget.image,
       ),

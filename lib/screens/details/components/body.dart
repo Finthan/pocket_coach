@@ -9,11 +9,11 @@ class Body extends StatelessWidget {
     super.key,
     required this.image,
     required this.title,
-    required this.country,
+    required this.status,
     required this.price,
   });
 
-  final String image, title, country;
+  final String image, title, status;
   final int price;
 
   @override
@@ -26,7 +26,7 @@ class Body extends StatelessWidget {
             size: size,
             image: image,
           ),
-          TitleAndPrice(title: title, country: country, price: price),
+          TitleAndPrice(title: title, status: status, price: price),
           const SizedBox(
             height: kDefaultPadding / 2,
           ),
@@ -45,9 +45,9 @@ class Body extends StatelessWidget {
                       )),
                       backgroundColor:
                           MaterialStateProperty.all(kPrimaryColor)),
-                  onPressed: () {},
+                  onPressed: () {}, //=> _openTelegramChat()
                   child: const Text(
-                    "Купить сейчас",
+                    "Перейти в чат",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -55,19 +55,20 @@ class Body extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Описание",
-                    style: TextStyle(color: kPrimaryColor, fontSize: 16),
-                  ),
-                ),
-              ),
+              Expanded(child: Container()),
             ],
           ),
         ],
       ),
     );
   }
+
+  // _openTelegramChat() async {
+  //   final url = 'https://t.me/$title';
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     print('Could not launch $url');
+  //   }
+  // }
 }

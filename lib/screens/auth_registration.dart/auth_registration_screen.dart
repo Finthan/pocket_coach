@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
+import '../../info.dart';
 import '../../main.dart';
 import '../../all_class.dart';
 
@@ -50,10 +51,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   final _cardnumberTextController = TextEditingController();
 
   Future<void> _auth() async {
-    List<dynamic> me = [
-      Me(id: "-0"),
-    ];
-
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'auth',
@@ -68,9 +65,11 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
 
     try {
       final json = await jsonDecode(jsonString) as dynamic;
-      me = json
-          .map((dynamic e) => Me.fromJson(e as Map<String, dynamic>))
-          .toList();
+      setState(() {
+        me = json
+            .map((dynamic e) => Me.fromJson(e as Map<String, dynamic>))
+            .toList();
+      });
 
       Uri checkClient = Uri.http('gymapp.amadeya.net', '/api.php', {
         'apiv': '1',
@@ -173,7 +172,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
       me = json
           .map((dynamic e) => Me.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(me[0].id);
     } catch (error) {
       print(error);
     }

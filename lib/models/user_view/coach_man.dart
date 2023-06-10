@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../all_class.dart';
-import '../main.dart';
-import '../screens/details/details_screen.dart';
-import '../../../models/coach.dart';
+import '../../all_class.dart';
+import '../../main.dart';
+import '../../screens/details/users_screen.dart';
+import 'coach.dart';
 
 class CoachMan extends StatefulWidget {
   const CoachMan({
@@ -78,19 +78,7 @@ class _CoachMan extends State<CoachMan> {
                       image: "assets/images/men_${i + 1}.jpg",
                       title: listOfTutors[i].name,
                       TypeOfTraning: listOfTutors[i].typeOfTraining,
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailsScreen(
-                              title: listOfTutors[i].name,
-                              country: listOfTutors[i].typeOfTraining,
-                              image: "assets/images/men_${i + 1}.jpg",
-                              price: int.parse(listOfTutors[i].cost),
-                            ),
-                          ),
-                        );
-                      },
+                      press: () {},
                       price: int.parse(listOfTutors[i].cost),
                     ),
                 ],
@@ -110,9 +98,9 @@ class _CoachMan extends State<CoachMan> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetailsScreen(
+                            builder: (context) => UsersScreen(
                               title: listOfTutors[i].name,
-                              country: listOfTutors[i].typeOfTraining,
+                              status: listOfTutors[i].typeOfTraining,
                               image: "assets/images/men_${i + 1}.jpg",
                               price: int.parse(listOfTutors[i].cost),
                             ),
