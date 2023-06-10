@@ -8,6 +8,10 @@ class Me {
   }
 }
 
+dynamic getTutorsList = 'строка не изменена';
+dynamic myClientsList = 'строка не изменена';
+dynamic allClientsList = 'строка не изменена';
+
 class Tutor {
   final String id;
   final String gender;

@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pocket_coach/main.dart';
 
-import '../../../functions/get_functions.dart';
-import '../../../models/coach.dart';
 import '../all_class.dart';
+import '../main.dart';
 import '../screens/details/details_screen.dart';
+import '../../../models/coach.dart';
 
 class CoachMan extends StatefulWidget {
   const CoachMan({
@@ -19,6 +17,7 @@ class CoachMan extends StatefulWidget {
 }
 
 class _CoachMan extends State<CoachMan> {
+  @override
   void initState() {
     super.initState();
     getTutors();
@@ -41,20 +40,20 @@ class _CoachMan extends State<CoachMan> {
       'action': 'get',
       'object': 'tutors',
     });
-    getTutorsList = await http.get(uri);
+    try {
+      getTutorsList = await http.get(uri);
+    } catch (e) {
+      print(e);
+    }
     String jsonString = "";
     if (getTutorsList.statusCode == 200 && isAuth == true) {
-      setState(() {
-        var decodedResponse =
-            jsonDecode(utf8.decode(getTutorsList.bodyBytes)) as Map;
-        jsonString = jsonEncode(decodedResponse['data']);
-      });
+      var decodedResponse =
+          jsonDecode(utf8.decode(getTutorsList.bodyBytes)) as Map;
+      jsonString = jsonEncode(decodedResponse['data']);
     }
 
     try {
-      // setState(() {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      // });
 
       listOfTutors = json
           .map((dynamic e) => Tutors.fromJson(e as Map<String, dynamic>))

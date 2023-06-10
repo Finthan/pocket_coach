@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pocket_coach/functions/get_functions.dart';
 import 'package:pocket_coach/screens/home/home_screen.dart';
 import 'package:pocket_coach/screens/workout/workout_screen.dart';
 import 'package:rive/rive.dart';

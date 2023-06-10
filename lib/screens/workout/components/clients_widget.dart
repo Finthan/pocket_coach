@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../all_class.dart';
 import '../../../constants.dart';
-import '../../../functions/get_functions.dart';
 import '../../auth_registration.dart/auth_registration_screen.dart';
-import 'client_widget.dart';
 
 class ClientsWidget extends StatefulWidget {
   const ClientsWidget({
@@ -153,32 +150,6 @@ class _ClientsWidget extends State<ClientsWidget>
           state: _currentStep > 0 ? StepState.complete : StepState.disabled,
           isActive: _currentStep >= 0,
           title: const Text(
-            "Выбор клиента",
-            style: TextStyle(color: kWhiteColor),
-          ),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                for (var i = 0; i < listOfClients.length; i++)
-                  ClientWidget(
-                    title: listOfClients[i].name,
-                    press: () {
-                      listClientForWorkout = listOfClients[i].cardnumber;
-                      print(listClientForWorkout);
-                    },
-                    age: listOfClients[i].age,
-                    cardnumber: listOfClients[i].cardnumber,
-                    gender: listOfClients[i].gender,
-                  ),
-              ],
-            ),
-          ),
-        ),
-        Step(
-          state: _currentStep > 1 ? StepState.complete : StepState.disabled,
-          isActive: _currentStep >= 1,
-          title: const Text(
             "Задайте параметры",
             style: TextStyle(color: kWhiteColor),
           ),
@@ -269,8 +240,8 @@ class _ClientsWidget extends State<ClientsWidget>
           ),
         ),
         Step(
-          state: _currentStep > 2 ? StepState.complete : StepState.disabled,
-          isActive: _currentStep >= 2,
+          state: _currentStep > 1 ? StepState.complete : StepState.disabled,
+          isActive: _currentStep >= 1,
           title: const Text(
             "Выбор упражнений",
             style: TextStyle(color: kWhiteColor),
@@ -422,8 +393,8 @@ class _ClientsWidget extends State<ClientsWidget>
           ),
         ),
         Step(
-          state: _currentStep > 3 ? StepState.complete : StepState.disabled,
-          isActive: _currentStep >= 3,
+          state: _currentStep > 2 ? StepState.complete : StepState.disabled,
+          isActive: _currentStep >= 2,
           title: const Text(
             "Выбор упражнений2",
             style: TextStyle(color: kWhiteColor),
@@ -462,21 +433,7 @@ class _ClientsWidget extends State<ClientsWidget>
       currentStep: _currentStep,
       onStepContinue: () {
         setState(() {
-          // dynamic auth = await http.get(uri);
-          // var decodedResponse =
-          //     jsonDecode(utf8.decode(auth.bodyBytes)) as Map;
-          // String jsonString = jsonEncode(decodedResponse['data']);
-
-          // try {
-          //   final json = await jsonDecode(jsonString) as dynamic;
-          //   workoutList = json
-          //       .map((dynamic e) =>
-          //           WorkoutList.fromJson(e as Map<String, dynamic>))
-          //       .toList();
-          // } catch (error) {}
-          // _currentStep += 1;
-          //ввести данные по тренировкам
-          if (_currentStep != 3) {
+          if (_currentStep != 2) {
             _currentStep += 1;
           } else if (_currentStep == 3) {
             print("listClientForWorkout = $listClientForWorkout");

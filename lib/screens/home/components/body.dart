@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
-import '../../../functions/get_functions.dart';
-import '../../../main.dart';
 import '../../../models/client_man.dart';
 import '../../../models/coach_man.dart';
 import '../../auth_registration.dart/auth_registration_screen.dart';
@@ -11,7 +9,7 @@ import 'header_with_search_box.dart';
 import 'title_with_more_btn.dart';
 
 class Body extends StatefulWidget {
-  Body({super.key});
+  const Body({super.key});
 
   @override
   State<Body> createState() => _BodyState();
@@ -38,7 +36,7 @@ class _BodyState extends State<Body> {
                         title: "Тренера",
                         press: () {},
                       ),
-                      CoachMan()
+                      const CoachMan()
                     ],
                   )
                 : Column(
@@ -47,12 +45,12 @@ class _BodyState extends State<Body> {
                         title: "Все клиенты",
                         press: () {},
                       ),
-                      ClientMan(),
+                      const ClientMan(),
                       TitleWithMoreBtn(
                         title: "Остальные клиенты",
                         press: () {},
                       ),
-                      ClientMan(),
+                      const ClientMan(),
                     ],
                   )
           ],

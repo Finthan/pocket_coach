@@ -1,10 +1,8 @@
 import 'package:pocket_coach/screens/app/main_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
-import 'functions/get_functions.dart';
 import 'constants.dart';
 import 'screens/auth_registration.dart/auth_registration_screen.dart';
 
