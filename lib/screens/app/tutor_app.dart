@@ -81,7 +81,7 @@ class _TutorAppState extends State<TutorApp>
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(
                       Radius.circular(isSideMenuClosed ? 0 : 25)),
-                  child: HomeScreen(),
+                  child: const HomeScreen(),
                 ),
               ),
             ),

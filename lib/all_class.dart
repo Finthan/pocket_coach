@@ -31,7 +31,7 @@ class Tutor {
 
   factory Tutor.fromJson(Map<String, dynamic> json) {
     return Tutor(
-      id: json['id_user'] as String,
+      id: json['id'] as String,
       gender: json['gender'] as String,
       typeOfTraining: json['type_of_training'] as String,
       name: json['name'] as String,
@@ -58,7 +58,7 @@ class Client {
 
   factory Client.fromJson(Map<String, dynamic> json) {
     return Client(
-      id: json['id_user'] as String,
+      id: json['id'] as String,
       gender: json['gender'] as String,
       cardnumber: json['cardnumber'] as String,
       name: json['name'] as String,
@@ -122,82 +122,153 @@ class Clients {
   }
 }
 
-class User {
-  final int id;
-  final String username;
-  final int age;
-  final String lastMessage;
-  final String time;
-  final String status;
-  final String unReadMessage;
-  final bool isRead;
-
-  User({
-    required this.id,
-    required this.username,
-    required this.age,
-    required this.lastMessage,
-    required this.time,
-    required this.status,
-    required this.unReadMessage,
-    required this.isRead,
-  });
-}
-
-// 'id_tutor': '',
-// 'id_client': '',
-// 'name_workout': '',
-// 'workout_date': '',
-
-class WorkoutList {
-  final String idTutor;
-  final String idClient;
+class Training {
+  final String id;
   final String nameWorkout;
-  final String workoutDate;
+  final String dateTime;
+  final String typeWorkout;
+  final String nameIcon;
+  final int colors;
 
-  WorkoutList({
-    required this.idTutor,
-    required this.idClient,
+  Training({
+    required this.id,
     required this.nameWorkout,
-    required this.workoutDate,
-  });
+    required String dateTime,
+    required this.nameIcon,
+    required this.typeWorkout,
+    required this.colors,
+  }) : dateTime = dateTime + " 00:00:00Z";
 
-  factory WorkoutList.fromJson(Map<String, dynamic> json) {
-    return WorkoutList(
-      idTutor: json['id_tutor'] as String,
-      idClient: json['id_client'] as String,
+  factory Training.fromJson(Map<String, dynamic> json) {
+    int colors;
+    String typeWorkout;
+    String nameIcon;
+    switch (json['name_workout'] as String) {
+      case 'Тренирока на грудь':
+        nameIcon = "assets/images/workout_g.png";
+        typeWorkout = 'Грудь';
+        colors = 0xFF0F8644;
+        break;
+      case 'Тренирока на ноги':
+        nameIcon = "assets/images/workout_g.png";
+        typeWorkout = 'Грудь';
+        colors = 0xFF36B37B;
+        break;
+      case 'Тренирока на руки':
+        nameIcon = "assets/images/workout_g.png";
+        typeWorkout = 'Грудь';
+        colors = 0xFF8B1FA9;
+        break;
+      default:
+        nameIcon = "assets/images/workout_g.png";
+        typeWorkout = 'Нет типа';
+        colors = 0xFFFC571D;
+        break;
+    }
+    return Training(
+      id: json['id'] as String,
       nameWorkout: json['name_workout'] as String,
-      workoutDate: json['workout_date'] as String,
+      dateTime: json['workout_date'] as String,
+      colors: colors,
+      typeWorkout: typeWorkout,
+      nameIcon: nameIcon,
     );
   }
 }
 
-class Message {
-  late bool isMe;
-  late String message;
-  late String time;
+class ExerciseList {
+  String id;
+  String idWorkout;
+  String nameExercise;
+  String muscleGroup;
+  String ordering;
 
-  Message(
-    this.isMe,
-    this.message,
-    this.time,
-  );
+  ExerciseList({
+    required this.id,
+    required this.idWorkout,
+    required this.nameExercise,
+    required this.muscleGroup,
+    required this.ordering,
+  });
+
+  factory ExerciseList.fromJson(Map<String, dynamic> json) {
+    return ExerciseList(
+      id: json['id'] as String,
+      idWorkout: json['id_workout'] as String,
+      nameExercise: json['name_exercise'] as String,
+      muscleGroup: json['muscle_group'] as String,
+      ordering: json['ordering'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id_workout': idWorkout,
+      'name_exercise': nameExercise,
+      'muscle_group': muscleGroup,
+      'ordering': int.parse(ordering),
+    };
+  }
 }
 
-class Training {
-  late int id;
-  late String nameIcon;
-  late String name;
-  late String dateTime;
-  late List<String> workout;
-  late int colors;
+class ApproachesList {
+  String id;
+  String idExerciseWorkout;
+  String numberApproaches;
+  String weight;
+  String countList;
 
-  Training(
-    this.id,
-    this.nameIcon,
-    this.name,
-    this.dateTime,
-    this.workout,
-    this.colors,
-  );
+  ApproachesList({
+    required this.id,
+    required this.idExerciseWorkout,
+    required this.numberApproaches,
+    required this.weight,
+    required this.countList,
+  });
+
+  factory ApproachesList.fromJson(Map<String, dynamic> json) {
+    return ApproachesList(
+      id: json['id'] as String,
+      idExerciseWorkout: json['id_exercise_workout'] as String,
+      numberApproaches: json['number_approaches'] as String,
+      weight: json['weight'] as String,
+      countList: json['count'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': int.parse(id),
+      'id_exercise_workout': idExerciseWorkout,
+      'number_approaches': int.parse(numberApproaches),
+      'weight': int.parse(weight),
+      'count_list': int.parse(countList),
+    };
+  }
+}
+
+class ClientExercise {
+  String id;
+  String idWorkout;
+  String nameExercise;
+  String muscleGroup;
+  String ordering;
+
+  ClientExercise({
+    required this.id,
+    required this.idWorkout,
+    required this.nameExercise,
+    required this.muscleGroup,
+    required this.ordering,
+  });
+
+  factory ClientExercise.fromJson(Map<String, dynamic> json) {
+    return ClientExercise(
+      id: json['id'] as String,
+      idWorkout: json['id_workout'] as String,
+      nameExercise: json['name_exercise'] as String,
+      muscleGroup: json['muscle_group'] as String,
+      ordering: json['ordering'] as String,
+    );
+  }
 }

@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../all_class.dart';
 import '../../../constants.dart';
+import '../../../main.dart';
+import '../../auth_registration.dart/auth_registration_screen.dart';
 
 class Workout extends StatefulWidget {
   const Workout({
@@ -10,19 +16,63 @@ class Workout extends StatefulWidget {
   });
 
   final String title;
-  final int id;
+  final String id;
 
   @override
   State<Workout> createState() => _WorkoutState();
 }
 
 class _WorkoutState extends State<Workout> {
+  List<ClientExercise> clientExercise = [];
+
   int _currentStep = 0;
 
   int i = 0;
   int countWidget = 6;
-  int countWorkout = 6;
+  int countWorkout = 1;
   var countTrue = true;
+
+  @override
+  void initState() {
+    super.initState();
+    clientTrainings();
+  }
+
+  Future<void> clientTrainings() async {
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'get',
+      'object': 'clientexercise',
+      'id_client': clientMe[0].id,
+    });
+    var response;
+    try {
+      response = await http.get(uri);
+    } catch (error) {
+      print('myClients $error');
+      return;
+    }
+    String jsonString = "";
+    if (response.statusCode == 200 && isAuth == true) {
+      var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+      jsonString = jsonEncode(decodedResponse['data']);
+    }
+    try {
+      final json = await jsonDecode(jsonString) as List<dynamic>;
+//print(jsonString);
+      if (json.length > 0) {
+        setState(() {
+          clientExercise = json
+              .map((dynamic e) =>
+                  ClientExercise.fromJson(e as Map<String, dynamic>))
+              .toList();
+          countWorkout = clientExercise.length;
+        });
+      }
+    } catch (error) {
+      print('ошибка форматирования json myClients $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +100,9 @@ class _WorkoutState extends State<Workout> {
         steps: [
           for (i = 0; i < countWorkout; i++)
             Step(
-              state: _currentStep > i ? StepState.complete : StepState.disabled,
+              state: _currentStep >= i && _currentStep < countWorkout
+                  ? StepState.complete
+                  : StepState.disabled,
               isActive: _currentStep == i,
               title: const Text(
                 "Step 1",
@@ -59,7 +111,6 @@ class _WorkoutState extends State<Workout> {
               content: Column(
                 children: [
                   Container(
-                    // padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
                     width: 500,
                     height: 200,
                     decoration: const BoxDecoration(
@@ -124,20 +175,18 @@ class _WorkoutState extends State<Workout> {
         ],
         currentStep: _currentStep,
         onStepContinue: () {
-          setState(() {
-            if (_currentStep != i - 1) {
-              _currentStep += 1;
-            } else {
-              print("Завершение тренировки");
-            }
-          });
+          if (_currentStep < countWorkout - 1) {
+            setState(() {
+              _currentStep++;
+            });
+          }
         },
         onStepCancel: () {
-          setState(() {
-            if (_currentStep != 0) {
-              _currentStep -= 1;
-            }
-          });
+          if (_currentStep > 0) {
+            setState(() {
+              _currentStep--;
+            });
+          }
         },
       ),
     );

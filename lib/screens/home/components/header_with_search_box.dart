@@ -19,6 +19,7 @@ class HeaderWithSearchBox extends StatefulWidget {
 class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
   @override
   Widget build(BuildContext context) {
+    print("${widget.size.height} ${widget.size.width}");
     return Container(
       margin: const EdgeInsets.only(bottom: kDefaultPadding * 2.5),
       height: widget.size.height * 0.2,

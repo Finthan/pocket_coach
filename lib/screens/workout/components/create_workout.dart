@@ -4,7 +4,12 @@ import '../../../constants.dart';
 import 'clients_widget.dart';
 
 class CreateWorkout extends StatefulWidget {
-  const CreateWorkout({super.key});
+  const CreateWorkout({
+    super.key,
+    required this.id,
+  });
+
+  final String id;
 
   @override
   State<CreateWorkout> createState() => _CreateWorkoutState();
@@ -25,7 +30,9 @@ class _CreateWorkoutState extends State<CreateWorkout> {
         title: const Text("Создание тренировки"),
         centerTitle: false,
       ),
-      body: ClientsWidget(),
+      body: ClientsWidget(
+        id: widget.id,
+      ),
     );
   }
 }

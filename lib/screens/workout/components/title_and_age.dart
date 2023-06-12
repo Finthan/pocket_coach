@@ -7,18 +7,16 @@ class TitleAndPrice extends StatelessWidget {
     super.key,
     required this.title,
     required this.status,
-    required this.price,
+    required this.age,
   });
 
-  final String title, status;
-  final int price;
+  final String title, status, age;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: kDefaultPadding,
-      ),
+      padding:
+          const EdgeInsets.symmetric(horizontal: kDefaultPadding, vertical: 20),
       child: Row(
         children: <Widget>[
           RichText(
@@ -27,7 +25,7 @@ class TitleAndPrice extends StatelessWidget {
                 TextSpan(
                   text: "$title\n",
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        color: kPrimaryColor,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -35,7 +33,7 @@ class TitleAndPrice extends StatelessWidget {
                   text: status,
                   style: const TextStyle(
                     fontSize: 20,
-                    color: kPrimaryColor,
+                    color: Colors.white,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
@@ -44,9 +42,9 @@ class TitleAndPrice extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            '₽$price',
+            '$age',
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  color: kPrimaryColor,
+                  color: Colors.white,
                 ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -5,8 +6,8 @@ import 'package:http/http.dart' as http;
 import '../../all_class.dart';
 import '../../info.dart';
 import '../../main.dart';
-import '../../screens/workout/workout_screen.dart';
 import '../../../constants.dart';
+import '../../user_screen/client_screen/client_screen.dart';
 
 class AllClientMan extends StatefulWidget {
   const AllClientMan({
@@ -21,6 +22,7 @@ class _AllClientMan extends State<AllClientMan> {
   void initState() {
     super.initState();
     getAllClients();
+    Timer.periodic(Duration(seconds: 5), (Timer t) => getAllClients());
   }
 
   List<Clients> listOfClients = [
@@ -54,9 +56,13 @@ class _AllClientMan extends State<AllClientMan> {
 
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      listOfClients = json
-          .map((dynamic e) => Clients.fromJson(e as Map<String, dynamic>))
-          .toList();
+      if (json.length > 0) {
+        setState(() {
+          listOfClients = json
+              .map((dynamic e) => Clients.fromJson(e as Map<String, dynamic>))
+              .toList();
+        });
+      }
     } catch (error) {
       print(error);
     }
@@ -72,16 +78,9 @@ class _AllClientMan extends State<AllClientMan> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for (var i = 0; i < listOfClients.length; i++)
+                  for (var i = 0; i < 3; i++)
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const WorkoutScreen(),
-                          ),
-                        );
-                      },
+                      onTap: () {},
                       child: Container(
                         margin: const EdgeInsets.only(
                           left: 20,
@@ -159,7 +158,13 @@ class _AllClientMan extends State<AllClientMan> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const WorkoutScreen(),
+                            builder: (context) => ClientScreen(
+                              id: listOfClients[i].id,
+                              title: listOfClients[i].name,
+                              age: listOfClients[i].age,
+                              status: listOfClients[i].cardnumber,
+                              image: 'assets/images/men_0.jpg',
+                            ),
                           ),
                         );
                       },

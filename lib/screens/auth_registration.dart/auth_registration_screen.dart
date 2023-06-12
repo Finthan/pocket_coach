@@ -136,8 +136,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
     ];
     Uri uri;
     if (isRegClient == true) {
-      print(isRegClient);
-
       uri = Uri.http('gymapp.amadeya.net', '/api.php', {
         'apiv': '1',
         'action': 'auth',

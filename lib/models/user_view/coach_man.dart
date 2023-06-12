@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../all_class.dart';
 import '../../main.dart';
-import '../../screens/details/users_screen.dart';
+import '../../user_screen/tutor_screen/tutor_screen.dart';
 import 'coach.dart';
 
 class CoachMan extends StatefulWidget {
@@ -54,10 +54,11 @@ class _CoachMan extends State<CoachMan> {
 
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-
-      listOfTutors = json
-          .map((dynamic e) => Tutors.fromJson(e as Map<String, dynamic>))
-          .toList();
+      if (json.length > 0) {
+        listOfTutors = json
+            .map((dynamic e) => Tutors.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
     } catch (error) {
       print(error);
     }
@@ -98,11 +99,11 @@ class _CoachMan extends State<CoachMan> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => UsersScreen(
+                            builder: (context) => TutorScreen(
                               title: listOfTutors[i].name,
                               status: listOfTutors[i].typeOfTraining,
                               image: "assets/images/men_${i + 1}.jpg",
-                              price: int.parse(listOfTutors[i].cost),
+                              price: listOfTutors[i].cost,
                             ),
                           ),
                         );

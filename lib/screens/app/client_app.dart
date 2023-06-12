@@ -21,7 +21,12 @@ class ClientApp extends StatefulWidget {
 
 List navBarButton = [
   const HomeScreen(),
-  const WorkoutScreen(),
+  const WorkoutScreen(
+    id: '',
+    status: '',
+    name: '',
+    age: '',
+  ),
 ];
 
 class _ClientAppState extends State<ClientApp>
