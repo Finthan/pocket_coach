@@ -20,9 +20,12 @@ class Approaches extends StatefulWidget {
 
 class _ApproachesState extends State<Approaches> {
   List<ApproachesList> _data = [];
+  bool _isAuth = true;
+
   @override
   void initState() {
     super.initState();
+    _isAuth = Main.isAuth;
     getApproaches();
   }
 
@@ -46,6 +49,7 @@ class _ApproachesState extends State<Approaches> {
               child: const Text('Удалить'),
               onPressed: () {
                 setState(() {
+                  deleteApproaches(index);
                   _data.removeAt(index);
                   for (var i = 0; i < _data.length; i++) {
                     _data[i].numberApproaches = (i + 1).toString();
@@ -60,13 +64,38 @@ class _ApproachesState extends State<Approaches> {
     );
   }
 
-  Future<void> fetchApproaches(jsonData) async {
+  Future<void> deleteApproaches(i) async {
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'set',
+      'object': 'delapproaches',
+      'id': _data[i].id,
+      'id_exercise_workout': _data[i].idExerciseWorkout,
+    });
+    await http.get(uri);
+
+    setState(() {
+      try {
+        for (var i = 0; i < _data.length; i++) {
+          _data[i].numberApproaches = (i + 1).toString();
+        }
+        fetchApproaches();
+      } catch (e) {}
+    });
+  }
+
+  Future<void> fetchApproaches() async {
+    for (var i = 0; i < _data.length; i++) {
+      print(
+          'id:${_data[i].id} idExerciseWorkout:${_data[i].idExerciseWorkout} numberApproaches:${_data[i].numberApproaches} weight:${_data[i].weight} countList:${_data[i].countList}');
+    }
+    var jsonData = _data.map((aproaches) => aproaches.toJson()).toList();
+    print(jsonData);
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
       'object': 'addapproaches',
     });
-    // print(jsonData);
     var response;
     try {
       response = await http.post(uri,
@@ -74,16 +103,15 @@ class _ApproachesState extends State<Approaches> {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(jsonData));
-      print("!!!!!!");
 
       print(utf8.decode(response.bodyBytes));
       String jsonString = "";
-      if (response.statusCode == 200 && isAuth == true) {
+      if (response.statusCode == 200 && _isAuth == true) {
         var decodedResponse =
             jsonDecode(utf8.decode(response.bodyBytes)) as Map;
         jsonString = jsonEncode(decodedResponse['data']);
       }
-      // print(jsonString);
+      print(jsonString);
       try {
         final json = await jsonDecode(jsonString) as List<dynamic>;
         approaches = json
@@ -103,9 +131,14 @@ class _ApproachesState extends State<Approaches> {
     } catch (error) {
       print('myClients $error');
     }
+    for (var i = 0; i < _data.length; i++) {
+      print(
+          'id:${_data[i].id} idExerciseWorkout:${_data[i].idExerciseWorkout} numberApproaches:${_data[i].numberApproaches} weight:${_data[i].weight} countList:${_data[i].countList}');
+    }
   }
 
   Future<void> getApproaches() async {
+    print(widget.item.id);
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -119,9 +152,8 @@ class _ApproachesState extends State<Approaches> {
     } catch (error) {
       print('getexercise $error');
     }
-
     String jsonString = "";
-    if (response.statusCode == 200 && isAuth == true) {
+    if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
     }
@@ -135,7 +167,7 @@ class _ApproachesState extends State<Approaches> {
             .toList();
       }
     } catch (error) {
-      print('ошибка форматирования json $error');
+      // print('ошибка форматирования json $error');
     }
     setState(() {
       try {
@@ -146,7 +178,6 @@ class _ApproachesState extends State<Approaches> {
 
   @override
   Widget build(BuildContext context) {
-    var jsonData;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.item.nameExercise),
@@ -336,10 +367,7 @@ class _ApproachesState extends State<Approaches> {
                         child: const Text('Сохранить'),
                         onPressed: () {
                           setState(() {
-                            jsonData = _data
-                                .map((aproaches) => aproaches.toJson())
-                                .toList();
-                            fetchApproaches(jsonData);
+                            fetchApproaches();
                           });
                           Navigator.of(context).pop();
                         },

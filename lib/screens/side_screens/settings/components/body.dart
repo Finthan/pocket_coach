@@ -8,7 +8,12 @@ import '../../components_side/app_bar_side_screens.dart';
 import 'title_side_settings_screens.dart';
 
 class Body extends StatefulWidget {
-  const Body({super.key});
+  const Body({
+    super.key,
+    required this.onGlobalVariableChanged,
+  });
+
+  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<Body> createState() => _BodyState();
@@ -51,6 +56,7 @@ class _BodyState extends State<Body> {
                     });
                   },
                   isActive: selectedMenuL == menu,
+                  onGlobalVariableChanged: () {},
                 ),
               ),
             ],

@@ -13,7 +13,12 @@ import 'info_card.dart';
 import 'side_menu_tile.dart';
 
 class SideMenu extends StatefulWidget {
-  const SideMenu({super.key});
+  const SideMenu({
+    super.key,
+    required this.onGlobalVariableChanged,
+  });
+
+  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<SideMenu> createState() => _SideMenuState();
@@ -92,7 +97,9 @@ class _SideMenuState extends State<SideMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Settings(),
+                              builder: (context) => Settings(
+                                onGlobalVariableChanged: () {},
+                              ),
                             ),
                           );
                           break;

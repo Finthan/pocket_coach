@@ -32,9 +32,12 @@ class _WorkoutState extends State<Workout> {
   int countWorkout = 1;
   var countTrue = true;
 
+  bool _isAuth = true;
+
   @override
   void initState() {
     super.initState();
+    _isAuth = Main.isAuth;
     clientTrainings();
   }
 
@@ -43,7 +46,7 @@ class _WorkoutState extends State<Workout> {
       'apiv': '1',
       'action': 'get',
       'object': 'clientexercise',
-      'id_client': clientMe[0].id,
+      'id_workout': widget.id,
     });
     var response;
     try {
@@ -53,20 +56,21 @@ class _WorkoutState extends State<Workout> {
       return;
     }
     String jsonString = "";
-    if (response.statusCode == 200 && isAuth == true) {
+    if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
     }
+    print(jsonString);
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-//print(jsonString);
-      if (json.length > 0) {
+      if (json.isNotEmpty) {
         setState(() {
           clientExercise = json
               .map((dynamic e) =>
                   ClientExercise.fromJson(e as Map<String, dynamic>))
               .toList();
           countWorkout = clientExercise.length;
+          print("количество $countWorkout");
         });
       }
     } catch (error) {
@@ -96,99 +100,76 @@ class _WorkoutState extends State<Workout> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Stepper(
-        steps: [
-          for (i = 0; i < countWorkout; i++)
-            Step(
-              state: _currentStep >= i && _currentStep < countWorkout
-                  ? StepState.complete
-                  : StepState.disabled,
-              isActive: _currentStep == i,
-              title: const Text(
-                "Step 1",
-                style: TextStyle(color: kWhiteColor),
-              ),
-              content: Column(
-                children: [
-                  Container(
-                    width: 500,
-                    height: 200,
-                    decoration: const BoxDecoration(
-                      color: kWorkoutColor,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+      body: clientExercise.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Stepper(
+              steps: [
+                for (i = 0; i < countWorkout; i++)
+                  Step(
+                    state: _currentStep >= i && _currentStep < countWorkout
+                        ? StepState.complete
+                        : StepState.disabled,
+                    isActive: _currentStep == i,
+                    title: const Text(
+                      "Step 1",
+                      style: TextStyle(color: kWhiteColor),
                     ),
-                    child: const Center(
-                      child: Text(
-                        "Video",
-                        style: TextStyle(color: kWhiteColor),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: countTrue
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.start,
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        for (var j = 0; j < countWidget; j++)
-                          Padding(
-                            padding: countTrue
-                                ? const EdgeInsets.only(right: 0)
-                                : const EdgeInsets.only(right: 10),
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: kWorkoutColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+                        SizedBox(
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                padding:
+                                    const EdgeInsets.only(left: 5, top: 20),
+                                child: Text(
+                                  clientExercise[i].nameExercise,
+                                  style: const TextStyle(color: kWhiteColor),
+                                ),
                               ),
-                              child: const Text(
-                                "Image",
-                                style: TextStyle(color: kWhiteColor),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                padding:
+                                    const EdgeInsets.only(left: 5, top: 15),
+                                child: Text(
+                                  clientExercise[i].muscleGroup,
+                                  style: const TextStyle(color: kWhiteColor),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
+                        ),
+                        IconButton(
+                          splashRadius: 20,
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.add_sharp,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 5, top: 20),
-                    child: const Text(
-                      "Вес и колчество повторений: 15 кг, 4 подхода",
-                      style: TextStyle(color: kWhiteColor),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 5, top: 15),
-                    child: const Text(
-                      "Сколько сделал:",
-                      style: TextStyle(color: kWhiteColor),
-                    ),
-                  ),
-                ],
-              ),
+              ],
+              currentStep: _currentStep,
+              onStepContinue: () {
+                if (_currentStep < countWorkout - 1) {
+                  setState(() {
+                    _currentStep++;
+                  });
+                }
+              },
+              onStepCancel: () {
+                if (_currentStep > 0) {
+                  setState(() {
+                    _currentStep--;
+                  });
+                }
+              },
             ),
-        ],
-        currentStep: _currentStep,
-        onStepContinue: () {
-          if (_currentStep < countWorkout - 1) {
-            setState(() {
-              _currentStep++;
-            });
-          }
-        },
-        onStepCancel: () {
-          if (_currentStep > 0) {
-            setState(() {
-              _currentStep--;
-            });
-          }
-        },
-      ),
     );
   }
 }

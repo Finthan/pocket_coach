@@ -12,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    //print(tutorMe[0].id);
     return const Scaffold(
       body: Body(),
     );

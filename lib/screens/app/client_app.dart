@@ -13,7 +13,12 @@ import '../../models/side_menu_button.dart';
 import '../../utils/rive_utils.dart';
 
 class ClientApp extends StatefulWidget {
-  const ClientApp({super.key});
+  const ClientApp({
+    super.key,
+    required this.onGlobalVariableChanged,
+  });
+
+  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<ClientApp> createState() => _ClientAppState();
@@ -79,7 +84,9 @@ class _ClientAppState extends State<ClientApp>
             width: 288,
             left: isSideMenuClosed ? -288 : 0,
             height: MediaQuery.of(context).size.height,
-            child: const SideMenu(),
+            child: SideMenu(
+              onGlobalVariableChanged: () {},
+            ),
           ),
           Transform(
             alignment: Alignment.center,

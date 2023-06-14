@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../components/auth_natification.dart';
 import '../../../../constants.dart';
 import '../../../../main.dart';
 import '../../../../models/rive_asset.dart';
@@ -10,10 +11,12 @@ class VisibilitySettingsSide extends StatefulWidget {
     super.key,
     required this.isActive,
     required this.menu,
+    required this.onGlobalVariableChanged,
   });
 
   final bool isActive;
   final RiveAsset menu;
+  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<VisibilitySettingsSide> createState() => _VisibilitySettingsSideState();
@@ -82,10 +85,10 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              isAuth = false;
-                              runApp(const Main());
+                              Main.isAuth = false;
                               Navigator.pop(context);
                               Navigator.pop(context);
+                              AuthNotification(false).dispatch(context);
                             });
                           },
                           child: Text('Выйти'),
@@ -120,10 +123,8 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
             //         nightMode = value;
             //         if (nightMode == false) {
             //           kBackgroundColor = Color.fromRGBO(255, 255, 255, 1);
-            //           print("$nightMode $kBackgroundColor");
             //         } else {
             //           kBackgroundColor = Color.fromRGBO(94, 117, 128, 1);
-            //           print("$nightMode $kBackgroundColor");
             //         }
             //       });
             //     },

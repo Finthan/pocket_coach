@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../components/auth_natification.dart';
 import '../../constants.dart';
 import '../../info.dart';
 import '../../main.dart';
@@ -40,6 +41,14 @@ var isClient = true;
 var isRegClient = true;
 
 class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
+  late bool _isAuth;
+
+  @override
+  void initState() {
+    super.initState();
+    _isAuth = Main.isAuth;
+  }
+
   var isRegist = false;
   final _loginTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
@@ -109,20 +118,22 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isClient = false;
         }
       } catch (error) {
-        print('Не добавляется auth1 $error');
+        print(
+            'screens.auth_registration:_AUTH: ошибка форматирования json: $error');
       }
     } catch (error) {
-      print('Не добавляется auth2 $error');
+      print(
+          'screens.auth_registration:_AUTH: ошибка форматирования json: проверка на Клиента, Тренера $error');
     }
     try {
       if (me[0].id != "-0") {
         setState(() {
-          isAuth = true;
-          runApp(const Main());
+          Main.isAuth = true;
+          AuthNotification(true).dispatch(context);
         });
       } else {
         setState(() {
-          isAuth = false;
+          Main.isAuth = false;
         });
       }
     } catch (error) {
@@ -171,7 +182,8 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           .map((dynamic e) => Me.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (error) {
-      print(error);
+      print(
+          'screens.auth_registration:_REGIST: ошибка форматирования json: $error');
     }
   }
 

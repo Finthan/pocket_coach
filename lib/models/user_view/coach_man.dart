@@ -17,8 +17,11 @@ class CoachMan extends StatefulWidget {
 }
 
 class _CoachMan extends State<CoachMan> {
+  bool _isAuth = true;
+
   @override
   void initState() {
+    _isAuth = Main.isAuth;
     super.initState();
     getTutors();
   }
@@ -46,7 +49,7 @@ class _CoachMan extends State<CoachMan> {
       print(e);
     }
     String jsonString = "";
-    if (getTutorsList.statusCode == 200 && isAuth == true) {
+    if (getTutorsList.statusCode == 200 && _isAuth == true) {
       var decodedResponse =
           jsonDecode(utf8.decode(getTutorsList.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);

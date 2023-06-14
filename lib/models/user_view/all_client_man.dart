@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 
 import '../../all_class.dart';
 import '../../info.dart';
-import '../../main.dart';
 import '../../../constants.dart';
+import '../../main.dart';
 import '../../user_screen/client_screen/client_screen.dart';
 
 class AllClientMan extends StatefulWidget {
@@ -19,10 +19,19 @@ class AllClientMan extends StatefulWidget {
 }
 
 class _AllClientMan extends State<AllClientMan> {
+  late Timer _timer;
+  bool _isAuth = true;
+
   void initState() {
     super.initState();
+    _isAuth = Main.isAuth;
     getAllClients();
-    Timer.periodic(Duration(seconds: 5), (Timer t) => getAllClients());
+    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => getAllClients());
+  }
+
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   List<Clients> listOfClients = [
@@ -44,11 +53,12 @@ class _AllClientMan extends State<AllClientMan> {
     });
     try {
       myClientsList = await http.get(uri);
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(
+          'models.all_client_man:GETALLCLIENTS: получение данных по http: $error');
     }
     String jsonString = "";
-    if (myClientsList.statusCode == 200 && isAuth == true) {
+    if (myClientsList.statusCode == 200 && _isAuth == true) {
       var decodedResponse =
           jsonDecode(utf8.decode(myClientsList.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
@@ -64,7 +74,7 @@ class _AllClientMan extends State<AllClientMan> {
         });
       }
     } catch (error) {
-      print(error);
+      print('models.all_client_man:GETALLCLIENTS: форматирование json: $error');
     }
   }
 
@@ -169,67 +179,66 @@ class _AllClientMan extends State<AllClientMan> {
                         );
                       },
                       child: Container(
-                        margin: const EdgeInsets.only(
+                        margin: EdgeInsets.only(
                           left: 20,
                           top: 20,
                           bottom: 20,
+                          right: (i == listOfClients.length - 1) ? 20 : 0,
                         ),
                         child: Column(children: <Widget>[
                           Container(
-                            child: Container(
-                              height: 100,
-                              width: 200,
-                              padding:
-                                  const EdgeInsets.all(kDefaultPadding / 2),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: const Offset(0, 10),
-                                    blurRadius: 50,
-                                    color: kPrimaryColor.withOpacity(0.23),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 140,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: "${listOfClients[i].name}\n"
-                                                .toUpperCase(),
-                                            style: const TextStyle(
-                                                color: kTextColor),
+                            height: 100,
+                            width: 200,
+                            padding: const EdgeInsets.all(kDefaultPadding / 2),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(0, 10),
+                                  blurRadius: 50,
+                                  color: kPrimaryColor.withOpacity(0.23),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 140,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "${listOfClients[i].name}\n"
+                                              .toUpperCase(),
+                                          style: const TextStyle(
+                                              color: kTextColor),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              "${listOfClients[i].cardnumber}\n"
+                                                  .toUpperCase(),
+                                          style: TextStyle(
+                                            color:
+                                                kPrimaryColor.withOpacity(0.5),
                                           ),
-                                          TextSpan(
-                                            text:
-                                                "${listOfClients[i].cardnumber}\n"
-                                                    .toUpperCase(),
-                                            style: TextStyle(
-                                              color: kPrimaryColor
-                                                  .withOpacity(0.5),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const Spacer(),
-                                  Text(
-                                    "${listOfClients[i].age}\n",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(color: kPrimaryColor),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "${listOfClients[i].age}\n",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(color: kPrimaryColor),
+                                ),
+                              ],
                             ),
+                            // ),
                           ),
                         ]),
                       ),

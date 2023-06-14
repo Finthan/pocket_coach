@@ -19,8 +19,12 @@ class MyClientMan extends StatefulWidget {
 }
 
 class _MyClientMan extends State<MyClientMan> {
+  bool _isAuth = true;
+
+  @override
   void initState() {
     super.initState();
+    _isAuth = Main.isAuth;
     getMyClients();
     Timer.periodic(Duration(seconds: 5), (Timer t) => getMyClients());
   }
@@ -45,10 +49,10 @@ class _MyClientMan extends State<MyClientMan> {
     try {
       myClientsList = await http.get(uri);
     } catch (error) {
-      print('myClients $error');
+      print('user_view:my_client_manGETMYCLIENT $error');
     }
     String jsonString = "";
-    if (myClientsList.statusCode == 200 && isAuth == true) {
+    if (myClientsList.statusCode == 200 && _isAuth == true) {
       var decodedResponse =
           jsonDecode(utf8.decode(myClientsList.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
@@ -66,7 +70,8 @@ class _MyClientMan extends State<MyClientMan> {
       }
       //print(json);
     } catch (error) {
-      print('ошибка форматирования json myClients $error');
+      // print(
+      //     'user_view.my_client_manGETMYCLIENT: ошибка форматирования json: $error');
     }
   }
 
@@ -168,66 +173,64 @@ class _MyClientMan extends State<MyClientMan> {
                       );
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(
+                      margin: EdgeInsets.only(
                         left: 20,
                         top: 20,
                         bottom: 20,
+                        right: (i == listOfClients.length - 1) ? 20 : 0,
                       ),
                       child: Column(children: <Widget>[
                         Container(
-                          child: Container(
-                            height: 100,
-                            width: 200,
-                            padding: const EdgeInsets.all(kDefaultPadding / 2),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(0, 10),
-                                  blurRadius: 50,
-                                  color: kPrimaryColor.withOpacity(0.23),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 140,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "${listOfClients[i].name}\n"
-                                              .toUpperCase(),
-                                          style: const TextStyle(
-                                              color: kTextColor),
+                          height: 100,
+                          width: 200,
+                          padding: const EdgeInsets.all(kDefaultPadding / 2),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 10),
+                                blurRadius: 50,
+                                color: kPrimaryColor.withOpacity(0.23),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 140,
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: "${listOfClients[i].name}\n"
+                                            .toUpperCase(),
+                                        style:
+                                            const TextStyle(color: kTextColor),
+                                      ),
+                                      TextSpan(
+                                        text: "${listOfClients[i].cardnumber}\n"
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                          color: kPrimaryColor.withOpacity(0.5),
                                         ),
-                                        TextSpan(
-                                          text:
-                                              "${listOfClients[i].cardnumber}\n"
-                                                  .toUpperCase(),
-                                          style: TextStyle(
-                                            color:
-                                                kPrimaryColor.withOpacity(0.5),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const Spacer(),
-                                Text(
-                                  "${listOfClients[i].age}\n",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(color: kPrimaryColor),
-                                ),
-                              ],
-                            ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                "${listOfClients[i].age}\n",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: kPrimaryColor),
+                              ),
+                            ],
                           ),
+                          // ),
                         ),
                       ]),
                     ),

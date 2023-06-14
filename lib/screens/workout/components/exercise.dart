@@ -23,9 +23,13 @@ dynamic exerciseList = 'строка не изменена';
 class _ExerciseState extends State<Exercise> {
   List<ExerciseList> _data = [];
 
+  bool _isAuth = true;
+
   @override
   void initState() {
     super.initState();
+
+    _isAuth = Main.isAuth;
     getExercise();
   }
 
@@ -48,6 +52,7 @@ class _ExerciseState extends State<Exercise> {
               child: const Text('Удалить'),
               onPressed: () {
                 setState(() {
+                  deleteExercise(index);
                   _data.removeAt(index);
                 });
                 Navigator.of(context).pop();
@@ -59,7 +64,31 @@ class _ExerciseState extends State<Exercise> {
     );
   }
 
-  Future<void> fetchExercise(jsonData) async {
+  Future<void> deleteExercise(index) async {
+    print(
+        "id:${_data[index].id}, idWorkout:${_data[index].idWorkout}, idWorkout:${_data[index].idWorkout}");
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'set',
+      'object': 'delexercise',
+      'id': _data[index].id,
+      'id_exercise': _data[index].idExercise,
+      'id_workout': _data[index].idWorkout,
+    });
+    await http.get(uri);
+
+    setState(() {
+      try {
+        for (var i = 0; i < _data.length; i++) {
+          _data[i].ordering = (i).toString();
+        }
+        fetchExercise();
+      } catch (e) {}
+    });
+  }
+
+  Future<void> fetchExercise() async {
+    var jsonData = _data.map((exercise) => exercise.toJson()).toList();
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -74,7 +103,7 @@ class _ExerciseState extends State<Exercise> {
           body: jsonEncode(jsonData));
 
       String jsonString = "";
-      if (response.statusCode == 200 && isAuth == true) {
+      if (response.statusCode == 200 && _isAuth == true) {
         var decodedResponse =
             jsonDecode(utf8.decode(response.bodyBytes)) as Map;
         jsonString = jsonEncode(decodedResponse['data']);
@@ -113,15 +142,13 @@ class _ExerciseState extends State<Exercise> {
       'id_workout': widget.training.id.toString(),
     });
     var response;
-
     try {
       response = await http.get(uri);
     } catch (error) {
       print('getexercise $error');
     }
-
     String jsonString = "";
-    if (response.statusCode == 200 && isAuth == true) {
+    if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
     }
@@ -146,8 +173,6 @@ class _ExerciseState extends State<Exercise> {
 
   @override
   Widget build(BuildContext context) {
-    var jsonData;
-    var jsonString;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.training.nameWorkout),
@@ -249,6 +274,7 @@ class _ExerciseState extends State<Exercise> {
                             _data.add(ExerciseList(
                               id: "0",
                               idWorkout: widget.training.id,
+                              idExercise: "0",
                               nameExercise: _textController.text,
                               muscleGroup: _muscleController.text,
                               ordering: (_data.length).toString(),
@@ -292,10 +318,7 @@ class _ExerciseState extends State<Exercise> {
                         child: const Text('Сохранить'),
                         onPressed: () {
                           setState(() {
-                            jsonData = _data
-                                .map((exercise) => exercise.toJson())
-                                .toList();
-                            fetchExercise(jsonData);
+                            fetchExercise();
                           });
                           Navigator.of(context).pop();
                         },

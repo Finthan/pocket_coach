@@ -32,9 +32,12 @@ class _ListWorkoutState extends State<ListWorkout>
     with SingleTickerProviderStateMixin {
   List<Training> trainings = [];
 
+  bool _isAuth = true;
+
   @override
   void initState() {
     super.initState();
+    _isAuth = Main.isAuth;
     isClient ? clientTrainings() : fetchTrainings();
   }
 
@@ -53,7 +56,7 @@ class _ListWorkoutState extends State<ListWorkout>
       print('myClients $error');
     }
     String jsonString = "";
-    if (response.statusCode == 200 && isAuth == true) {
+    if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
     }
@@ -86,7 +89,7 @@ class _ListWorkoutState extends State<ListWorkout>
       print('myClients $error');
     }
     String jsonString = "";
-    if (response.statusCode == 200 && isAuth == true) {
+    if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
     }
@@ -105,9 +108,52 @@ class _ListWorkoutState extends State<ListWorkout>
     }
   }
 
+  void _showDeleteConfirmationDialog(Training appointment) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Удалить тренировку?',
+            style: TextStyle(
+              color: Colors.black87,
+            ),
+          ),
+          content: const Text(
+            'Вы уверены, что хотите удалить эту тренировку?',
+            style: TextStyle(
+              color: Colors.black54,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Отмена',
+                style: TextStyle(
+                  color: Colors.black54,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Удалить'),
+              onPressed: () {
+                setState(() {
+                  trainings.removeWhere((t) => t.id == appointment.id);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(clientMe[0].id);
     final DateTime todayDay = DateTime.now();
     var weekList = ["", "", ""];
     var nameWorkout = [
@@ -362,7 +408,7 @@ class _ListWorkoutState extends State<ListWorkout>
                 child: Center(
                   child: Text(
                     details.appointments.first.typeWorkout,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 10,
                     ),
@@ -392,6 +438,11 @@ class _ListWorkoutState extends State<ListWorkout>
                           )
                         }
                     };
+            },
+            onLongPress: (CalendarLongPressDetails details) {
+              if (!isClient) {
+                _showDeleteConfirmationDialog(details.appointments!.first);
+              }
             },
           ),
         ),
@@ -423,6 +474,6 @@ class TrainingDataSource extends CalendarDataSource {
   @override
   DateTime getEndTime(int index) {
     return DateTime.parse((appointments![index] as Training).dateTime)
-        .add(Duration(hours: 1));
+        .add(const Duration(hours: 1));
   }
 }

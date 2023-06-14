@@ -179,6 +179,7 @@ class Training {
 class ExerciseList {
   String id;
   String idWorkout;
+  String idExercise;
   String nameExercise;
   String muscleGroup;
   String ordering;
@@ -186,6 +187,7 @@ class ExerciseList {
   ExerciseList({
     required this.id,
     required this.idWorkout,
+    required this.idExercise,
     required this.nameExercise,
     required this.muscleGroup,
     required this.ordering,
@@ -195,6 +197,7 @@ class ExerciseList {
     return ExerciseList(
       id: json['id'] as String,
       idWorkout: json['id_workout'] as String,
+      idExercise: json['id_exercise'] as String,
       nameExercise: json['name_exercise'] as String,
       muscleGroup: json['muscle_group'] as String,
       ordering: json['ordering'] as String,
