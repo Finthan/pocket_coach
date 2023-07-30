@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../components/auth_natification.dart';
 import '../../constants.dart';
@@ -16,37 +17,31 @@ class AuthRegistrationScreen extends StatefulWidget {
   State<AuthRegistrationScreen> createState() => _AuthRegistrationScreenState();
 }
 
-List<dynamic> tutorMe = [
-  Tutor(
-    id: '',
-    name: '',
-    age: '',
-    gender: '',
-    typeOfTraining: '',
-    cost: '',
-  ),
-];
+Tutor tutorMe = Tutor(
+  id: '',
+  name: '',
+  age: '',
+  gender: '',
+  typeOfTraining: '',
+  cost: '',
+);
 
-List<dynamic> clientMe = [
-  Client(
-    id: '',
-    name: '',
-    age: '',
-    gender: '',
-    cardnumber: '',
-  ),
-];
+Client clientMe = Client(
+  id: '',
+  name: '',
+  age: '',
+  gender: '',
+  cardnumber: '',
+);
 
 var isClient = true;
 var isRegClient = true;
 
 class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
-  late bool _isAuth;
-
   @override
   void initState() {
     super.initState();
-    _isAuth = Main.isAuth;
+    late bool _isAuth = Main.isAuth;
   }
 
   var isRegist = false;
@@ -64,112 +59,137 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
       'apiv': '1',
       'action': 'auth',
       'object': 'login',
-      'login': '${_loginTextController.text}',
-      'pass': '${_passwordTextController.text}',
+      'login': _loginTextController.text,
+      'pass': _passwordTextController.text,
     });
 
-    dynamic auth = await http.get(uri);
-    var decodedResponse = jsonDecode(utf8.decode(auth.bodyBytes)) as Map;
-    String jsonString = jsonEncode(decodedResponse['data']);
+    var connectivityResult = await (Connectivity().checkConnectivity());
 
-    try {
-      final json = await jsonDecode(jsonString) as dynamic;
-      setState(() {
-        me = json
-            .map((dynamic e) => Me.fromJson(e as Map<String, dynamic>))
-            .toList();
-      });
-
-      Uri checkClient = Uri.http('gymapp.amadeya.net', '/api.php', {
-        'apiv': '1',
-        'action': 'auth',
-        'object': 'checkclient',
-        'id': me[0].id.toString(),
-      });
-
-      Uri checkTutor = Uri.http('gymapp.amadeya.net', '/api.php', {
-        'apiv': '1',
-        'action': 'auth',
-        'object': 'checktutor',
-        'id': me[0].id.toString(),
-      });
-
-      dynamic check_client = await http.get(checkClient);
-      var decodedClient =
-          jsonDecode(utf8.decode(check_client.bodyBytes)) as Map;
-      String clientString = jsonEncode(decodedClient['data']);
-
-      dynamic check_tutor = await http.get(checkTutor);
-      var decodedTutor = jsonDecode(utf8.decode(check_tutor.bodyBytes)) as Map;
-      String tutorString = jsonEncode(decodedTutor['data']);
+    if (connectivityResult != ConnectivityResult.none) {
+      dynamic auth = await http.get(uri);
+      var decodedResponse = jsonDecode(utf8.decode(auth.bodyBytes)) as Map;
+      String jsonString = jsonEncode(decodedResponse['data']);
 
       try {
-        if (clientString.length > 2) {
-          final jsonC = await jsonDecode(clientString) as dynamic;
-          clientMe = jsonC
-              .map((dynamic e) => Client.fromJson(e as Map<String, dynamic>))
-              .toList();
-          isClient = true;
-        } else if (tutorString.length > 2) {
-          final jsonT = await jsonDecode(tutorString) as dynamic;
-          tutorMe = jsonT
-              .map((dynamic e) => Tutor.fromJson(e as Map<String, dynamic>))
-              .toList();
-          isClient = false;
+        final json = await jsonDecode(jsonString) as dynamic;
+
+        Map<String, dynamic> jsonMap = json.first;
+        String id = jsonMap['id'].toString();
+        setState(() {
+          me = Me(id: id);
+        });
+
+        Uri client = Uri.http('gymapp.amadeya.net', '/api.php', {
+          'apiv': '1',
+          'action': 'auth',
+          'object': 'checkclient',
+          'id': me.id.toString(),
+        });
+
+        Uri tutor = Uri.http('gymapp.amadeya.net', '/api.php', {
+          'apiv': '1',
+          'action': 'auth',
+          'object': 'checktutor',
+          'id': me.id.toString(),
+        });
+
+        dynamic checkClient = await http.get(client);
+        var decodedClient =
+            jsonDecode(utf8.decode(checkClient.bodyBytes)) as Map;
+        checkClient = null;
+        String? clientString = jsonEncode(decodedClient['data']);
+        decodedClient.clear;
+
+        dynamic checkTutor = await http.get(tutor);
+        var decodedTutor = jsonDecode(utf8.decode(checkTutor.bodyBytes)) as Map;
+        checkTutor = null;
+        String? tutorString = jsonEncode(decodedTutor['data']);
+        decodedTutor.clear;
+
+        try {
+          if (clientString.length > 2) {
+            final jsonC = await jsonDecode(clientString) as dynamic;
+            Map<String, dynamic> jsonMap = jsonC.first;
+            String id = jsonMap['id'].toString();
+            String name = jsonMap['name'].toString();
+            String age = jsonMap['age'].toString();
+            String gender = jsonMap['gender'].toString();
+            String cardnumber = jsonMap['cardnumber'].toString();
+
+            clientMe = Client(
+              id: id,
+              name: name,
+              age: age,
+              gender: gender,
+              cardnumber: cardnumber,
+            );
+            isClient = true;
+          } else if (tutorString.length > 2) {
+            final jsonT = await jsonDecode(tutorString) as dynamic;
+
+            Map<String, dynamic> jsonMap = jsonT.first;
+            String id = jsonMap['id'].toString();
+            String name = jsonMap['name'].toString();
+            String age = jsonMap['age'].toString();
+            String gender = jsonMap['gender'].toString();
+            String typeOfTraining = jsonMap['type_of_training'].toString();
+            String cost = jsonMap['cost'].toString();
+
+            tutorMe = Tutor(
+              id: id,
+              name: name,
+              age: age,
+              gender: gender,
+              typeOfTraining: typeOfTraining,
+              cost: cost,
+            );
+            isClient = false;
+          }
+          tutorString = null;
+          clientString = null;
+        } catch (error) {}
+      } catch (error) {}
+      try {
+        if (me.id != "-0") {
+          setState(() {
+            Main.isAuth = true;
+            AuthNotification(true).dispatch(context);
+          });
+        } else {
+          setState(() {
+            Main.isAuth = false;
+          });
         }
-      } catch (error) {
-        print(
-            'screens.auth_registration:_AUTH: ошибка форматирования json: $error');
-      }
-    } catch (error) {
-      print(
-          'screens.auth_registration:_AUTH: ошибка форматирования json: проверка на Клиента, Тренера $error');
-    }
-    try {
-      if (me[0].id != "-0") {
-        setState(() {
-          Main.isAuth = true;
-          AuthNotification(true).dispatch(context);
-        });
-      } else {
-        setState(() {
-          Main.isAuth = false;
-        });
-      }
-    } catch (error) {
-      print('Не добавляется auth3 $error');
+      } catch (error) {}
     }
   }
 
   Future<void> _regist() async {
-    List<dynamic> me = [
-      Me(id: "-0"),
-    ];
     Uri uri;
     if (isRegClient == true) {
       uri = Uri.http('gymapp.amadeya.net', '/api.php', {
         'apiv': '1',
         'action': 'auth',
         'object': 'registerclient',
-        'login': '${_loginTextController.text}',
-        'pass': '${_passwordTextController.text}',
-        'name': '${_nameTextController.text}',
-        'age': '${_ageTextController.text}',
-        'gender': '${_genderTextController.text}',
-        'cardnumber': '${_cardnumberTextController.text}',
+        'login': _loginTextController.text,
+        'pass': _passwordTextController.text,
+        'name': _nameTextController.text,
+        'age': _ageTextController.text,
+        'gender': _genderTextController.text,
+        'cardnumber': _cardnumberTextController.text,
       });
     } else {
       uri = Uri.http('gymapp.amadeya.net', '/api.php', {
         'apiv': '1',
         'action': 'auth',
         'object': 'registertutor',
-        'login': '${_loginTextController.text}',
-        'pass': '${_passwordTextController.text}',
-        'name': '${_nameTextController.text}',
-        'age': '${_ageTextController.text}',
-        'gender': '${_genderTextController.text}',
-        'type_of_training': '${_trainingTextController.text}',
-        'cost': '${_costTextController.text}',
+        'login': _loginTextController.text,
+        'pass': _passwordTextController.text,
+        'name': _nameTextController.text,
+        'age': _ageTextController.text,
+        'gender': _genderTextController.text,
+        'type_of_training': _trainingTextController.text,
+        'cost': _costTextController.text,
       });
     }
     dynamic auth = await http.get(uri);
@@ -181,10 +201,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
       me = json
           .map((dynamic e) => Me.fromJson(e as Map<String, dynamic>))
           .toList();
-    } catch (error) {
-      print(
-          'screens.auth_registration:_REGIST: ошибка форматирования json: $error');
-    }
+    } catch (error) {}
   }
 
   void _changeState() {

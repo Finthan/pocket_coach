@@ -13,10 +13,7 @@ import '../../utils/rive_utils.dart';
 class TutorApp extends StatefulWidget {
   const TutorApp({
     super.key,
-    required this.onGlobalVariableChanged,
   });
-
-  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<TutorApp> createState() => _TutorAppState();
@@ -72,9 +69,7 @@ class _TutorAppState extends State<TutorApp>
             width: 288,
             left: isSideMenuClosed ? -288 : 0,
             height: MediaQuery.of(context).size.height,
-            child: SideMenu(
-              onGlobalVariableChanged: () {},
-            ),
+            child: const SideMenu(),
           ),
           Transform(
             alignment: Alignment.center,

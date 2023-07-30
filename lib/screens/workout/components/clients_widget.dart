@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../all_class.dart';
 import '../../../constants.dart';
-import '../../../info.dart';
 import '../../auth_registration.dart/auth_registration_screen.dart';
 
 class ClientsWidget extends StatefulWidget {
@@ -31,11 +28,6 @@ class _ClientsWidget extends State<ClientsWidget>
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -111,15 +103,14 @@ class _ClientsWidget extends State<ClientsWidget>
                 setState(() {
                   time = _timeTextController.text;
                   nameWorkout = _workoutTextController.text;
-                  print("$nameWorkout $time");
                   Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
                     'apiv': '1',
                     'action': 'set',
                     'object': 'createworkout',
-                    'id_tutor': '${tutorMe[0].id}',
-                    'id_client': '${widget.id}',
-                    'name_workout': '$nameWorkout',
-                    'workout_date': '$time',
+                    'id_tutor': tutorMe.id,
+                    'id_client': widget.id,
+                    'name_workout': nameWorkout,
+                    'workout_date': time,
                   });
                   dynamic auth = http.get(uri);
                   Navigator.pop(context);

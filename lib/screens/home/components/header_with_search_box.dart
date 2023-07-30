@@ -42,7 +42,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
               isClient
                   ? Text(
                       //"Привет User_${tutorMe[0].id}!",
-                      "Привет ${clientMe[0].name}!",
+                      "Привет ${clientMe.name}!",
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 color: Colors.white,
@@ -50,7 +50,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
                               ),
                     )
                   : Text(
-                      "Привет ${tutorMe[0].name}!",
+                      "Привет ${tutorMe.name}!",
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 color: Colors.white,

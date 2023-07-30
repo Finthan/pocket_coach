@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../auth_registration.dart/auth_registration_screen.dart';
 import 'components/body.dart';
 
 class HomeScreen extends StatefulWidget {

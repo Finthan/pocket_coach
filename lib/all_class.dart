@@ -244,7 +244,35 @@ class ApproachesList {
       'id': int.parse(id),
       'id_exercise_workout': idExerciseWorkout,
       'number_approaches': int.parse(numberApproaches),
-      'weight': int.parse(weight),
+      'weight': double.parse(weight.replaceAll(',', '.')),
+      'count_list': int.parse(countList),
+    };
+  }
+}
+
+class MadeApproachesList {
+  String idApproaches;
+  String weight;
+  String countList;
+
+  MadeApproachesList({
+    required this.idApproaches,
+    required this.weight,
+    required this.countList,
+  });
+
+  factory MadeApproachesList.fromJson(Map<String, dynamic> json) {
+    return MadeApproachesList(
+      idApproaches: json['id_approaches'] as String,
+      weight: json['weight'] as String,
+      countList: json['count'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id_approaches': int.parse(idApproaches),
+      'weight': double.parse(weight.replaceAll(',', '.')),
       'count_list': int.parse(countList),
     };
   }

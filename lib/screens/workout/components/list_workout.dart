@@ -9,7 +9,6 @@ import '../../../all_class.dart';
 import '../../../constants.dart';
 import '../../../main.dart';
 import '../../auth_registration.dart/auth_registration_screen.dart';
-import 'create_workout.dart';
 import 'exercise.dart';
 import 'workout.dart';
 
@@ -31,8 +30,9 @@ class ListWorkout extends StatefulWidget {
 class _ListWorkoutState extends State<ListWorkout>
     with SingleTickerProviderStateMixin {
   List<Training> trainings = [];
+  var id = [];
 
-  bool _isAuth = true;
+  late bool _isAuth;
 
   @override
   void initState() {
@@ -47,14 +47,12 @@ class _ListWorkoutState extends State<ListWorkout>
       'action': 'get',
       'object': 'tutorworkouts',
       'id_client': widget.id,
-      'id_tutor': tutorMe[0].id.toString(),
+      'id_tutor': tutorMe.id.toString(),
     });
     var response;
     try {
       response = await http.get(uri);
-    } catch (error) {
-      print('myClients $error');
-    }
+    } catch (error) {}
     String jsonString = "";
     if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
@@ -62,17 +60,42 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      //print(jsonString);
-      if (json.length > 0) {
+      if (json.isNotEmpty) {
         setState(() {
           trainings = json
               .map((dynamic e) => Training.fromJson(e as Map<String, dynamic>))
               .toList();
         });
       }
-    } catch (error) {
-      print('ошибка форматирования json myClients $error');
+    } catch (error) {}
+  }
+
+  Future<void> addTrainings(name, time) async {
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'set',
+      'object': 'createworkout',
+      'id_tutor': tutorMe.id,
+      'id_client': widget.id,
+      'name_workout': name,
+      'workout_date': time,
+    });
+    dynamic response = await http.get(uri);
+    String jsonString = "";
+    if (response.statusCode == 200 && _isAuth == true) {
+      var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+      jsonString = jsonEncode(decodedResponse['data']);
     }
+    try {
+      final json = jsonDecode(jsonString) as List<dynamic>;
+      if (json.isNotEmpty) {
+        setState(() {
+          trainings = json
+              .map((dynamic e) => Training.fromJson(e as Map<String, dynamic>))
+              .toList();
+        });
+      }
+    } catch (error) {}
   }
 
   Future<void> clientTrainings() async {
@@ -80,14 +103,12 @@ class _ListWorkoutState extends State<ListWorkout>
       'apiv': '1',
       'action': 'get',
       'object': 'clientworkouts',
-      'id_client': clientMe[0].id,
+      'id_client': clientMe.id,
     });
     var response;
     try {
       response = await http.get(uri);
-    } catch (error) {
-      print('myClients $error');
-    }
+    } catch (error) {}
     String jsonString = "";
     if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
@@ -95,16 +116,115 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      //print(jsonString);
-      if (json.length > 0) {
+      if (json.isNotEmpty) {
         setState(() {
           trainings = json
               .map((dynamic e) => Training.fromJson(e as Map<String, dynamic>))
               .toList();
         });
       }
-    } catch (error) {
-      print('ошибка форматирования json myClients $error');
+    } catch (error) {}
+  }
+
+  Future<void> deleteTrainings(id) async {
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'set',
+      'object': 'delworkout',
+      'id_workout': id,
+      'id_tutor': widget.id,
+    });
+    var response;
+
+    try {
+      response = await http.get(uri);
+    } catch (error) {}
+    String jsonString = "";
+    if (response.statusCode == 200 && _isAuth == true) {
+      var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+      jsonString = jsonEncode(decodedResponse['data']);
+    }
+    try {
+      final json = await jsonDecode(jsonString) as List<dynamic>;
+      if (json.isNotEmpty) {
+        setState(() {
+          trainings = json
+              .map((dynamic e) => Training.fromJson(e as Map<String, dynamic>))
+              .toList();
+        });
+      }
+    } catch (error) {}
+  }
+
+  void _handleCellLongPress(CalendarLongPressDetails details) {
+    if (details.appointments == null || details.appointments!.isEmpty) {
+      final _workoutTextController = TextEditingController();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Добавить тренировку?'),
+            content: SizedBox(
+              height: 100,
+              child: Column(children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 15, bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Напишите название тренировки",
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: TextField(
+                    controller: _workoutTextController,
+                    decoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+                      hintText: "Напишите название тренировки",
+                      hintStyle: TextStyle(
+                        color: Colors.black38,
+                        fontSize: 15,
+                      ),
+                      isCollapsed: true,
+                      filled: true,
+                    ),
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ),
+              ]),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text(
+                  'Отмена',
+                  style: TextStyle(color: Colors.black38),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text(
+                  'Добавить',
+                  style: TextStyle(color: Colors.green),
+                ),
+                onPressed: () {
+                  String name = _workoutTextController.text;
+                  var time = details.date
+                      .toString()
+                      .substring(0, details.date.toString().length - 13);
+                  addTrainings(name, time);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -115,23 +235,17 @@ class _ListWorkoutState extends State<ListWorkout>
         return AlertDialog(
           title: const Text(
             'Удалить тренировку?',
-            style: TextStyle(
-              color: Colors.black87,
-            ),
+            style: TextStyle(color: Colors.black87),
           ),
-          content: const Text(
-            'Вы уверены, что хотите удалить эту тренировку?',
-            style: TextStyle(
-              color: Colors.black54,
-            ),
+          content: Text(
+            "Вы уверены, что хотите удалить эту тренировку ${appointment.dateTime}?",
+            style: const TextStyle(color: Colors.black54),
           ),
           actions: <Widget>[
             TextButton(
               child: const Text(
                 'Отмена',
-                style: TextStyle(
-                  color: Colors.black54,
-                ),
+                style: TextStyle(color: Colors.black54),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -140,6 +254,7 @@ class _ListWorkoutState extends State<ListWorkout>
             TextButton(
               child: const Text('Удалить'),
               onPressed: () {
+                deleteTrainings(appointment.id);
                 setState(() {
                   trainings.removeWhere((t) => t.id == appointment.id);
                 });
@@ -155,6 +270,7 @@ class _ListWorkoutState extends State<ListWorkout>
   @override
   Widget build(BuildContext context) {
     final DateTime todayDay = DateTime.now();
+    print(todayDay);
     var weekList = ["", "", ""];
     var nameWorkout = [
       "Нет запланированной тренировки",
@@ -167,9 +283,27 @@ class _ListWorkoutState extends State<ListWorkout>
       "assets/images/icon_no.png",
     ];
     if (isClient) {
-      print("отображение тренировок");
-      var day;
-      var month;
+      List<DateTime> dates = trainings
+          .map((training) => DateTime.parse(training.dateTime))
+          .toList();
+
+      // Отсортируем список объектов DateTime
+      dates.sort();
+
+      // Преобразуем отсортированные объекты DateTime обратно в объекты Training
+      List<Training> sortedTrainings = dates.map((date) {
+        return trainings.firstWhere(
+            (training) => DateTime.parse(training.dateTime) == date);
+      }).toList();
+      setState(() {
+        trainings.replaceRange(0, trainings.length, sortedTrainings);
+      });
+
+      try {
+        print("${trainings[0].id} ${trainings[0].dateTime} ${trainings[1].id}");
+      } catch (e) {}
+      int? day;
+      int? month;
       var week = [0, 0, 0];
       DateTime trainingWeek = DateTime.parse(todayDay.toString());
       for (var i = 0; i < 3; i++) {
@@ -183,6 +317,7 @@ class _ListWorkoutState extends State<ListWorkout>
               week[1] != DateTime.parse(trainings[j].dateTime).weekday) {
             trainingWeek = DateTime.parse(trainings[j].dateTime);
             week[i] = DateTime.parse(trainings[j].dateTime).weekday;
+            id.add(trainings[j].id);
             day = DateTime.parse(trainings[j].dateTime).day;
             month = DateTime.parse(trainings[j].dateTime).month;
             nameWorkout[i] = trainings[j].nameWorkout;
@@ -190,7 +325,6 @@ class _ListWorkoutState extends State<ListWorkout>
             break;
           }
         }
-        print(" ${nameWorkout[0]} ${nameWorkout[1]} ${nameWorkout[2]}");
         if (todayDay.day == day && todayDay.month == month) {
           weekList[i] = "Сегодня";
         } else if (todayDay.day + 1 == day && todayDay.month == month) {
@@ -221,6 +355,9 @@ class _ListWorkoutState extends State<ListWorkout>
           }
         }
       }
+      day = null;
+      month = null;
+      week.clear();
     }
 
     return ListView(
@@ -259,7 +396,7 @@ class _ListWorkoutState extends State<ListWorkout>
                             MaterialPageRoute(
                               builder: (context) => Workout(
                                 title: nameWorkout[i],
-                                id: trainings[i].id,
+                                id: id[i],
                               ),
                             ),
                           );
@@ -312,40 +449,6 @@ class _ListWorkoutState extends State<ListWorkout>
                     title: widget.name,
                     status: widget.status,
                     age: widget.age,
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                    child: Center(
-                      child: TextButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.only(
-                                    left: 15, top: 15, bottom: 15)),
-                            backgroundColor:
-                                MaterialStateProperty.all(kPrimaryColor)),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateWorkout(
-                                id: widget.id,
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text("Создать тренировку",
-                              style: TextStyle(
-                                  color: kTextSideScreens, fontSize: 15),
-                              textAlign: TextAlign.left),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -417,31 +520,42 @@ class _ListWorkoutState extends State<ListWorkout>
               );
             },
             onTap: (CalendarTapDetails details) {
-              isClient
-                  ? {
-                      if (details.appointments != null &&
-                          details.appointments!.isNotEmpty)
-                        {}
-                    }
-                  : {
-                      if (details.appointments != null &&
-                          details.appointments!.isNotEmpty)
-                        {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Exercise(
-                                training:
-                                    details.appointments!.first as Training,
-                              ),
-                            ),
-                          )
-                        }
-                    };
+              if (!isClient) {
+                if (details.appointments != null &&
+                    details.appointments!.isNotEmpty) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Exercise(
+                        training: details.appointments!.first as Training,
+                      ),
+                    ),
+                  );
+                }
+              }
             },
             onLongPress: (CalendarLongPressDetails details) {
               if (!isClient) {
-                _showDeleteConfirmationDialog(details.appointments!.first);
+                var isTab = false;
+                var isTraining = false;
+                for (var i = 0; i < trainings.length; i++) {
+                  var string_1 = details.date
+                      .toString()
+                      .substring(0, details.date.toString().length - 4);
+                  var string_2 = trainings[i]
+                      .dateTime
+                      .substring(0, trainings[i].dateTime.length - 1);
+                  if (string_1 == string_2) {
+                    isTraining = true;
+                  }
+                }
+                if (isTraining) {
+                  if (!isClient) {
+                    _showDeleteConfirmationDialog(details.appointments!.first);
+                  }
+                } else {
+                  _handleCellLongPress(details);
+                }
               }
             },
           ),

@@ -15,10 +15,7 @@ import 'side_menu_tile.dart';
 class SideMenu extends StatefulWidget {
   const SideMenu({
     super.key,
-    required this.onGlobalVariableChanged,
   });
-
-  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<SideMenu> createState() => _SideMenuState();
@@ -39,12 +36,12 @@ class _SideMenuState extends State<SideMenu> {
             children: [
               isClient
                   ? InfoCard(
-                      name: '${clientMe[0].name}',
-                      status: '${clientMe[0].cardnumber}',
+                      name: clientMe.name,
+                      status: clientMe.cardnumber,
                     )
                   : InfoCard(
-                      name: '${tutorMe[0].name}',
-                      status: '${tutorMe[0].typeOfTraining}',
+                      name: tutorMe.name,
+                      status: tutorMe.typeOfTraining,
                     ),
 
               Padding(
@@ -97,9 +94,7 @@ class _SideMenuState extends State<SideMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Settings(
-                                onGlobalVariableChanged: () {},
-                              ),
+                              builder: (context) => Settings(),
                             ),
                           );
                           break;

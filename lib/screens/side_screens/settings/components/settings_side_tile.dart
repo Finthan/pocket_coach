@@ -12,14 +12,12 @@ class SettingsSideTile extends StatelessWidget {
     required this.press,
     required this.riveonInit,
     required this.isActive,
-    required this.onGlobalVariableChanged,
   });
 
   final RiveAsset menu;
   final VoidCallback press;
   final ValueChanged<Artboard> riveonInit;
   final bool isActive;
-  final VoidCallback onGlobalVariableChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,6 @@ class SettingsSideTile extends StatelessWidget {
         VisibilitySettingsSide(
           isActive: isActive,
           menu: menu,
-          onGlobalVariableChanged: () {},
         ),
       ],
     );

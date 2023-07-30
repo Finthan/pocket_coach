@@ -85,12 +85,7 @@ class _ApproachesState extends State<Approaches> {
   }
 
   Future<void> fetchApproaches() async {
-    for (var i = 0; i < _data.length; i++) {
-      print(
-          'id:${_data[i].id} idExerciseWorkout:${_data[i].idExerciseWorkout} numberApproaches:${_data[i].numberApproaches} weight:${_data[i].weight} countList:${_data[i].countList}');
-    }
     var jsonData = _data.map((aproaches) => aproaches.toJson()).toList();
-    print(jsonData);
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -104,41 +99,29 @@ class _ApproachesState extends State<Approaches> {
           },
           body: jsonEncode(jsonData));
 
-      print(utf8.decode(response.bodyBytes));
       String jsonString = "";
       if (response.statusCode == 200 && _isAuth == true) {
         var decodedResponse =
             jsonDecode(utf8.decode(response.bodyBytes)) as Map;
         jsonString = jsonEncode(decodedResponse['data']);
       }
-      print(jsonString);
       try {
         final json = await jsonDecode(jsonString) as List<dynamic>;
         approaches = json
             .map((dynamic e) =>
                 ApproachesList.fromJson(e as Map<String, dynamic>))
             .toList();
-
-        //print(json);
-      } catch (error) {
-        print('ошибка форматирования json $error');
-      }
+      } catch (error) {}
       setState(() {
         try {
           _data = approaches;
         } catch (e) {}
       });
-    } catch (error) {
-      print('myClients $error');
-    }
-    for (var i = 0; i < _data.length; i++) {
-      print(
-          'id:${_data[i].id} idExerciseWorkout:${_data[i].idExerciseWorkout} numberApproaches:${_data[i].numberApproaches} weight:${_data[i].weight} countList:${_data[i].countList}');
-    }
+    } catch (error) {}
+    for (var i = 0; i < _data.length; i++) {}
   }
 
   Future<void> getApproaches() async {
-    print(widget.item.id);
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -149,9 +132,7 @@ class _ApproachesState extends State<Approaches> {
 
     try {
       response = await http.get(uri);
-    } catch (error) {
-      print('getexercise $error');
-    }
+    } catch (error) {}
     String jsonString = "";
     if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
@@ -166,9 +147,7 @@ class _ApproachesState extends State<Approaches> {
                 ApproachesList.fromJson(e as Map<String, dynamic>))
             .toList();
       }
-    } catch (error) {
-      // print('ошибка форматирования json $error');
-    }
+    } catch (error) {}
     setState(() {
       try {
         _data = approaches;
@@ -326,7 +305,6 @@ class _ApproachesState extends State<Approaches> {
                           });
 
                           for (int i = 0; i < _data.length; i++) {
-                            print(i);
                             _data[i].numberApproaches = (i + 1).toString();
                           }
                           Navigator.of(context).pop();
@@ -396,7 +374,6 @@ class _ApproachesState extends State<Approaches> {
               final item = _data.removeAt(oldIndex);
               _data.insert(newIndex, item);
               for (int i = 0; i < _data.length; i++) {
-                print(i);
                 _data[i].numberApproaches = (i + 1).toString();
               }
             });

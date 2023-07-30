@@ -6,10 +6,7 @@ import 'package:pocket_coach/screens/auth_registration.dart/auth_registration_sc
 class MainApp extends StatefulWidget {
   const MainApp({
     super.key,
-    required this.onGlobalVariableChanged,
   });
-
-  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -19,13 +16,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isClient
-          ? ClientApp(
-              onGlobalVariableChanged: () {},
-            )
-          : TutorApp(
-              onGlobalVariableChanged: () {},
-            ),
+      body: isClient ? const ClientApp() : const TutorApp(),
     );
   }
 }

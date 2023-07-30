@@ -34,7 +34,6 @@ class _ExerciseState extends State<Exercise> {
   }
 
   void _removeItem(int index) {
-    print(_data[index].id);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -65,8 +64,6 @@ class _ExerciseState extends State<Exercise> {
   }
 
   Future<void> deleteExercise(index) async {
-    print(
-        "id:${_data[index].id}, idWorkout:${_data[index].idWorkout}, idWorkout:${_data[index].idWorkout}");
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -108,7 +105,6 @@ class _ExerciseState extends State<Exercise> {
             jsonDecode(utf8.decode(response.bodyBytes)) as Map;
         jsonString = jsonEncode(decodedResponse['data']);
       }
-      print(jsonString);
       try {
         final json = await jsonDecode(jsonString) as List<dynamic>;
         if (json.length > 0) {
@@ -117,19 +113,14 @@ class _ExerciseState extends State<Exercise> {
                   ExerciseList.fromJson(e as Map<String, dynamic>))
               .toList();
         }
-        //print(json);
-      } catch (error) {
-        print('ошибка форматирования json $error');
-      }
+      } catch (error) {}
       setState(() {
         try {
           _data = exercises;
-          print(_data[0].id);
+          exercises = [];
         } catch (e) {}
       });
-    } catch (error) {
-      print('myClients $error');
-    }
+    } catch (error) {}
   }
 
   List<ExerciseList> exercises = [];
@@ -144,9 +135,7 @@ class _ExerciseState extends State<Exercise> {
     var response;
     try {
       response = await http.get(uri);
-    } catch (error) {
-      print('getexercise $error');
-    }
+    } catch (error) {}
     String jsonString = "";
     if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
@@ -160,10 +149,7 @@ class _ExerciseState extends State<Exercise> {
                 (dynamic e) => ExerciseList.fromJson(e as Map<String, dynamic>))
             .toList();
       }
-      //print(json);
-    } catch (error) {
-      print('ошибка форматирования json $error');
-    }
+    } catch (error) {}
     setState(() {
       try {
         _data = exercises;

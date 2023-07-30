@@ -31,29 +31,25 @@ class _BodyState extends State<Body> {
             ),
             HeaderWithSearchBox(size: size),
             isClient
-                ? Column(
-                    children: [
-                      TitleWithMoreBtn(
-                        title: "Тренера",
-                        press: () {},
-                      ),
-                      const CoachMan()
-                    ],
-                  )
-                : Column(
-                    children: [
-                      TitleWithMoreBtn(
-                        title: "Все клиенты",
-                        press: () {},
-                      ),
-                      const MyClientMan(),
-                      TitleWithMoreBtn(
-                        title: "Остальные клиенты",
-                        press: () {},
-                      ),
-                      const AllClientMan(),
-                    ],
-                  )
+                ? Column(children: [
+                    TitleWithMoreBtn(
+                      title: "Тренера",
+                      press: () {},
+                    ),
+                    CoachMan(size: size)
+                  ])
+                : Column(children: [
+                    TitleWithMoreBtn(
+                      title: "Все клиенты",
+                      press: () {},
+                    ),
+                    MyClientMan(size: size),
+                    TitleWithMoreBtn(
+                      title: "Остальные клиенты",
+                      press: () {},
+                    ),
+                    AllClientMan(size: size)
+                  ])
           ],
         ),
       ),

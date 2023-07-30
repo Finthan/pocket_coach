@@ -30,6 +30,14 @@ class _MainState extends State<Main> {
   }
 
   @override
+  void didUpdateWidget(Main oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      _isAuth = Main.isAuth;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return NotificationListener<AuthNotification>(
       onNotification: (notification) {
@@ -70,11 +78,7 @@ class _MainState extends State<Main> {
           textTheme:
               Theme.of(context).textTheme.apply(bodyColor: kPrimaryColor),
         ),
-        home: _isAuth
-            ? MainApp(
-                onGlobalVariableChanged: () {},
-              )
-            : const AuthRegistrationScreen(),
+        home: _isAuth ? const MainApp() : const AuthRegistrationScreen(),
       ),
     );
   }

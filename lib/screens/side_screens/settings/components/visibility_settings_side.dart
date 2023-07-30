@@ -11,12 +11,10 @@ class VisibilitySettingsSide extends StatefulWidget {
     super.key,
     required this.isActive,
     required this.menu,
-    required this.onGlobalVariableChanged,
   });
 
   final bool isActive;
   final RiveAsset menu;
-  final VoidCallback onGlobalVariableChanged;
 
   @override
   State<VisibilitySettingsSide> createState() => _VisibilitySettingsSideState();
