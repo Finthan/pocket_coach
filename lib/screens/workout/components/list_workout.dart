@@ -360,204 +360,231 @@ class _ListWorkoutState extends State<ListWorkout>
       week.clear();
     }
 
-    return ListView(
+    return Stack(
       children: [
-        isClient
-            ? Column(
-                children: [
-                  Container(
-                    height: 55,
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.only(
-                      top: 15,
-                      left: 20,
-                    ),
-                    child: const Text(
-                      "Планируемые тренировки",
-                      style: TextStyle(
-                        color: kWhiteColor,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 17, right: 17),
-                    child: Divider(
-                      color: kPrimaryColor,
-                      height: 1,
-                    ),
-                  ),
-                  for (var i = 0; i < 3; i++)
-                    GestureDetector(
-                      onTap: () {
-                        if (i == 0) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Workout(
-                                title: nameWorkout[i],
-                                id: id[i],
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.only(top: 5, left: 20),
-                        leading: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: const Offset(0, 5),
-                                blurRadius: 2,
-                                color: kPrimaryColor.withOpacity(0.80),
-                              ),
-                            ],
-                            image: DecorationImage(
-                              alignment: Alignment.center,
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                iconWorkout[i],
-                              ),
-                            ),
+        ListView(
+          children: [
+            isClient
+                ? Column(
+                    children: [
+                      Container(
+                        height: 55,
+                        alignment: Alignment.topLeft,
+                        padding: const EdgeInsets.only(
+                          top: 15,
+                          left: 20,
+                        ),
+                        child: const Text(
+                          "Планируемые тренировки",
+                          style: TextStyle(
+                            color: kWhiteColor,
+                            fontSize: 20,
                           ),
                         ),
-                        title: Padding(
-                          padding: const EdgeInsets.only(right: 10, bottom: 5),
-                          child: Text(
-                            nameWorkout[i],
-                            style: const TextStyle(color: kTextSideScreens),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 17, right: 17),
+                        child: Divider(
+                          color: kPrimaryColor,
+                          height: 1,
+                        ),
+                      ),
+                      for (var i = 0; i < 3; i++)
+                        GestureDetector(
+                          onTap: () {
+                            if (i == 0) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Workout(
+                                    title: nameWorkout[i],
+                                    id: id[i],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: ListTile(
+                            contentPadding:
+                                const EdgeInsets.only(top: 5, left: 20),
+                            leading: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(0, 5),
+                                    blurRadius: 2,
+                                    color: kPrimaryColor.withOpacity(0.80),
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                    iconWorkout[i],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            title: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 10, bottom: 5),
+                              child: Text(
+                                nameWorkout[i],
+                                style: const TextStyle(color: kTextSideScreens),
+                              ),
+                            ),
+                            subtitle: Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Text(
+                                  weekList[i],
+                                  style:
+                                      const TextStyle(color: kTextSideScreens),
+                                )),
                           ),
                         ),
-                        subtitle: Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Text(
-                              weekList[i],
-                              style: const TextStyle(color: kTextSideScreens),
-                            )),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      TitleAndPrice(
+                        title: widget.name,
+                        status: widget.status,
+                        age: widget.age,
                       ),
-                    ),
-                ],
-              )
-            : Column(
-                children: [
-                  TitleAndPrice(
-                    title: widget.name,
-                    status: widget.status,
-                    age: widget.age,
+                    ],
                   ),
-                ],
-              ),
 
-        //TODO Break
-        Container(
-          height: 55,
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.only(
-            top: 15,
-            left: 20,
-          ),
-          child: const Text(
-            "График тренировок",
-            style: TextStyle(
-              color: kWhiteColor,
-              fontSize: 20,
-            ),
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 17, right: 17),
-          child: Divider(
-            color: kPrimaryColor,
-            height: 1,
-          ),
-        ),
-        SizedBox(
-          height: 500,
-          child: SfCalendar(
-            firstDayOfWeek: 1,
-            view: CalendarView.month,
-            dataSource: TrainingDataSource(trainings),
-            headerStyle: const CalendarHeaderStyle(
-              textStyle: TextStyle(
-                color: kWhiteColor,
-                fontSize: 20,
+            //TODO Break
+            Container(
+              height: 55,
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(
+                top: 15,
+                left: 20,
               ),
-              textAlign: TextAlign.center,
-            ),
-            monthViewSettings: const MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-              appointmentDisplayCount: 3,
-              showTrailingAndLeadingDates: true,
-              dayFormat: 'EE',
-              monthCellStyle: MonthCellStyle(
-                textStyle: TextStyle(color: kCalendarColor),
-              ),
-            ),
-            todayHighlightColor: kCalendarColor,
-            cellBorderColor: kPrimaryColor,
-            appointmentBuilder:
-                (BuildContext context, CalendarAppointmentDetails details) {
-              return Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Color(details.appointments.first.colors),
-                  borderRadius: BorderRadius.circular(5),
+              child: const Text(
+                "График тренировок",
+                style: TextStyle(
+                  color: kWhiteColor,
+                  fontSize: 20,
                 ),
-                child: Center(
-                  child: Text(
-                    details.appointments.first.typeWorkout,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                    ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 17, right: 17),
+              child: Divider(
+                color: kPrimaryColor,
+                height: 1,
+              ),
+            ),
+            SizedBox(
+              height: 500,
+              child: SfCalendar(
+                firstDayOfWeek: 1,
+                view: CalendarView.month,
+                dataSource: TrainingDataSource(trainings),
+                headerStyle: const CalendarHeaderStyle(
+                  textStyle: TextStyle(
+                    color: kWhiteColor,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                monthViewSettings: const MonthViewSettings(
+                  appointmentDisplayMode:
+                      MonthAppointmentDisplayMode.appointment,
+                  appointmentDisplayCount: 3,
+                  showTrailingAndLeadingDates: true,
+                  dayFormat: 'EE',
+                  monthCellStyle: MonthCellStyle(
+                    textStyle: TextStyle(color: kCalendarColor),
                   ),
                 ),
-              );
-            },
-            onTap: (CalendarTapDetails details) {
-              if (!isClient) {
-                if (details.appointments != null &&
-                    details.appointments!.isNotEmpty) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Exercise(
-                        training: details.appointments!.first as Training,
+                todayHighlightColor: kCalendarColor,
+                cellBorderColor: kPrimaryColor,
+                appointmentBuilder:
+                    (BuildContext context, CalendarAppointmentDetails details) {
+                  return Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Color(details.appointments.first.colors),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Center(
+                      child: Text(
+                        details.appointments.first.typeWorkout,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   );
-                }
-              }
-            },
-            onLongPress: (CalendarLongPressDetails details) {
-              if (!isClient) {
-                var isTab = false;
-                var isTraining = false;
-                for (var i = 0; i < trainings.length; i++) {
-                  var string_1 = details.date
-                      .toString()
-                      .substring(0, details.date.toString().length - 4);
-                  var string_2 = trainings[i]
-                      .dateTime
-                      .substring(0, trainings[i].dateTime.length - 1);
-                  if (string_1 == string_2) {
-                    isTraining = true;
-                  }
-                }
-                if (isTraining) {
+                },
+                onTap: (CalendarTapDetails details) {
                   if (!isClient) {
-                    _showDeleteConfirmationDialog(details.appointments!.first);
+                    if (details.appointments != null &&
+                        details.appointments!.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Exercise(
+                            training: details.appointments!.first as Training,
+                          ),
+                        ),
+                      );
+                    }
                   }
-                } else {
-                  _handleCellLongPress(details);
-                }
-              }
-            },
+                },
+                onLongPress: (CalendarLongPressDetails details) {
+                  if (!isClient) {
+                    var isTab = false;
+                    var isTraining = false;
+                    for (var i = 0; i < trainings.length; i++) {
+                      var string_1 = details.date
+                          .toString()
+                          .substring(0, details.date.toString().length - 4);
+                      var string_2 = trainings[i]
+                          .dateTime
+                          .substring(0, trainings[i].dateTime.length - 1);
+                      if (string_1 == string_2) {
+                        isTraining = true;
+                      }
+                    }
+                    if (isTraining) {
+                      if (!isClient) {
+                        _showDeleteConfirmationDialog(
+                            details.appointments!.first);
+                      }
+                    } else {
+                      _handleCellLongPress(details);
+                    }
+                  }
+                },
+              ),
+            ),
+            Container(height: 70),
+          ],
+        ),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: kPrimaryColor,
+            ),
+            child: const Icon(
+              Icons.chat,
+              color: kWhiteColor,
+              size: 30,
+            ),
           ),
         ),
       ],

@@ -5,16 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "iPhone 6s",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "apple_ios_simulator",
-            "flutterMode": "debug",
-            "program": "lib/main.dart",
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
             "name": "pocket_coach",
             "request": "launch",
             "type": "dart"

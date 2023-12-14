@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
 import '../../../screens/workout/components/create_workout.dart';
@@ -12,6 +13,15 @@ class ChatWorkoutButton extends StatelessWidget {
 
   final Size size;
   final String id;
+
+  void openUrl() async {
+    const url = 'tg://resolve?domain=ururururushka';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Не удалось открыть $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +41,7 @@ class ChatWorkoutButton extends StatelessWidget {
               ),
               backgroundColor: MaterialStateProperty.all(kPrimaryColor),
             ),
-            onPressed: () {}, //TODO
+            onPressed: openUrl,
             child: const Text(
               "Перейти в чат",
               style: TextStyle(
