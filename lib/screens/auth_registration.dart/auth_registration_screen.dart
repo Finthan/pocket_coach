@@ -228,7 +228,9 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isRegist ? "Регистрация" : "Авторизация"),
+        title: Text(
+          isRegist ? "Регистрация" : "Авторизация",
+        ),
       ),
       body: Center(
         child: SizedBox(
@@ -254,11 +256,14 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 13),
                       hintText: "Введите текст... Nikita",
-                      hintStyle: TextStyle(color: kTextChat),
+                      hintStyle: TextStyle(
+                        color: kTextChat,
+                      ),
                       isCollapsed: true,
                       filled: true,
                     ),
-                    style: const TextStyle(color: kWhiteColor),
+                    style: const TextStyle(
+                        color: kWhiteColor, backgroundColor: kBackgroundColor),
                   ),
                 ),
                 const Padding(
