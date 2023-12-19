@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
 import 'chat_workout_button.dart';
 import 'image_and_icon.dart';
 import 'title_and_age.dart';

@@ -4,6 +4,8 @@ const kPrimaryColor = Color.fromRGBO(2, 158, 150, 1);
 const kNavBarIconColor = Color.fromRGBO(3, 235, 223, 1);
 const kCalendarColor = Color.fromRGBO(2, 211, 201, 1);
 
+const kTextFieldColor = Color.fromRGBO(30, 33, 34, 1);
+
 const kTextColor = Color.fromRGBO(144, 162, 170, 100);
 const kTextColorBackground = Color.fromARGB(255, 245, 239, 239);
 const kTextColorBox = Color.fromRGBO(144, 162, 170, 80);
@@ -24,6 +26,10 @@ const kTextChat = Color.fromRGBO(217, 221, 225, 1);
 const kSwitch = Color.fromRGBO(211, 221, 225, 1);
 
 const kWorkoutColor = Color.fromRGBO(83, 105, 115, 1);
+
+const kGray1Color = Color.fromRGBO(94, 94, 94, 1);
+const kFont1Color = Color.fromRGBO(114, 114, 114, 1);
+const kBlack22Color = Color.fromRGBO(34, 34, 34, 1);
 
 const kDefaultPadding = 20.0;
 

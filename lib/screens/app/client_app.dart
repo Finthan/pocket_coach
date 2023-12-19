@@ -81,7 +81,7 @@ class _ClientAppState extends State<ClientApp>
             width: 288,
             left: isSideMenuClosed ? -288 : 0,
             height: MediaQuery.of(context).size.height,
-            child: SideMenu(),
+            child: const SideMenu(),
           ),
           Transform(
             alignment: Alignment.center,

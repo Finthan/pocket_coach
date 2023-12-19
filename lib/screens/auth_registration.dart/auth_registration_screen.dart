@@ -9,6 +9,7 @@ import '../../constants.dart';
 import '../../info.dart';
 import '../../main.dart';
 import '../../all_class.dart';
+import 'components/auth_text_field.dart';
 
 class AuthRegistrationScreen extends StatefulWidget {
   const AuthRegistrationScreen({super.key});
@@ -53,6 +54,9 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   final _trainingTextController = TextEditingController();
   final _costTextController = TextEditingController();
   final _cardnumberTextController = TextEditingController();
+
+  bool _isLoginFocused = false;
+  bool _isPasswordFocused = false;
 
   Future<void> _auth() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
@@ -224,6 +228,16 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           }));
   }
 
+  void updateFocus(String field, bool isFocused) {
+    setState(() {
+      if (field == 'login') {
+        _isLoginFocused = isFocused;
+      } else if (field == 'password') {
+        _isPasswordFocused = isFocused;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -232,64 +246,31 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isRegist ? "Регистрация" : "Авторизация",
         ),
       ),
-      body: Center(
-        child: SizedBox(
-          height: isRegist ? 700 : 300,
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 18, top: 15, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Введите логин",
-                      style: TextStyle(color: kWhiteColor, fontSize: 17),
-                    ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 15, right: 15, bottom: 30),
+                  child: AuthTextField(
+                    loginTextController: _loginTextController,
+                    label: 'Введите логин',
+                    isFocused: _isLoginFocused,
+                    onFocusChanged: (isFocused) =>
+                        updateFocus('login', isFocused),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: TextField(
-                    controller: _loginTextController,
-                    decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                      hintText: "Введите текст... Nikita",
-                      hintStyle: TextStyle(
-                        color: kTextChat,
-                      ),
-                      isCollapsed: true,
-                      filled: true,
-                    ),
-                    style: const TextStyle(
-                        color: kWhiteColor, backgroundColor: kBackgroundColor),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 18, top: 15, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Введите пароль",
-                      style: TextStyle(color: kWhiteColor, fontSize: 17),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: TextField(
-                    controller: _passwordTextController,
-                    decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                      hintText: "Введите текст... pass",
-                      hintStyle: TextStyle(color: kTextChat),
-                      isCollapsed: true,
-                      filled: true,
-                    ),
-                    obscureText: true,
-                    style: const TextStyle(color: kWhiteColor),
+                  child: AuthTextField(
+                    loginTextController: _passwordTextController,
+                    label: 'Введите пароль',
+                    isFocused: _isPasswordFocused,
+                    onFocusChanged: (isFocused) =>
+                        updateFocus('password', isFocused),
                   ),
                 ),
                 isRegist
