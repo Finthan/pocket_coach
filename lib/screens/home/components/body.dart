@@ -4,7 +4,7 @@ import 'package:pocket_coach/models/user_view/coach_man.dart';
 
 import '../../../constants.dart';
 import '../../../models/user_view/all_client_man.dart';
-import '../../auth_registration.dart/auth_registration_screen.dart';
+import '../../auth_registration/auth_registration_screen.dart';
 
 import 'header_with_search_box.dart';
 import 'title_with_more_btn.dart';

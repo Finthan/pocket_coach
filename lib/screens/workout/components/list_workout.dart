@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../../all_class.dart';
 import '../../../constants.dart';
 import '../../../main.dart';
-import '../../auth_registration.dart/auth_registration_screen.dart';
+import '../../auth_registration/auth_registration_screen.dart';
 import 'exercise.dart';
 import 'workout.dart';
 

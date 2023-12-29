@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../constants.dart';
-import '../../auth_registration.dart/auth_registration_screen.dart';
+import '../../auth_registration/auth_registration_screen.dart';
 
 class ClientsWidget extends StatefulWidget {
   const ClientsWidget({

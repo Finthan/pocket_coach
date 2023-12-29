@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'components/auth_natification.dart';
 import 'constants.dart';
-import 'screens/auth_registration.dart/auth_registration_screen.dart';
+import 'screens/auth_registration/auth_registration_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

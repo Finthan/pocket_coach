@@ -55,8 +55,9 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   final _costTextController = TextEditingController();
   final _cardnumberTextController = TextEditingController();
 
-  bool _isLoginFocused = false;
-  bool _isPasswordFocused = false;
+  bool isLoginFocused = false;
+  bool isPasswordFocused = false;
+  bool isNameFocused = false;
 
   Future<void> _auth() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
@@ -230,10 +231,22 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
 
   void updateFocus(String field, bool isFocused) {
     setState(() {
-      if (field == 'login') {
-        _isLoginFocused = isFocused;
-      } else if (field == 'password') {
-        _isPasswordFocused = isFocused;
+      switch (field) {
+        case 'login':
+          isLoginFocused = isFocused;
+          isPasswordFocused = false;
+          isNameFocused = false;
+          break;
+        case 'password':
+          isPasswordFocused = isFocused;
+          isLoginFocused = false;
+          isNameFocused = false;
+          break;
+        case 'name':
+          isNameFocused = isFocused;
+          isLoginFocused = false;
+          isPasswordFocused = false;
+          break;
       }
     });
   }
@@ -258,7 +271,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                   child: AuthTextField(
                     loginTextController: _loginTextController,
                     label: 'Введите логин',
-                    isFocused: _isLoginFocused,
+                    isFocused: isLoginFocused,
                     onFocusChanged: (isFocused) =>
                         updateFocus('login', isFocused),
                   ),
@@ -268,38 +281,22 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                   child: AuthTextField(
                     loginTextController: _passwordTextController,
                     label: 'Введите пароль',
-                    isFocused: _isPasswordFocused,
+                    isFocused: isPasswordFocused,
                     onFocusChanged: (isFocused) =>
                         updateFocus('password', isFocused),
                   ),
                 ),
                 isRegist
                     ? (Column(children: [
-                        const Padding(
-                          padding:
-                              EdgeInsets.only(top: 10, left: 18, bottom: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Введите имя",
-                              style:
-                                  TextStyle(color: kWhiteColor, fontSize: 17),
-                            ),
-                          ),
-                        ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: TextField(
-                            controller: _nameTextController,
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 13),
-                              hintText: "Введите текст... Никита",
-                              hintStyle: TextStyle(color: kTextChat),
-                              isCollapsed: true,
-                              filled: true,
-                            ),
-                            style: const TextStyle(color: kWhiteColor),
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, bottom: 30),
+                          child: AuthTextField(
+                            loginTextController: _nameTextController,
+                            label: 'Введите имя',
+                            isFocused: isNameFocused,
+                            onFocusChanged: (isFocused) =>
+                                updateFocus('name', isNameFocused),
                           ),
                         ),
                         const Padding(

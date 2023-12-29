@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../constants.dart';
-import '../../auth_registration.dart/auth_registration_screen.dart';
+import '../../auth_registration/auth_registration_screen.dart';
 
 class HeaderWithSearchBox extends StatefulWidget {
   const HeaderWithSearchBox({

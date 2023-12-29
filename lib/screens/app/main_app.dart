@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_coach/screens/app/client_app.dart';
 import 'package:pocket_coach/screens/app/tutor_app.dart';
-import 'package:pocket_coach/screens/auth_registration.dart/auth_registration_screen.dart';
+import 'package:pocket_coach/screens/auth_registration/auth_registration_screen.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({
