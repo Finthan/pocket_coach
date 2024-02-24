@@ -18,19 +18,22 @@ class AppBarSideScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        const ButtonBackSideScreens(),
-        TitleSideScreens(
-          title: menu.title,
-        ),
-        IconSideScreens(
-          riveOnInit: riveOnInit,
-          menu: menu,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          const ButtonBackSideScreens(),
+          TitleSideScreens(
+            title: menu.title,
+          ),
+          IconSideScreens(
+            riveOnInit: riveOnInit,
+            menu: menu,
+          ),
+        ],
+      ),
     );
   }
 }

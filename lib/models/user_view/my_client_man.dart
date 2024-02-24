@@ -27,18 +27,18 @@ class _MyClientMan extends State<MyClientMan> {
   bool _isAuth = false;
 
   @override
-  void dispose() {
-    super.dispose();
-    _isAuth = false;
-    me = Me(id: "-0");
-  }
-
-  @override
   void initState() {
     super.initState();
     _isAuth = Main.isAuth;
     getMyClients();
     Timer.periodic(const Duration(seconds: 5), (Timer t) => getMyClients());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _isAuth = false;
+    me = Me(id: "-0");
   }
 
   List<Clients> listOfClients = [];

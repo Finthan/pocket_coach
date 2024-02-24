@@ -33,7 +33,7 @@ class SideMenuTile extends StatelessWidget {
           children: [
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-              height: 48,
+              height: 56,
               width: isActive ? 288 : 0,
               child: Container(
                 decoration: const BoxDecoration(

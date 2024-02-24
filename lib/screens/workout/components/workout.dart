@@ -24,6 +24,7 @@ class Workout extends StatefulWidget {
 class _WorkoutState extends State<Workout> {
   final TextEditingController _countDoneApproaches = TextEditingController();
   final TextEditingController _weightDoneApproaches = TextEditingController();
+  ConnectionState _connectionState = ConnectionState.waiting;
 
   List<ClientExercise> clientExercise = [];
 
@@ -54,7 +55,7 @@ class _WorkoutState extends State<Workout> {
     clientTrainings();
   }
 
-  Future<void> clientTrainings() async {
+  Future<List<List<ApproachesList>>> clientTrainings() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -64,9 +65,7 @@ class _WorkoutState extends State<Workout> {
     var response;
     try {
       response = await http.get(uri);
-    } catch (error) {
-      return;
-    }
+    } catch (error) {}
     String jsonString = "";
     if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
@@ -74,11 +73,13 @@ class _WorkoutState extends State<Workout> {
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
+      print(json);
       if (json.isNotEmpty) {
         setState(() {
           clientExercise = json
-              .map((dynamic e) =>
-                  ClientExercise.fromJson(e as Map<String, dynamic>))
+              .map((dynamic e) => ClientExercise.fromJson(
+                    e as Map<String, dynamic>,
+                  ))
               .toList();
           countWorkout = clientExercise.length;
         });
@@ -97,7 +98,7 @@ class _WorkoutState extends State<Workout> {
       try {
         responseApproaches = await http.get(uriApproaches);
       } catch (error) {
-        return;
+        // return;
       }
       String jsonStringApproaches = "";
       if (responseApproaches.statusCode == 200 && _isAuth == true) {
@@ -107,6 +108,7 @@ class _WorkoutState extends State<Workout> {
       }
       try {
         final json = await jsonDecode(jsonStringApproaches) as List<dynamic>;
+
         if (json.isNotEmpty) {
           if (_data.length <= index) {
             _data.add([]);
@@ -117,12 +119,16 @@ class _WorkoutState extends State<Workout> {
                   .toList());
             });
           }
-
-          // print(_data[index]);
           index++;
         }
       } catch (error) {}
     }
+    setState(() {
+      if (clientExercise.isNotEmpty && _data.isNotEmpty) {
+        _connectionState = ConnectionState.done;
+      }
+    });
+    return _data;
   }
 
   Future<void> fetchApproachers() async {
@@ -185,6 +191,7 @@ class _WorkoutState extends State<Workout> {
 
   @override
   Widget build(BuildContext context) {
+    final widthContext = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -198,10 +205,11 @@ class _WorkoutState extends State<Workout> {
       ),
       body: FutureBuilder(
         future: clientTrainings(),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (snapshot.hasData) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<List<ApproachesList>>> snapshot) {
+          if (_connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (clientExercise.isNotEmpty) {
+          } else {
             return Stepper(
               currentStep: _currentStep,
               onStepContinue: _onStepContinue,
@@ -218,66 +226,64 @@ class _WorkoutState extends State<Workout> {
                       style: const TextStyle(color: kWhiteColor),
                     ),
                     content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 160,
-                                padding: const EdgeInsets.only(top: 15),
-                                child: Text(
-                                  "Подход ${_currentData.numberApproaches}",
-                                  style: const TextStyle(
-                                    color: kNavBarIconColor,
-                                    fontSize: 16,
-                                  ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: widthContext * 0.35,
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text(
+                                "Подход ${_data[_currentStep][_currentSubStep].numberApproaches}",
+                                style: const TextStyle(
+                                  color: kNavBarIconColor,
+                                  fontSize: 16,
                                 ),
                               ),
-                              Container(
-                                width: 160,
-                                padding: const EdgeInsets.only(top: 15),
-                                child: Text(
-                                  "Количество повторений ${_currentData.countList}",
-                                  style: const TextStyle(
-                                    color: kWhiteColor,
-                                  ),
-                                  maxLines: 3,
+                            ),
+                            Container(
+                              width: widthContext * 0.35,
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text(
+                                "Количество повторений ${_data[_currentStep][_currentSubStep].countList}",
+                                style: const TextStyle(
+                                  color: kWhiteColor,
                                 ),
+                                maxLines: 3,
                               ),
-                              Container(
-                                width: 160,
-                                padding: const EdgeInsets.only(
-                                  top: 15,
-                                  bottom: 15,
-                                ),
-                                child: Text(
-                                  "Вес ${_currentData.weight}",
-                                  style: const TextStyle(color: kWhiteColor),
-                                ),
+                            ),
+                            Container(
+                              width: widthContext * 0.35,
+                              padding: const EdgeInsets.only(
+                                top: 15,
+                                bottom: 15,
                               ),
-                            ],
-                          ),
+                              child: Text(
+                                "Вес ${_data[_currentStep][_currentSubStep].weight}",
+                                style: const TextStyle(color: kWhiteColor),
+                              ),
+                            ),
+                          ],
                         ),
                         Column(
                           children: [
-                            const SizedBox(
-                              width: 200,
+                            SizedBox(
+                              width: widthContext * 0.43,
                               child: Text(
                                 'Введите количество выполненых повторений',
                                 style: TextStyle(color: kNavBarIconColor),
                               ),
                             ),
                             SizedBox(
-                              width: 200,
+                              width: widthContext * 0.43,
                               child: TextField(
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: kTextFieldColor),
                                 controller: _countDoneApproaches,
                                 decoration: const InputDecoration(
                                   hintText: 'Введите число',
                                   hintStyle: TextStyle(
-                                    color: Colors.white,
+                                    color: kTextColor,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -286,7 +292,7 @@ class _WorkoutState extends State<Workout> {
                             ),
                             Container(
                               padding: const EdgeInsets.only(top: 30),
-                              width: 200,
+                              width: widthContext * 0.43,
                               child: const Text(
                                 'Введите вес',
                                 style: TextStyle(color: kNavBarIconColor),
@@ -294,14 +300,14 @@ class _WorkoutState extends State<Workout> {
                             ),
                             Container(
                               padding: const EdgeInsets.only(bottom: 10),
-                              width: 200,
+                              width: widthContext * 0.43,
                               child: TextField(
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: kTextFieldColor),
                                 controller: _weightDoneApproaches,
                                 decoration: const InputDecoration(
                                   hintText: 'Введите число',
                                   hintStyle: TextStyle(
-                                    color: Colors.white,
+                                    color: kTextColor,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -342,8 +348,6 @@ class _WorkoutState extends State<Workout> {
                 );
               },
             );
-          } else {
-            return Container();
           }
         },
       ),

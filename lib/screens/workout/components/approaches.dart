@@ -118,7 +118,7 @@ class _ApproachesState extends State<Approaches> {
         } catch (e) {}
       });
     } catch (error) {}
-    for (var i = 0; i < _data.length; i++) {}
+    // for (var i = 0; i < _data.length; i++) {}
   }
 
   Future<void> getApproaches() async {
@@ -302,51 +302,12 @@ class _ApproachesState extends State<Approaches> {
                                 countList: _countController.text.toString(),
                               ));
                             }
+                            fetchApproaches();
                           });
 
                           for (int i = 0; i < _data.length; i++) {
                             _data[i].numberApproaches = (i + 1).toString();
                           }
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          IconButton(
-            splashRadius: 20,
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  // контроллер для текстового поля
-                  final TextEditingController _textController =
-                      TextEditingController();
-                  final TextEditingController _muscleController =
-                      TextEditingController();
-
-                  return AlertDialog(
-                    title: const Text(
-                      'Сохранить упражнения?',
-                      textAlign: TextAlign.center,
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text('Отмена'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Сохранить'),
-                        onPressed: () {
-                          setState(() {
-                            fetchApproaches();
-                          });
                           Navigator.of(context).pop();
                         },
                       ),
@@ -376,6 +337,7 @@ class _ApproachesState extends State<Approaches> {
               for (int i = 0; i < _data.length; i++) {
                 _data[i].numberApproaches = (i + 1).toString();
               }
+              fetchApproaches();
             });
           },
           children: _data

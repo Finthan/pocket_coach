@@ -9,6 +9,7 @@ import '../../../all_class.dart';
 import '../../../constants.dart';
 import '../../../main.dart';
 import '../../auth_registration/auth_registration_screen.dart';
+import 'custom_alert_dialog.dart';
 import 'exercise.dart';
 import 'workout.dart';
 
@@ -60,34 +61,6 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      if (json.isNotEmpty) {
-        setState(() {
-          trainings = json
-              .map((dynamic e) => Training.fromJson(e as Map<String, dynamic>))
-              .toList();
-        });
-      }
-    } catch (error) {}
-  }
-
-  Future<void> addTrainings(name, time) async {
-    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-      'apiv': '1',
-      'action': 'set',
-      'object': 'createworkout',
-      'id_tutor': tutorMe.id,
-      'id_client': widget.id,
-      'name_workout': name,
-      'workout_date': time,
-    });
-    dynamic response = await http.get(uri);
-    String jsonString = "";
-    if (response.statusCode == 200 && _isAuth == true) {
-      var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-      jsonString = jsonEncode(decodedResponse['data']);
-    }
-    try {
-      final json = jsonDecode(jsonString) as List<dynamic>;
       if (json.isNotEmpty) {
         setState(() {
           trainings = json
@@ -156,72 +129,23 @@ class _ListWorkoutState extends State<ListWorkout>
     } catch (error) {}
   }
 
+  void updateTrainings(List<Training> newTrainings) {
+    setState(() {
+      trainings = newTrainings;
+    });
+  }
+
   void _handleCellLongPress(CalendarLongPressDetails details) {
     if (details.appointments == null || details.appointments!.isEmpty) {
-      final _workoutTextController = TextEditingController();
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Добавить тренировку?'),
-            content: SizedBox(
-              height: 100,
-              child: Column(children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 15, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Напишите название тренировки",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: TextField(
-                    controller: _workoutTextController,
-                    decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                      hintText: "Напишите название тренировки",
-                      hintStyle: TextStyle(
-                        color: Colors.black38,
-                        fontSize: 15,
-                      ),
-                      isCollapsed: true,
-                      filled: true,
-                    ),
-                    style: const TextStyle(color: Colors.black87),
-                  ),
-                ),
-              ]),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text(
-                  'Отмена',
-                  style: TextStyle(color: Colors.black38),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: const Text(
-                  'Добавить',
-                  style: TextStyle(color: Colors.green),
-                ),
-                onPressed: () {
-                  String name = _workoutTextController.text;
-                  var time = details.date
-                      .toString()
-                      .substring(0, details.date.toString().length - 13);
-                  addTrainings(name, time);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+          return CustomAlertDialog(
+            id: widget.id,
+            isAuth: _isAuth,
+            trainings: trainings,
+            onUpdateTrainings: updateTrainings,
+            details: details,
           );
         },
       );
@@ -448,14 +372,10 @@ class _ListWorkoutState extends State<ListWorkout>
                         ),
                     ],
                   )
-                : Column(
-                    children: [
-                      TitleAndPrice(
-                        title: widget.name,
-                        status: widget.status,
-                        age: widget.age,
-                      ),
-                    ],
+                : TitleAndPrice(
+                    title: widget.name,
+                    status: widget.status,
+                    age: widget.age,
                   ),
 
             //TODO Break
@@ -542,7 +462,6 @@ class _ListWorkoutState extends State<ListWorkout>
                 },
                 onLongPress: (CalendarLongPressDetails details) {
                   if (!isClient) {
-                    var isTab = false;
                     var isTraining = false;
                     for (var i = 0; i < trainings.length; i++) {
                       var string_1 = details.date

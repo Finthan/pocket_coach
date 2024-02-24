@@ -1,10 +1,15 @@
 class Me {
   final String id;
 
-  Me({required this.id});
+  Me({
+    required this.id,
+  });
 
   factory Me.fromJson(Map<String, dynamic> json) {
-    return Me(id: json['id'] as String);
+    print(json);
+    return Me(
+      id: json['id'] as String,
+    );
   }
 }
 
@@ -274,6 +279,46 @@ class MadeApproachesList {
       'id_approaches': int.parse(idApproaches),
       'weight': double.parse(weight.replaceAll(',', '.')),
       'count_list': int.parse(countList),
+    };
+  }
+}
+
+class MadeApproachesChart {
+  String id;
+  String idWorkout;
+  String workoutDate;
+  String weight;
+  String countList;
+  String numberApproaches;
+
+  MadeApproachesChart({
+    required this.id,
+    required this.idWorkout,
+    required this.workoutDate,
+    required this.weight,
+    required this.countList,
+    required this.numberApproaches,
+  });
+
+  factory MadeApproachesChart.fromJson(Map<String, dynamic> json) {
+    return MadeApproachesChart(
+      id: json['id'] as String,
+      idWorkout: json['id_workout'] as String,
+      workoutDate: json['workout_date'] as String,
+      weight: json['weight'] as String,
+      countList: json['count'] as String,
+      numberApproaches: json['number_approaches'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': int.parse(id),
+      'id_workout': int.parse(idWorkout),
+      'workout_date': int.parse(workoutDate),
+      'weight': double.parse(weight.replaceAll(',', '.')),
+      'count_list': int.parse(countList),
+      'number_approaches': int.parse(numberApproaches),
     };
   }
 }

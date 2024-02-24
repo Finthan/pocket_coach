@@ -38,6 +38,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
             ),
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               isClient
                   ? Text(

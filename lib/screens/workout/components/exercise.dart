@@ -107,7 +107,7 @@ class _ExerciseState extends State<Exercise> {
       }
       try {
         final json = await jsonDecode(jsonString) as List<dynamic>;
-        if (json.length > 0) {
+        if (json.isNotEmpty) {
           exercises = json
               .map((dynamic e) =>
                   ExerciseList.fromJson(e as Map<String, dynamic>))
@@ -118,6 +118,7 @@ class _ExerciseState extends State<Exercise> {
         try {
           _data = exercises;
           exercises = [];
+          getExercise();
         } catch (e) {}
       });
     } catch (error) {}
@@ -143,7 +144,7 @@ class _ExerciseState extends State<Exercise> {
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      if (json.length > 0) {
+      if (json.isNotEmpty) {
         exercises = json
             .map(
                 (dynamic e) => ExerciseList.fromJson(e as Map<String, dynamic>))
@@ -153,6 +154,7 @@ class _ExerciseState extends State<Exercise> {
     setState(() {
       try {
         _data = exercises;
+        exercises = [];
       } catch (e) {}
     });
   }
@@ -177,11 +179,9 @@ class _ExerciseState extends State<Exercise> {
             splashRadius: 20,
             icon: const Icon(Icons.add),
             onPressed: () {
-              // отобразить диалоговое окно для добавления нового элемента
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  // контроллер для текстового поля
                   final TextEditingController _textController =
                       TextEditingController();
                   final TextEditingController _muscleController =
@@ -266,46 +266,7 @@ class _ExerciseState extends State<Exercise> {
                               ordering: (_data.length).toString(),
                             ));
                           });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          IconButton(
-            splashRadius: 20,
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  // контроллер для текстового поля
-                  final TextEditingController _textController =
-                      TextEditingController();
-                  final TextEditingController _muscleController =
-                      TextEditingController();
-
-                  return AlertDialog(
-                    title: const Text(
-                      'Сохранить упражнения?',
-                      textAlign: TextAlign.center,
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text('Отмена'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Сохранить'),
-                        onPressed: () {
-                          setState(() {
-                            fetchExercise();
-                          });
+                          fetchExercise();
                           Navigator.of(context).pop();
                         },
                       ),
@@ -335,6 +296,7 @@ class _ExerciseState extends State<Exercise> {
               for (int i = 0; i < _data.length; i++) {
                 _data[i].ordering = i.toString();
               }
+              fetchExercise();
             });
           },
           children: _data
@@ -359,12 +321,14 @@ class _ExerciseState extends State<Exercise> {
                         ],
                       ),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Approaches(item: item),
-                          ),
-                        );
+                        print(item.id);
+                        if (item.id != "0")
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Approaches(item: item),
+                            ),
+                          );
                       },
                     ),
                   ))

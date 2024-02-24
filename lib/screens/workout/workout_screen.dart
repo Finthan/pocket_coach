@@ -20,13 +20,11 @@ class WorkoutScreen extends StatefulWidget {
 class _WorkoutScreenState extends State<WorkoutScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Body(
-        id: widget.id,
-        status: widget.status,
-        age: widget.age,
-        name: widget.name,
-      ),
+    return Body(
+      id: widget.id,
+      status: widget.status,
+      age: widget.age,
+      name: widget.name,
     );
   }
 }

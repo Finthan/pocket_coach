@@ -44,17 +44,17 @@ class _SideMenuState extends State<SideMenu> {
                       status: tutorMe.typeOfTraining,
                     ),
 
-              Padding(
-                padding: const EdgeInsets.only(left: 17, top: 25, bottom: 15),
-                child: Text(
-                  "Browse".toUpperCase(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: Colors.white70),
-                ),
-              ),
-              /////////////////
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 17, top: 25, bottom: 15),
+              //   child: Text(
+              //     "Browse".toUpperCase(),
+              //     style: Theme.of(context)
+              //         .textTheme
+              //         .titleMedium!
+              //         .copyWith(color: Colors.white70),
+              //   ),
+              // ),
+              // /////////////////
               ...sideMenus.map(
                 (menu) => SideMenuTile(
                   menu: menu,

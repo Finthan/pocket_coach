@@ -58,6 +58,11 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   bool isLoginFocused = false;
   bool isPasswordFocused = false;
   bool isNameFocused = false;
+  bool isAgeFocused = false;
+  bool isGenderFocused = false;
+  bool isCardnumberFocused = false;
+  bool isCostFocused = false;
+  bool isTrainingFocused = false;
 
   Future<void> _auth() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
@@ -236,16 +241,81 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isLoginFocused = isFocused;
           isPasswordFocused = false;
           isNameFocused = false;
+          isAgeFocused = false;
+          isGenderFocused = false;
+          isCardnumberFocused = false;
+          isCostFocused = false;
+          isTrainingFocused = false;
           break;
         case 'password':
-          isPasswordFocused = isFocused;
           isLoginFocused = false;
+          isPasswordFocused = isFocused;
           isNameFocused = false;
+          isAgeFocused = false;
+          isGenderFocused = false;
+          isCardnumberFocused = false;
+          isCostFocused = false;
+          isTrainingFocused = false;
           break;
         case 'name':
-          isNameFocused = isFocused;
           isLoginFocused = false;
           isPasswordFocused = false;
+          isNameFocused = isFocused;
+          isAgeFocused = false;
+          isGenderFocused = false;
+          isCardnumberFocused = false;
+          isCostFocused = false;
+          isTrainingFocused = false;
+          break;
+        case 'age':
+          isLoginFocused = false;
+          isPasswordFocused = false;
+          isNameFocused = false;
+          isAgeFocused = isFocused;
+          isGenderFocused = false;
+          isCardnumberFocused = false;
+          isCostFocused = false;
+          isTrainingFocused = false;
+          break;
+        case 'gender':
+          isLoginFocused = false;
+          isPasswordFocused = false;
+          isNameFocused = false;
+          isAgeFocused = false;
+          isGenderFocused = isFocused;
+          isCardnumberFocused = false;
+          isCostFocused = false;
+          isTrainingFocused = false;
+          break;
+        case 'cardnumber':
+          isLoginFocused = false;
+          isPasswordFocused = false;
+          isNameFocused = false;
+          isAgeFocused = false;
+          isGenderFocused = false;
+          isCardnumberFocused = isFocused;
+          isCostFocused = false;
+          isTrainingFocused = false;
+          break;
+        case 'cost':
+          isLoginFocused = false;
+          isPasswordFocused = false;
+          isNameFocused = false;
+          isAgeFocused = false;
+          isGenderFocused = false;
+          isCardnumberFocused = false;
+          isCostFocused = isFocused;
+          isTrainingFocused = false;
+          break;
+        case 'training':
+          isLoginFocused = false;
+          isPasswordFocused = false;
+          isNameFocused = false;
+          isAgeFocused = false;
+          isGenderFocused = false;
+          isCardnumberFocused = false;
+          isCostFocused = false;
+          isTrainingFocused = isFocused;
           break;
       }
     });
@@ -266,8 +336,8 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 15, right: 15, bottom: 30),
+                  padding: const EdgeInsets.only(
+                      top: 10, left: 15, right: 15, bottom: 30),
                   child: AuthTextField(
                     loginTextController: _loginTextController,
                     label: 'Введите логин',
@@ -277,7 +347,8 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  padding:
+                      const EdgeInsets.only(left: 15, right: 15, bottom: 30),
                   child: AuthTextField(
                     loginTextController: _passwordTextController,
                     label: 'Введите пароль',
@@ -296,149 +367,68 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                             label: 'Введите имя',
                             isFocused: isNameFocused,
                             onFocusChanged: (isFocused) =>
-                                updateFocus('name', isNameFocused),
-                          ),
-                        ),
-                        const Padding(
-                          padding:
-                              EdgeInsets.only(top: 10, left: 18, bottom: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Введите возраст",
-                              style:
-                                  TextStyle(color: kWhiteColor, fontSize: 17),
-                            ),
+                                updateFocus('name', isFocused),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: TextField(
-                            controller: _ageTextController,
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 13),
-                              hintText: "Введите текст... 18",
-                              hintStyle: TextStyle(color: kTextChat),
-                              isCollapsed: true,
-                              filled: true,
-                            ),
-                            style: const TextStyle(color: kWhiteColor),
-                          ),
-                        ),
-                        const Padding(
-                          padding:
-                              EdgeInsets.only(top: 10, left: 18, bottom: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Введите пол",
-                              style:
-                                  TextStyle(color: kWhiteColor, fontSize: 17),
-                            ),
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, bottom: 30),
+                          child: AuthTextField(
+                            loginTextController: _ageTextController,
+                            label: 'Введите возраст',
+                            isFocused: isAgeFocused,
+                            onFocusChanged: (isFocused) =>
+                                updateFocus('age', isFocused),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: TextField(
-                            controller: _genderTextController,
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 13),
-                              hintText: "Введите текст... М",
-                              hintStyle: TextStyle(color: kTextChat),
-                              isCollapsed: true,
-                              filled: true,
-                            ),
-                            style: const TextStyle(color: kWhiteColor),
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, bottom: 30),
+                          child: AuthTextField(
+                            loginTextController: _genderTextController,
+                            label: 'Введите пол',
+                            isFocused: isGenderFocused,
+                            onFocusChanged: (isFocused) =>
+                                updateFocus('gender', isFocused),
                           ),
                         ),
                         isRegClient
                             ? (Column(children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 10, left: 18, bottom: 10),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "Введите номер карты",
-                                      style: TextStyle(
-                                          color: kWhiteColor, fontSize: 17),
-                                    ),
-                                  ),
-                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: TextField(
-                                    controller: _cardnumberTextController,
-                                    decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 13),
-                                      hintText: "Введите текст... 1241342135",
-                                      hintStyle: TextStyle(color: kTextChat),
-                                      isCollapsed: true,
-                                      filled: true,
-                                    ),
-                                    style: const TextStyle(color: kWhiteColor),
+                                      left: 15, right: 15, bottom: 30),
+                                  child: AuthTextField(
+                                    loginTextController:
+                                        _cardnumberTextController,
+                                    label: 'Введите номер карты',
+                                    isFocused: isCardnumberFocused,
+                                    onFocusChanged: (isFocused) =>
+                                        updateFocus('cardnumber', isFocused),
                                   ),
                                 ),
                               ]))
                             : (Column(children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 10, left: 18, bottom: 10),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "Введите тип тренировок",
-                                      style: TextStyle(
-                                          color: kWhiteColor, fontSize: 17),
-                                    ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15, right: 15, bottom: 30),
+                                  child: AuthTextField(
+                                    loginTextController:
+                                        _trainingTextController,
+                                    label: 'Введите тип тренировок',
+                                    isFocused: isTrainingFocused,
+                                    onFocusChanged: (isFocused) =>
+                                        updateFocus('training', isFocused),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: TextField(
-                                    controller: _trainingTextController,
-                                    decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 13),
-                                      hintText: "Введите текст... Бодибилдинг",
-                                      hintStyle: TextStyle(color: kTextChat),
-                                      isCollapsed: true,
-                                      filled: true,
-                                    ),
-                                    style: const TextStyle(color: kWhiteColor),
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 10, left: 18, bottom: 10),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "Введите цена за услуги",
-                                      style: TextStyle(
-                                          color: kWhiteColor, fontSize: 17),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: TextField(
-                                    controller: _costTextController,
-                                    decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 13),
-                                      hintText: "Введите текст... 1500",
-                                      hintStyle: TextStyle(color: kTextChat),
-                                      isCollapsed: true,
-                                      filled: true,
-                                    ),
-                                    style: const TextStyle(color: kWhiteColor),
+                                      left: 15, right: 15, bottom: 30),
+                                  child: AuthTextField(
+                                    loginTextController: _costTextController,
+                                    label: 'Введите тип тренировок',
+                                    isFocused: isCostFocused,
+                                    onFocusChanged: (isFocused) =>
+                                        updateFocus('cost', isFocused),
                                   ),
                                 ),
                               ])),
@@ -479,7 +469,8 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                       )
                     : Container(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+                  padding: const EdgeInsets.only(
+                      top: 15, left: 15, right: 15, bottom: 15),
                   child: TextButton(
                     onPressed: _changeState,
                     child: Text(
