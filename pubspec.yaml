@@ -49,6 +49,8 @@ dependencies:
   fl_chart: ^0.66.1
   flutter_cupertino_date_picker_fork: ^1.0.7
   flutter_telegram_login: ^0.0.2
+  uploadcare_client: ^6.3.2
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

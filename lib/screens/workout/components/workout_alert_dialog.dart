@@ -8,8 +8,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../../all_class.dart';
 import '../../auth_registration/auth_registration_screen.dart';
 
-class CustomAlertDialog extends StatefulWidget {
-  CustomAlertDialog({
+class WorkoutAlertDialog extends StatefulWidget {
+  WorkoutAlertDialog({
     super.key,
     required this.id,
     required this.isAuth,
@@ -25,10 +25,10 @@ class CustomAlertDialog extends StatefulWidget {
   final Function(List<Training>) onUpdateTrainings;
 
   @override
-  State<CustomAlertDialog> createState() => _CustomAlertDialogState();
+  State<WorkoutAlertDialog> createState() => _WorkoutAlertDialogState();
 }
 
-class _CustomAlertDialogState extends State<CustomAlertDialog> {
+class _WorkoutAlertDialogState extends State<WorkoutAlertDialog> {
   final _workoutTextController = TextEditingController();
 
   Future<void> addTrainings(name, time) async {
@@ -66,70 +66,36 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       title: const Text('Добавить тренировку?'),
       content: SizedBox(
         height: 110,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            ElevatedButton(
-              child: const Text(
-                'Создать тренировку по шаблону',
-                textAlign: TextAlign.center,
-              ),
-              onPressed: () {
-                setState(() {
-                  buttonText = 'Кнопка 1';
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kWhiteColor,
-                minimumSize: const Size(30, 30),
-                maximumSize: const Size(130, 60),
+            const Padding(
+              padding: EdgeInsets.only(top: 15, bottom: 10),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Напишите название тренировки",
+                  style: TextStyle(fontSize: 17),
+                ),
               ),
             ),
-            IconButton(
-              icon: const Center(child: Icon(Icons.add)),
-              onPressed: () {
-                setState(() {
-                  buttonText = 'Кнопка 2';
-                  time = widget.details.date
-                      .toString()
-                      .substring(0, widget.details.date.toString().length - 13);
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 3,
-                backgroundColor: kWhiteColor,
-                minimumSize: const Size(30, 30),
-                maximumSize: const Size(120, 60),
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: TextField(
+                controller: _workoutTextController,
+                decoration: const InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+                  hintText: "Напишите название тренировки",
+                  hintStyle: TextStyle(
+                    color: Colors.black38,
+                    fontSize: 15,
+                  ),
+                  isCollapsed: true,
+                  filled: true,
+                ),
+                style: const TextStyle(color: Colors.black87),
               ),
             ),
-            // const Padding(
-            //   padding: EdgeInsets.only(top: 15, bottom: 10),
-            //   child: Align(
-            //     alignment: Alignment.centerLeft,
-            //     child: Text(
-            //       "Напишите название тренировки",
-            //       style: TextStyle(fontSize: 17),
-            //     ),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.only(right: 15),
-            //   child: TextField(
-            //     controller: _workoutTextController,
-            //     decoration: const InputDecoration(
-            //       contentPadding:
-            //           EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-            //       hintText: "Напишите название тренировки",
-            //       hintStyle: TextStyle(
-            //         color: Colors.black38,
-            //         fontSize: 15,
-            //       ),
-            //       isCollapsed: true,
-            //       filled: true,
-            //     ),
-            //     style: const TextStyle(color: Colors.black87),
-            //   ),
-            // ),
           ],
         ),
       ),

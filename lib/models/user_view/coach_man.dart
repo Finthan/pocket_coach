@@ -42,6 +42,7 @@ class _CoachMan extends State<CoachMan> {
       id: '',
       name: '',
       age: '',
+      number: '',
       gender: '',
       typeOfTraining: '',
       cost: '0',
@@ -112,6 +113,7 @@ class _CoachMan extends State<CoachMan> {
                               builder: (context) => TutorScreen(
                                 title: listOfTutors[i].name,
                                 status: listOfTutors[i].typeOfTraining,
+                                number: listOfTutors[i].number,
                                 image: "assets/images/men_${i + 1}.jpg",
                                 price: listOfTutors[i].cost,
                               ),

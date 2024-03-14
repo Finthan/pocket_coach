@@ -122,6 +122,7 @@ class _MyClientMan extends State<MyClientMan> {
                               id: listOfClients[i].id,
                               name: listOfClients[i].name,
                               status: listOfClients[i].cardnumber,
+                              number: listOfClients[i].number,
                               age: listOfClients[i].age,
                             ),
                           ),

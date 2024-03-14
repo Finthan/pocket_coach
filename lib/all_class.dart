@@ -44,6 +44,17 @@ class Tutor {
       cost: json['cost'] as String,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'gender': gender,
+      'type_of_training': typeOfTraining,
+      'name': name,
+      'age': age,
+      'cost': cost,
+    };
+  }
 }
 
 class Client {
@@ -70,6 +81,16 @@ class Client {
       age: json['age'] as String,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'gender': gender,
+      'cardnumber': cardnumber,
+      'name': name,
+      'age': age,
+    };
+  }
 }
 
 class Tutors {
@@ -77,6 +98,7 @@ class Tutors {
   final String gender;
   final String typeOfTraining;
   final String age;
+  final String number;
   final String name;
   final String cost;
 
@@ -85,6 +107,7 @@ class Tutors {
     required this.gender,
     required this.typeOfTraining,
     required this.age,
+    required this.number,
     required this.name,
     required this.cost,
   });
@@ -96,6 +119,7 @@ class Tutors {
       typeOfTraining: json['type_of_training'] as String,
       name: json['name'] as String,
       age: json['age'] as String,
+      number: json['number'] as String,
       cost: json['cost'] as String,
     );
   }
@@ -106,6 +130,7 @@ class Clients {
   final String gender;
   final String cardnumber;
   final String age;
+  final String number;
   final String name;
 
   Clients({
@@ -113,6 +138,7 @@ class Clients {
     required this.gender,
     required this.cardnumber,
     required this.age,
+    required this.number,
     required this.name,
   });
 
@@ -123,6 +149,7 @@ class Clients {
       cardnumber: json['cardnumber'] as String,
       name: json['name'] as String,
       age: json['age'] as String,
+      number: json['number'] as String,
     );
   }
 }
@@ -148,20 +175,36 @@ class Training {
     int colors;
     String typeWorkout;
     String nameIcon;
-    switch (json['name_workout'] as String) {
-      case 'Тренирока на грудь':
+    String muscleGroup;
+    if (json['muscle_group'] != null) {
+      muscleGroup = (json['muscle_group'] as String).toLowerCase();
+    } else {
+      muscleGroup = '';
+    }
+    switch (muscleGroup) {
+      case 'квадрицепс':
         nameIcon = "assets/images/workout_g.png";
-        typeWorkout = 'Грудь';
+        typeWorkout = 'Ноги';
         colors = 0xFF0F8644;
         break;
-      case 'Тренирока на ноги':
+      case 'икроножная мышца':
+        nameIcon = "assets/images/workout_g.png";
+        typeWorkout = 'Ноги';
+        colors = 0xFF0F8644;
+        break;
+      case 'грудь':
         nameIcon = "assets/images/workout_g.png";
         typeWorkout = 'Грудь';
         colors = 0xFF36B37B;
         break;
-      case 'Тренирока на руки':
+      case 'бицепс':
         nameIcon = "assets/images/workout_g.png";
-        typeWorkout = 'Грудь';
+        typeWorkout = 'Руки';
+        colors = 0xFF8B1FA9;
+        break;
+      case 'трицепс':
+        nameIcon = "assets/images/workout_g.png";
+        typeWorkout = 'Руки';
         colors = 0xFF8B1FA9;
         break;
       default:
@@ -212,9 +255,37 @@ class ExerciseList {
   Map<String, dynamic> toJson() {
     return {
       'id_workout': idWorkout,
+      'id_exercise': idExercise,
       'name_exercise': nameExercise,
       'muscle_group': muscleGroup,
       'ordering': int.parse(ordering),
+    };
+  }
+}
+
+class Exercises {
+  String id;
+  String muscleGroup;
+  String nameExercise;
+
+  Exercises({
+    required this.id,
+    required this.muscleGroup,
+    required this.nameExercise,
+  });
+
+  factory Exercises.fromJson(Map<String, dynamic> json) {
+    return Exercises(
+      id: json['id'] as String,
+      muscleGroup: json['muscle_group'] as String,
+      nameExercise: json['name_exercise'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name_exercise': nameExercise,
+      'muscle_group': muscleGroup,
     };
   }
 }

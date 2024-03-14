@@ -8,9 +8,10 @@ class TutorScreen extends StatefulWidget {
     required this.image,
     required this.status,
     required this.price,
+    required this.number,
   });
 
-  final String image, title, status, price;
+  final String image, title, status, price, number;
 
   @override
   State<TutorScreen> createState() => _TutorScreenState();
@@ -23,6 +24,7 @@ class _TutorScreenState extends State<TutorScreen> {
       body: Body(
         title: widget.title,
         status: widget.status,
+        number: widget.number,
         price: widget.price,
         image: widget.image,
       ),

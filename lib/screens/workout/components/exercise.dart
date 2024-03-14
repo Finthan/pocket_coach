@@ -5,14 +5,17 @@ import 'package:http/http.dart' as http;
 import '../../../all_class.dart';
 import '../../../main.dart';
 import 'approaches.dart';
+import 'exercise_alert_dialog.dart';
 
 class Exercise extends StatefulWidget {
   const Exercise({
     super.key,
     required this.training,
+    required this.onUpdateTrainings,
   });
 
   final Training training;
+  final Function() onUpdateTrainings;
 
   @override
   State<Exercise> createState() => _ExerciseState();
@@ -63,7 +66,28 @@ class _ExerciseState extends State<Exercise> {
     );
   }
 
+  void updateExercise(List<ExerciseList> newExercise) {
+    setState(() {
+      _data = newExercise;
+    });
+  }
+
+  void addExercise() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ExerciseAlertDialog(
+          data: _data,
+          id: widget.training.id,
+          fetchExercise: (updatedData) => fetchExercise(updatedData),
+          onUpdateExercise: updateExercise,
+        );
+      },
+    );
+  }
+
   Future<void> deleteExercise(index) async {
+    print(_data[index].id);
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -74,24 +98,25 @@ class _ExerciseState extends State<Exercise> {
     });
     await http.get(uri);
 
-    setState(() {
-      try {
-        for (var i = 0; i < _data.length; i++) {
+    try {
+      for (var i = 0; i < _data.length; i++) {
+        setState(() {
           _data[i].ordering = (i).toString();
-        }
-        fetchExercise();
-      } catch (e) {}
-    });
+          print(_data[i].ordering);
+        });
+      }
+      fetchExercise(_data);
+    } catch (e) {}
   }
 
-  Future<void> fetchExercise() async {
-    var jsonData = _data.map((exercise) => exercise.toJson()).toList();
+  Future<void> fetchExercise(List<ExerciseList> data) async {
+    var jsonData = data.map((exercise) => exercise.toJson()).toList();
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
       'object': 'addexercise',
     });
-    var response;
+    dynamic response;
     try {
       response = await http.post(uri,
           headers: <String, String>{
@@ -116,7 +141,7 @@ class _ExerciseState extends State<Exercise> {
       } catch (error) {}
       setState(() {
         try {
-          _data = exercises;
+          data = exercises;
           exercises = [];
           getExercise();
         } catch (e) {}
@@ -155,6 +180,7 @@ class _ExerciseState extends State<Exercise> {
       try {
         _data = exercises;
         exercises = [];
+        widget.onUpdateTrainings;
       } catch (e) {}
     });
   }
@@ -179,101 +205,7 @@ class _ExerciseState extends State<Exercise> {
             splashRadius: 20,
             icon: const Icon(Icons.add),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  final TextEditingController _textController =
-                      TextEditingController();
-                  final TextEditingController _muscleController =
-                      TextEditingController();
-
-                  return AlertDialog(
-                    title: const Text(
-                      'Добавить элемент',
-                      textAlign: TextAlign.center,
-                    ),
-                    content: SizedBox(
-                      height: 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(top: 15),
-                            child: Text(
-                              "Название упражнения",
-                              style: TextStyle(color: Colors.black45),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              bottom: 5,
-                            ),
-                            child: TextField(
-                              controller: _textController,
-                              style: const TextStyle(color: Colors.black87),
-                              decoration: InputDecoration(
-                                fillColor:
-                                    Colors.grey[200], // задаем фоновый цвет
-                                filled: true,
-                                // остальные свойства InputDecoration
-                              ),
-                            ),
-                          ),
-                          const Text(
-                            "Задействованая мышца",
-                            style: TextStyle(color: Colors.black45),
-                            textAlign: TextAlign.start,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              bottom: 5,
-                            ),
-                            child: TextField(
-                              controller: _muscleController,
-                              style: const TextStyle(color: Colors.black87),
-                              decoration: InputDecoration(
-                                fillColor:
-                                    Colors.grey[200], // задаем фоновый цвет
-                                filled: true,
-                                // остальные свойства InputDecoration
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text('Отмена'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Добавить'),
-                        onPressed: () {
-                          setState(() {
-                            // добавить новый элемент в список
-                            _data.add(ExerciseList(
-                              id: "0",
-                              idWorkout: widget.training.id,
-                              idExercise: "0",
-                              nameExercise: _textController.text,
-                              muscleGroup: _muscleController.text,
-                              ordering: (_data.length).toString(),
-                            ));
-                          });
-                          fetchExercise();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+              addExercise();
             },
           ),
         ],
@@ -296,7 +228,7 @@ class _ExerciseState extends State<Exercise> {
               for (int i = 0; i < _data.length; i++) {
                 _data[i].ordering = i.toString();
               }
-              fetchExercise();
+              fetchExercise(_data);
             });
           },
           children: _data

@@ -1,15 +1,22 @@
+import 'dart:convert';
+
+import 'package:pocket_coach/all_class.dart';
 import 'package:pocket_coach/screens/app/main_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 import 'components/auth_natification.dart';
 import 'constants.dart';
+import 'info.dart';
 import 'screens/auth_registration/auth_registration_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -32,7 +39,75 @@ class _MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
-    _isAuth = Main.isAuth;
+    _initAuth();
+  }
+
+  Future<void> _initAuth() async {
+    bool auth = await _getAuth();
+    print("isAuth $auth");
+    setState(() {
+      _isAuth = auth;
+      Main.isAuth = auth;
+    });
+  }
+
+  Future<bool> _getAuth() async {
+    var prefs = await SharedPreferences.getInstance();
+    print("prefs.getBool('auth') ${prefs.getBool('auth')}");
+    if (prefs.getBool('auth') == true) {
+      _initMe();
+      _initClient();
+    }
+    return prefs.getBool('auth') ?? false;
+  }
+
+  Future<void> _initMe() async {
+    String stringMe = await _getMe();
+    print("stringMe $stringMe");
+    setState(() {
+      me = Me(id: stringMe);
+    });
+  }
+
+  Future<String> _getMe() async {
+    var prefs = await SharedPreferences.getInstance();
+    print("prefs.getString('me') ${prefs.getString('me')}");
+    return prefs.getString('me') ?? "-0";
+  }
+
+  Future<void> _initClient() async {
+    bool client = await _getClient();
+    print("client $client");
+    setState(() {
+      isClient = client;
+    });
+  }
+
+  Future<bool> _getClient() async {
+    var prefs = await SharedPreferences.getInstance();
+    print("prefs.getBool('client') ${prefs.getBool('client')}");
+    _auth(); 
+    return prefs.getBool('client') ?? false;
+  }
+
+  Future<void> _auth() async {
+    var prefs = await SharedPreferences.getInstance();
+    bool? client = prefs.getBool('client');
+    if (client!) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? clientJson = prefs.getString('clientMe');
+      setState(() {
+        clientMe = Client.fromJson(jsonDecode(clientJson!));
+      });
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? tutorJson = prefs.getString('tutorMe');
+      print("prefs.getString('tutorMe') ${prefs.getString('tutorMe')}");
+      print("prefs.getString('clientMe') ${prefs.getString('clientMe')}");
+      setState(() {
+        tutorMe = Tutor.fromJson(jsonDecode(tutorJson!));
+      });
+    }
   }
 
   @override

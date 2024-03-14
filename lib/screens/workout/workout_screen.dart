@@ -9,9 +9,10 @@ class WorkoutScreen extends StatefulWidget {
     required this.name,
     required this.status,
     required this.age,
+    required this.number,
   });
 
-  final String name, status, id, age;
+  final String name, status, id, age, number;
 
   @override
   State<WorkoutScreen> createState() => _WorkoutScreenState();
@@ -24,6 +25,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       id: widget.id,
       status: widget.status,
       age: widget.age,
+      number: widget.number,
       name: widget.name,
     );
   }

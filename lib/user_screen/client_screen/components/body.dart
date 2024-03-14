@@ -12,9 +12,10 @@ class Body extends StatelessWidget {
     required this.status,
     required this.age,
     required this.id,
+    required this.number,
   });
 
-  final String image, title, status, age, id;
+  final String image, title, status, age, id, number;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class Body extends StatelessWidget {
           ChatWorkoutButton(
             size: size,
             id: id,
+            number: number,
           ),
         ],
       ),

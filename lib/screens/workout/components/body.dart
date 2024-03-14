@@ -9,9 +9,10 @@ class Body extends StatefulWidget {
     required this.status,
     required this.id,
     required this.age,
+    required this.number,
   });
 
-  final String name, status, id, age;
+  final String name, status, id, age, number;
 
   @override
   State<Body> createState() => _BodyState();
@@ -44,6 +45,7 @@ class _BodyState extends State<Body> {
       body: ListWorkout(
         id: widget.id,
         age: widget.age,
+        number: widget.number,
         name: widget.name,
         status: widget.status,
       ),

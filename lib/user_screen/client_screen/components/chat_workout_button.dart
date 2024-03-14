@@ -9,18 +9,15 @@ class ChatWorkoutButton extends StatelessWidget {
     super.key,
     required this.size,
     required this.id,
+    required this.number,
   });
 
   final Size size;
-  final String id;
+  final String id, number;
 
   void openUrl() async {
-    const url = 'tg://resolve?domain=ururururushka';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Не удалось открыть $url';
-    }
+    var url = 'https://t.me/$number';
+    launch(url);
   }
 
   @override

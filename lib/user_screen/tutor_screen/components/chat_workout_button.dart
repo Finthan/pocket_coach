@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
 
@@ -6,9 +7,11 @@ class ChatWorkoutButton extends StatelessWidget {
   const ChatWorkoutButton({
     super.key,
     required this.size,
+    required this.number,
   });
 
   final Size size;
+  final String number;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,10 @@ class ChatWorkoutButton extends StatelessWidget {
                   ),
                 )),
                 backgroundColor: MaterialStateProperty.all(kPrimaryColor)),
-            onPressed: () {}, //=> _openTelegramChat()
+            onPressed: () {
+              var url = 'https://t.me/$number';
+              launch(url);
+            }, //=> _openTelegramChat()
             child: const Text(
               "Перейти в чат",
               style: TextStyle(

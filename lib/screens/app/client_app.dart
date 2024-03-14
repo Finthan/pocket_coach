@@ -26,6 +26,7 @@ List navBarButton = [
   const WorkoutScreen(
     id: '',
     status: '',
+    number: '',
     name: '',
     age: '',
   ),

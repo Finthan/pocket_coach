@@ -9,9 +9,10 @@ class ClientScreen extends StatefulWidget {
     required this.status,
     required this.age,
     required this.id,
+    required this.number,
   });
 
-  final String image, title, status, age, id;
+  final String image, title, status, age, id, number;
 
   @override
   State<ClientScreen> createState() => _ClientScreenState();
@@ -26,6 +27,7 @@ class _ClientScreenState extends State<ClientScreen> {
         title: widget.title,
         status: widget.status,
         age: widget.age,
+        number: widget.number,
         image: widget.image,
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/auth_natification.dart';
 import '../../constants.dart';
@@ -50,6 +51,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   final _passwordTextController = TextEditingController();
   final _nameTextController = TextEditingController();
   final _ageTextController = TextEditingController();
+  final _numberTextController = TextEditingController();
   final _genderTextController = TextEditingController();
   final _trainingTextController = TextEditingController();
   final _costTextController = TextEditingController();
@@ -59,6 +61,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
   bool isPasswordFocused = false;
   bool isNameFocused = false;
   bool isAgeFocused = false;
+  bool isNumberFocused = false;
   bool isGenderFocused = false;
   bool isCardnumberFocused = false;
   bool isCostFocused = false;
@@ -116,6 +119,8 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
         String? tutorString = jsonEncode(decodedTutor['data']);
         decodedTutor.clear;
 
+        print(clientString.length);
+
         try {
           if (clientString.length > 2) {
             final jsonC = await jsonDecode(clientString) as dynamic;
@@ -134,6 +139,11 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
               cardnumber: cardnumber,
             );
             isClient = true;
+            String clientJson = jsonEncode(clientMe);
+            print("clientJson $clientJson");
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString('clientMe', clientJson);
+            _setClient();
           } else if (tutorString.length > 2) {
             final jsonT = await jsonDecode(tutorString) as dynamic;
 
@@ -154,6 +164,11 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
               cost: cost,
             );
             isClient = false;
+            String tutorJson = jsonEncode(tutorMe);
+            print("tutorJson $tutorJson");
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString('tutorMe', tutorJson);
+            _setClient();
           }
           tutorString = null;
           clientString = null;
@@ -161,8 +176,9 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
       } catch (error) {}
       try {
         if (me.id != "-0") {
-          setState(() {
+          setState(() async {
             Main.isAuth = true;
+            await _setAuth();
             AuthNotification(true).dispatch(context);
           });
         } else {
@@ -185,6 +201,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
         'pass': _passwordTextController.text,
         'name': _nameTextController.text,
         'age': _ageTextController.text,
+        'number': _numberTextController.text,
         'gender': _genderTextController.text,
         'cardnumber': _cardnumberTextController.text,
       });
@@ -197,6 +214,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
         'pass': _passwordTextController.text,
         'name': _nameTextController.text,
         'age': _ageTextController.text,
+        'number': _numberTextController.text,
         'gender': _genderTextController.text,
         'type_of_training': _trainingTextController.text,
         'cost': _costTextController.text,
@@ -242,6 +260,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = false;
           isNameFocused = false;
           isAgeFocused = false;
+          isNumberFocused = false;
           isGenderFocused = false;
           isCardnumberFocused = false;
           isCostFocused = false;
@@ -252,6 +271,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = isFocused;
           isNameFocused = false;
           isAgeFocused = false;
+          isNumberFocused = false;
           isGenderFocused = false;
           isCardnumberFocused = false;
           isCostFocused = false;
@@ -262,6 +282,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = false;
           isNameFocused = isFocused;
           isAgeFocused = false;
+          isNumberFocused = false;
           isGenderFocused = false;
           isCardnumberFocused = false;
           isCostFocused = false;
@@ -272,6 +293,18 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = false;
           isNameFocused = false;
           isAgeFocused = isFocused;
+          isNumberFocused = false;
+          isGenderFocused = false;
+          isCardnumberFocused = false;
+          isCostFocused = false;
+          isTrainingFocused = false;
+          break;
+        case 'number':
+          isLoginFocused = false;
+          isPasswordFocused = false;
+          isNameFocused = false;
+          isAgeFocused = false;
+          isNumberFocused = isFocused;
           isGenderFocused = false;
           isCardnumberFocused = false;
           isCostFocused = false;
@@ -282,6 +315,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = false;
           isNameFocused = false;
           isAgeFocused = false;
+          isNumberFocused = false;
           isGenderFocused = isFocused;
           isCardnumberFocused = false;
           isCostFocused = false;
@@ -292,6 +326,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = false;
           isNameFocused = false;
           isAgeFocused = false;
+          isNumberFocused = false;
           isGenderFocused = false;
           isCardnumberFocused = isFocused;
           isCostFocused = false;
@@ -302,6 +337,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = false;
           isNameFocused = false;
           isAgeFocused = false;
+          isNumberFocused = false;
           isGenderFocused = false;
           isCardnumberFocused = false;
           isCostFocused = isFocused;
@@ -312,6 +348,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           isPasswordFocused = false;
           isNameFocused = false;
           isAgeFocused = false;
+          isNumberFocused = false;
           isGenderFocused = false;
           isCardnumberFocused = false;
           isCostFocused = false;
@@ -319,6 +356,28 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
           break;
       }
     });
+  }
+
+  Future _setAuth() async {
+    var prefs = await SharedPreferences.getInstance();
+    print(Main.isAuth);
+    prefs.setBool('auth', Main.isAuth);
+    if (Main.isAuth) {
+      await _setMe();
+      await _setClient();
+    }
+  }
+
+  Future _setClient() async {
+    var prefs = await SharedPreferences.getInstance();
+    print(isClient);
+    prefs.setBool('client', isClient);
+  }
+
+  Future _setMe() async {
+    var prefs = await SharedPreferences.getInstance();
+    print(me.id);
+    prefs.setString('me', me.id);
   }
 
   @override
@@ -385,6 +444,17 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                           padding: const EdgeInsets.only(
                               left: 15, right: 15, bottom: 30),
                           child: AuthTextField(
+                            loginTextController: _numberTextController,
+                            label: 'Введите номер телефона',
+                            isFocused: isAgeFocused,
+                            onFocusChanged: (isFocused) =>
+                                updateFocus('number', isFocused),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, bottom: 30),
+                          child: AuthTextField(
                             loginTextController: _genderTextController,
                             label: 'Введите пол',
                             isFocused: isGenderFocused,
@@ -425,7 +495,7 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
                                       left: 15, right: 15, bottom: 30),
                                   child: AuthTextField(
                                     loginTextController: _costTextController,
-                                    label: 'Введите тип тренировок',
+                                    label: 'Введите цену тренировки',
                                     isFocused: isCostFocused,
                                     onFocusChanged: (isFocused) =>
                                         updateFocus('cost', isFocused),

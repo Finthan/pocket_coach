@@ -1,15 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pocket_coach/screens/workout/components/title_and_age.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../all_class.dart';
 import '../../../constants.dart';
 import '../../../main.dart';
 import '../../auth_registration/auth_registration_screen.dart';
-import 'custom_alert_dialog.dart';
+import 'workout_alert_dialog.dart';
 import 'exercise.dart';
 import 'workout.dart';
 
@@ -20,9 +22,10 @@ class ListWorkout extends StatefulWidget {
     required this.status,
     required this.id,
     required this.age,
+    required this.number,
   });
 
-  final String name, status, id, age;
+  final String name, status, id, age, number;
 
   @override
   State<ListWorkout> createState() => _ListWorkoutState();
@@ -39,10 +42,11 @@ class _ListWorkoutState extends State<ListWorkout>
   void initState() {
     super.initState();
     _isAuth = Main.isAuth;
-    isClient ? clientTrainings() : fetchTrainings();
+    Timer.periodic(const Duration(seconds: 5),
+        (Timer t) => isClient ? clientTrainings() : tutorTrainings());
   }
 
-  Future<void> fetchTrainings() async {
+  Future<void> tutorTrainings() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -61,12 +65,16 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
+      print(json);
       if (json.isNotEmpty) {
         setState(() {
           trainings = json
               .map((dynamic e) => Training.fromJson(e as Map<String, dynamic>))
               .toList();
         });
+      }
+      for (var element in trainings) {
+        print("${element.nameWorkout}, ${element.typeWorkout}");
       }
     } catch (error) {}
   }
@@ -119,6 +127,7 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
+      print(json);
       if (json.isNotEmpty) {
         setState(() {
           trainings = json
@@ -135,12 +144,16 @@ class _ListWorkoutState extends State<ListWorkout>
     });
   }
 
+  void updateTraining() {
+    tutorTrainings();
+  }
+
   void _handleCellLongPress(CalendarLongPressDetails details) {
     if (details.appointments == null || details.appointments!.isEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return CustomAlertDialog(
+          return WorkoutAlertDialog(
             id: widget.id,
             isAuth: _isAuth,
             trainings: trainings,
@@ -454,6 +467,8 @@ class _ListWorkoutState extends State<ListWorkout>
                         MaterialPageRoute(
                           builder: (context) => Exercise(
                             training: details.appointments!.first as Training,
+                            onUpdateTrainings: updateTraining,
+                            // clientTrainings: (updatedData) => clientTrainings(),
                           ),
                         ),
                       );
@@ -493,18 +508,23 @@ class _ListWorkoutState extends State<ListWorkout>
           bottom: 10,
           right: 10,
           child: Container(
-            width: 50,
-            height: 50,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: kPrimaryColor,
-            ),
-            child: const Icon(
-              Icons.chat,
-              color: kWhiteColor,
-              size: 30,
-            ),
-          ),
+              width: 50,
+              height: 50,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: kPrimaryColor,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  var url = 'https://t.me/${widget.number}';
+                  launch(url);
+                },
+                icon: const Icon(
+                  Icons.chat,
+                  color: kWhiteColor,
+                  size: 30,
+                ),
+              )),
         ),
       ],
     );

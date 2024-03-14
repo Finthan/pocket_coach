@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_coach/constants.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../constants.dart';
@@ -20,6 +24,7 @@ class _ClientsWidget extends State<ClientsWidget>
     with SingleTickerProviderStateMixin {
   final _timeTextController = TextEditingController();
   final _workoutTextController = TextEditingController();
+  DateTime selectDay = DateTime(DateTime.now().year, DateTime.now().month);
 
   var countWork = 0;
   var time = "";
@@ -28,6 +33,46 @@ class _ClientsWidget extends State<ClientsWidget>
   @override
   void initState() {
     super.initState();
+    final DateTime todayDay = DateTime.now();
+    selectDay = DateTime(todayDay.year, todayDay.month, todayDay.day);
+  }
+
+  String capitalizeFirstLetter(int day, int month, int year) {
+    return "$day $month} $year";
+  }
+
+  String getMonthName(int day, int month, int year) {
+    String result;
+    var o = '';
+    if (day <= 9) {
+      o = '0';
+    }
+
+    if (month <= 9) {
+      result = "$o$day.0$month.$year";
+    } else {
+      result = "$day.$month.$year";
+    }
+    return result;
+  }
+
+  void _showDatePicker() {
+    final DateTime todayDay = DateTime.now();
+    final initialDateTime = DateTime(selectDay.year, selectDay.month, 1);
+    DatePicker.showDatePicker(
+      context,
+      pickerMode: DateTimePickerMode.date,
+      initialDateTime: initialDateTime,
+      minDateTime: DateTime(todayDay.year, todayDay.month, todayDay.day),
+      maxDateTime: DateTime(todayDay.year + 1, todayDay.month + 1),
+      onConfirm: (dateTime, _) {
+        setState(() {
+          selectDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+          print(selectDay);
+        });
+      },
+    );
   }
 
   @override
@@ -41,24 +86,26 @@ class _ClientsWidget extends State<ClientsWidget>
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Введите дату тренировки",
+                "Выберите дату тренировки",
                 style: TextStyle(color: kWhiteColor, fontSize: 17),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: TextField(
-              controller: _timeTextController,
-              decoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                hintText: "2023-05-28",
-                hintStyle: TextStyle(color: kTextChat),
-                isCollapsed: true,
-                filled: true,
+            padding: const EdgeInsets.only(left: 18, right: 15),
+            child: GestureDetector(
+              onTap: _showDatePicker,
+              child: Container(
+                color: kTextColorBox,
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  getMonthName(selectDay.day, selectDay.month, selectDay.year),
+                  style: TextStyle(
+                    color: kWhiteColor,
+                    fontSize: 20,
+                  ),
+                ),
               ),
-              style: const TextStyle(color: kWhiteColor),
             ),
           ),
           const Padding(
@@ -86,7 +133,7 @@ class _ClientsWidget extends State<ClientsWidget>
                 isCollapsed: true,
                 filled: true,
               ),
-              style: const TextStyle(color: kWhiteColor),
+              style: const TextStyle(color: kTextFieldColor),
             ),
           ),
           Padding(
@@ -110,9 +157,10 @@ class _ClientsWidget extends State<ClientsWidget>
                     'id_tutor': tutorMe.id,
                     'id_client': widget.id,
                     'name_workout': nameWorkout,
-                    'workout_date': time,
+                    'workout_date':
+                        "${selectDay.year}-${selectDay.month}-${selectDay.day}",
                   });
-                  dynamic auth = http.get(uri);
+                  http.get(uri);
                   Navigator.pop(context);
                 });
               },

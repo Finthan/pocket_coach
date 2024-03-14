@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../components/auth_natification.dart';
 import '../../../../constants.dart';
@@ -21,6 +22,15 @@ class VisibilitySettingsSide extends StatefulWidget {
 }
 
 class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
+  Future _set() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setBool('auth', false);
+    prefs.setString('me', "-0");
+    prefs.setBool('client', false);
+    prefs.setString('clientMe', "");
+    prefs.setString('tutorMe', "");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -84,6 +94,7 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
                           onPressed: () {
                             setState(() {
                               Main.isAuth = false;
+                              _set();
                               Navigator.pop(context);
                               Navigator.pop(context);
                               AuthNotification(false).dispatch(context);
