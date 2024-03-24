@@ -34,7 +34,6 @@ class _AuthTextFieldState extends State<AuthTextField> {
 
   @override
   Widget build(BuildContext context) {
-    print("${widget.label} ${widget._isFocused}");
     const border = OutlineInputBorder(
       borderSide: BorderSide(
         color: kWhiteColor,

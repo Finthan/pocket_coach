@@ -87,7 +87,6 @@ class _ExerciseState extends State<Exercise> {
   }
 
   Future<void> deleteExercise(index) async {
-    print(_data[index].id);
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -102,7 +101,6 @@ class _ExerciseState extends State<Exercise> {
       for (var i = 0; i < _data.length; i++) {
         setState(() {
           _data[i].ordering = (i).toString();
-          print(_data[i].ordering);
         });
       }
       fetchExercise(_data);
@@ -253,7 +251,6 @@ class _ExerciseState extends State<Exercise> {
                         ],
                       ),
                       onTap: () {
-                        print(item.id);
                         if (item.id != "0")
                           Navigator.push(
                             context,

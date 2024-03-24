@@ -119,8 +119,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
         String? tutorString = jsonEncode(decodedTutor['data']);
         decodedTutor.clear;
 
-        print(clientString.length);
-
         try {
           if (clientString.length > 2) {
             final jsonC = await jsonDecode(clientString) as dynamic;
@@ -140,7 +138,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
             );
             isClient = true;
             String clientJson = jsonEncode(clientMe);
-            print("clientJson $clientJson");
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('clientMe', clientJson);
             _setClient();
@@ -165,7 +162,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
             );
             isClient = false;
             String tutorJson = jsonEncode(tutorMe);
-            print("tutorJson $tutorJson");
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('tutorMe', tutorJson);
             _setClient();
@@ -360,7 +356,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
 
   Future _setAuth() async {
     var prefs = await SharedPreferences.getInstance();
-    print(Main.isAuth);
     prefs.setBool('auth', Main.isAuth);
     if (Main.isAuth) {
       await _setMe();
@@ -370,13 +365,11 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
 
   Future _setClient() async {
     var prefs = await SharedPreferences.getInstance();
-    print(isClient);
     prefs.setBool('client', isClient);
   }
 
   Future _setMe() async {
     var prefs = await SharedPreferences.getInstance();
-    print(me.id);
     prefs.setString('me', me.id);
   }
 

@@ -44,7 +44,6 @@ class _MainState extends State<Main> {
 
   Future<void> _initAuth() async {
     bool auth = await _getAuth();
-    print("isAuth $auth");
     setState(() {
       _isAuth = auth;
       Main.isAuth = auth;
@@ -53,7 +52,6 @@ class _MainState extends State<Main> {
 
   Future<bool> _getAuth() async {
     var prefs = await SharedPreferences.getInstance();
-    print("prefs.getBool('auth') ${prefs.getBool('auth')}");
     if (prefs.getBool('auth') == true) {
       _initMe();
       _initClient();
@@ -63,7 +61,6 @@ class _MainState extends State<Main> {
 
   Future<void> _initMe() async {
     String stringMe = await _getMe();
-    print("stringMe $stringMe");
     setState(() {
       me = Me(id: stringMe);
     });
@@ -71,13 +68,11 @@ class _MainState extends State<Main> {
 
   Future<String> _getMe() async {
     var prefs = await SharedPreferences.getInstance();
-    print("prefs.getString('me') ${prefs.getString('me')}");
     return prefs.getString('me') ?? "-0";
   }
 
   Future<void> _initClient() async {
     bool client = await _getClient();
-    print("client $client");
     setState(() {
       isClient = client;
     });
@@ -85,8 +80,7 @@ class _MainState extends State<Main> {
 
   Future<bool> _getClient() async {
     var prefs = await SharedPreferences.getInstance();
-    print("prefs.getBool('client') ${prefs.getBool('client')}");
-    _auth(); 
+    _auth();
     return prefs.getBool('client') ?? false;
   }
 
@@ -102,20 +96,10 @@ class _MainState extends State<Main> {
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? tutorJson = prefs.getString('tutorMe');
-      print("prefs.getString('tutorMe') ${prefs.getString('tutorMe')}");
-      print("prefs.getString('clientMe') ${prefs.getString('clientMe')}");
       setState(() {
         tutorMe = Tutor.fromJson(jsonDecode(tutorJson!));
       });
     }
-  }
-
-  @override
-  void didUpdateWidget(Main oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    setState(() {
-      _isAuth = Main.isAuth;
-    });
   }
 
   @override

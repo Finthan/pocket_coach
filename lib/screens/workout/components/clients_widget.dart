@@ -68,8 +68,6 @@ class _ClientsWidget extends State<ClientsWidget>
       onConfirm: (dateTime, _) {
         setState(() {
           selectDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
-
-          print(selectDay);
         });
       },
     );

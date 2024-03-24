@@ -6,7 +6,6 @@ class Me {
   });
 
   factory Me.fromJson(Map<String, dynamic> json) {
-    print(json);
     return Me(
       id: json['id'] as String,
     );

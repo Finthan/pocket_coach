@@ -102,7 +102,16 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           tooltipRoundedRadius: 10,
           tooltipHorizontalAlignment: FLHorizontalAlignment.left,
           tooltipPadding:
-              const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+              const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          getTooltipItems: (touchedSpots) {
+            return touchedSpots.map((LineBarSpot touchedSpot) {
+              final value = weight[touchedSpot.spotIndex];
+              return LineTooltipItem(
+                'Вес: $value',
+                const TextStyle(color: Colors.white),
+              );
+            }).toList();
+          },
         ),
         getTouchedSpotIndicator: (barData, touchSpotIndexes) {
           if (touchSpotIndexes.isEmpty) {
@@ -128,7 +137,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                       maxValue = spot;
                     }
                   }
-
                   final value = weight[index];
                   final percentage = (value - minValue) / (maxValue - minValue);
 
@@ -196,18 +204,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       lineChartData,
     );
   }
-
-  // List<FlSpot> generateSpots() {
-  //   List<FlSpot> spots = [];
-
-  //   int count = int.parse(widget.madeApproachesChart.length);
-
-  //   for (int i = 0; i < count; i++) {
-  //     spots.add(FlSpot((i + 1).toDouble(), double.parse(weight.replaceAll(',', '.'))));
-  //   }
-
-  //   return spots;
-  // }
 }
 
 Widget bottomTitleWidgets(double value, TitleMeta meta) {

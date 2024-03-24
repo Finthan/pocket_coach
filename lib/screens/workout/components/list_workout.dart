@@ -65,16 +65,12 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      print(json);
       if (json.isNotEmpty) {
         setState(() {
           trainings = json
               .map((dynamic e) => Training.fromJson(e as Map<String, dynamic>))
               .toList();
         });
-      }
-      for (var element in trainings) {
-        print("${element.nameWorkout}, ${element.typeWorkout}");
       }
     } catch (error) {}
   }
@@ -91,6 +87,7 @@ class _ListWorkoutState extends State<ListWorkout>
       response = await http.get(uri);
     } catch (error) {}
     String jsonString = "";
+    print(response.statusCode);
     if (response.statusCode == 200 && _isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
@@ -127,7 +124,6 @@ class _ListWorkoutState extends State<ListWorkout>
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      print(json);
       if (json.isNotEmpty) {
         setState(() {
           trainings = json
@@ -145,7 +141,7 @@ class _ListWorkoutState extends State<ListWorkout>
   }
 
   void updateTraining() {
-    tutorTrainings();
+    isClient ? clientTrainings() : tutorTrainings();
   }
 
   void _handleCellLongPress(CalendarLongPressDetails details) {
@@ -207,7 +203,6 @@ class _ListWorkoutState extends State<ListWorkout>
   @override
   Widget build(BuildContext context) {
     final DateTime todayDay = DateTime.now();
-    print(todayDay);
     var weekList = ["", "", ""];
     var nameWorkout = [
       "Нет запланированной тренировки",
@@ -236,9 +231,6 @@ class _ListWorkoutState extends State<ListWorkout>
         trainings.replaceRange(0, trainings.length, sortedTrainings);
       });
 
-      try {
-        print("${trainings[0].id} ${trainings[0].dateTime} ${trainings[1].id}");
-      } catch (e) {}
       int? day;
       int? month;
       var week = [0, 0, 0];

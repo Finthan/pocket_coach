@@ -87,7 +87,6 @@ class _ExerciseAlertDialogState extends State<ExerciseAlertDialog> {
           },
           body: jsonEncode(jsonData));
     } catch (error) {}
-    print(response);
   }
 
   @override
@@ -181,7 +180,6 @@ class _ExerciseAlertDialogState extends State<ExerciseAlertDialog> {
   }
 
   Widget _buildContentWidget(String isAdd) {
-    print("exercises.length ${exercises.length}");
     return SizedBox(
       height: 200,
       child: (isAdd == "+")

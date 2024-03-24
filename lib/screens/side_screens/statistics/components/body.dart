@@ -55,7 +55,6 @@ class _BodyState extends State<Body> {
   void dispose() {
     super.dispose();
     _isAuth = false;
-    me = Me(id: "-0");
   }
 
   void _showDatePicker() {
@@ -111,7 +110,6 @@ class _BodyState extends State<Body> {
                   MadeApproachesChart.fromJson(e as Map<String, dynamic>))
               .toList();
           countMadeApproachesChart = madeApproachesChart.length;
-          print(countMadeApproachesChart);
         });
       }
     } catch (error) {}

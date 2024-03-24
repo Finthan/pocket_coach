@@ -73,7 +73,6 @@ class _WorkoutState extends State<Workout> {
     }
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
-      print(json);
       if (json.isNotEmpty) {
         setState(() {
           clientExercise = json
@@ -97,9 +96,7 @@ class _WorkoutState extends State<Workout> {
       var responseApproaches;
       try {
         responseApproaches = await http.get(uriApproaches);
-      } catch (error) {
-        // return;
-      }
+      } catch (error) {}
       String jsonStringApproaches = "";
       if (responseApproaches.statusCode == 200 && _isAuth == true) {
         var decodedResponseApproaches =
@@ -138,9 +135,6 @@ class _WorkoutState extends State<Workout> {
             .toList())
         .toList();
 
-    String jsonString = jsonEncode(jsonData);
-    print(jsonString);
-
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -152,7 +146,6 @@ class _WorkoutState extends State<Workout> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(jsonData));
-    print(utf8.decode(response.bodyBytes));
   }
 
   void _showDialog() {
@@ -410,8 +403,6 @@ class _WorkoutState extends State<Workout> {
                 countList: _countDoneApproaches.text,
               );
             }
-            print("${information[_currentStep].length - 1} $_currentSubStep");
-            print("${information.length} ${_currentStep + 1}");
             if ((information[_currentStep].length - 1 == _currentSubStep) &&
                 (information.length > _currentStep + 1)) {
               if (information[_currentStep + 1].length > 0) {
