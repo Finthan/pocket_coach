@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../all_class.dart';
 import '../../../constants.dart';
 
 class TitleAndPrice extends StatelessWidget {
   const TitleAndPrice({
     super.key,
-    required this.title,
-    required this.status,
-    required this.age,
   });
-
-  final String title, status, age;
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +20,14 @@ class TitleAndPrice extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: "$title\n",
+                  text: context.watch<MeModel>().me!.name,
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 TextSpan(
-                  text: status,
+                  text: "",
                   style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -42,7 +39,7 @@ class TitleAndPrice extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            '$age',
+            context.watch<MeModel>().me!.age,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Colors.white,
                 ),

@@ -25,7 +25,7 @@ class _ApproachesState extends State<Approaches> {
   @override
   void initState() {
     super.initState();
-    _isAuth = Main.isAuth;
+    // _isAuth = Main.isAuth;
     getApproaches();
   }
 

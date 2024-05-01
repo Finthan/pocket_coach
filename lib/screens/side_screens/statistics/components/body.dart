@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pocket_coach/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -45,7 +46,7 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    _isAuth = Main.isAuth;
+    // _isAuth = Main.isAuth;
     final DateTime todayDay = DateTime.now();
     selectDay = DateTime(todayDay.year, todayDay.month);
     madeApproachesList();
@@ -76,21 +77,14 @@ class _BodyState extends State<Body> {
 
   Future<List<MadeApproachesChart>> madeApproachesList() async {
     Uri uri;
-    if (isClient) {
-      uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-        'apiv': '1',
-        'action': 'get',
-        'object': 'madeclientapproaches',
-        'id_user': me.id,
-      });
-    } else {
-      uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-        'apiv': '1',
-        'action': 'get',
-        'object': 'madetutorapproaches',
-        'id_user': me.id,
-      });
-    }
+    uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'get',
+      'object': context.watch<MeModel>().isClient!
+          ? 'madeclientapproaches'
+          : 'madetutorapproaches',
+      'id_user': context.watch<MeModel>().me!.id,
+    });
     var response;
     try {
       response = await http.get(uri);

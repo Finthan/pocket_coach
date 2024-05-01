@@ -36,7 +36,7 @@ class _WorkoutAlertDialogState extends State<WorkoutAlertDialog> {
       'apiv': '1',
       'action': 'set',
       'object': 'createworkout',
-      'id_tutor': tutorMe.id,
+      'id_tutor': MeModel().me!.idTutor,
       'id_client': widget.id,
       'name_workout': name,
       'workout_date': time,

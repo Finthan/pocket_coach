@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
 import '../../../constants.dart';
+import '../all_class.dart';
 import '../models/rive_asset.dart';
-import '../screens/auth_registration/auth_registration_screen.dart';
 import '../screens/side_screens/help/help.dart';
 import '../screens/side_screens/nutrition_information/nutrition_information.dart';
 import '../screens/side_screens/settings/settings.dart';
@@ -25,6 +26,10 @@ class _SideMenuState extends State<SideMenu> {
   RiveAsset selectedMenu = sideMenus.first;
   @override
   Widget build(BuildContext context) {
+    var name = context.watch<MeModel>().me!.name;
+    var status = (context.watch<MeModel>().me!.cardnumber != null)
+        ? context.watch<MeModel>().me!.cardnumber as String
+        : context.watch<MeModel>().me!.typeOfTraining as String;
     return Scaffold(
       backgroundColor: kBackgroundSideColor,
       body: SizedBox(
@@ -34,27 +39,10 @@ class _SideMenuState extends State<SideMenu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              isClient
-                  ? InfoCard(
-                      name: clientMe.name,
-                      status: clientMe.cardnumber,
-                    )
-                  : InfoCard(
-                      name: tutorMe.name,
-                      status: tutorMe.typeOfTraining,
-                    ),
-
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 17, top: 25, bottom: 15),
-              //   child: Text(
-              //     "Browse".toUpperCase(),
-              //     style: Theme.of(context)
-              //         .textTheme
-              //         .titleMedium!
-              //         .copyWith(color: Colors.white70),
-              //   ),
-              // ),
-              // /////////////////
+              InfoCard(
+                name: name,
+                status: status,
+              ),
               ...sideMenus.map(
                 (menu) => SideMenuTile(
                   menu: menu,
@@ -71,7 +59,6 @@ class _SideMenuState extends State<SideMenu> {
                     });
                     setState(() {
                       selectedMenu = menu;
-
                       switch (menu.artboard) {
                         case "HOME":
                           Navigator.push(

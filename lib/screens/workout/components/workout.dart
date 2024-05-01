@@ -51,7 +51,7 @@ class _WorkoutState extends State<Workout> {
   @override
   void initState() {
     super.initState();
-    _isAuth = Main.isAuth;
+    // _isAuth = Main.isAuth;
     clientTrainings();
   }
 

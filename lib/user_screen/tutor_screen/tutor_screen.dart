@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'components/body.dart';
 
-class TutorScreen extends StatefulWidget {
+class TutorScreen extends StatelessWidget {
   const TutorScreen({
     super.key,
     required this.title,
@@ -14,19 +14,14 @@ class TutorScreen extends StatefulWidget {
   final String image, title, status, price, number;
 
   @override
-  State<TutorScreen> createState() => _TutorScreenState();
-}
-
-class _TutorScreenState extends State<TutorScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Body(
-        title: widget.title,
-        status: widget.status,
-        number: widget.number,
-        price: widget.price,
-        image: widget.image,
+        title: title,
+        status: status,
+        number: number,
+        price: price,
+        image: image,
       ),
     );
   }

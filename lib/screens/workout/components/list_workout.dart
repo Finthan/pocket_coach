@@ -3,14 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pocket_coach/screens/workout/components/title_and_age.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../all_class.dart';
 import '../../../constants.dart';
-import '../../../main.dart';
-import '../../auth_registration/auth_registration_screen.dart';
 import 'workout_alert_dialog.dart';
 import 'exercise.dart';
 import 'workout.dart';
@@ -18,14 +17,7 @@ import 'workout.dart';
 class ListWorkout extends StatefulWidget {
   const ListWorkout({
     super.key,
-    required this.name,
-    required this.status,
-    required this.id,
-    required this.age,
-    required this.number,
   });
-
-  final String name, status, id, age, number;
 
   @override
   State<ListWorkout> createState() => _ListWorkoutState();
@@ -41,9 +33,6 @@ class _ListWorkoutState extends State<ListWorkout>
   @override
   void initState() {
     super.initState();
-    _isAuth = Main.isAuth;
-    Timer.periodic(const Duration(seconds: 5),
-        (Timer t) => isClient ? clientTrainings() : tutorTrainings());
   }
 
   Future<void> tutorTrainings() async {
@@ -51,8 +40,8 @@ class _ListWorkoutState extends State<ListWorkout>
       'apiv': '1',
       'action': 'get',
       'object': 'tutorworkouts',
-      'id_client': widget.id,
-      'id_tutor': tutorMe.id.toString(),
+      'id_client': context.watch<MeModel>().me!.idClient,
+      'id_tutor': context.watch<MeModel>().me!.idTutor,
     });
     var response;
     try {
@@ -80,7 +69,7 @@ class _ListWorkoutState extends State<ListWorkout>
       'apiv': '1',
       'action': 'get',
       'object': 'clientworkouts',
-      'id_client': clientMe.id,
+      'id_client': context.watch<MeModel>().me!.idClient,
     });
     var response;
     try {
@@ -110,7 +99,7 @@ class _ListWorkoutState extends State<ListWorkout>
       'action': 'set',
       'object': 'delworkout',
       'id_workout': id,
-      'id_tutor': widget.id,
+      'id_tutor': context.watch<MeModel>().me!.id,
     });
     var response;
 
@@ -141,7 +130,7 @@ class _ListWorkoutState extends State<ListWorkout>
   }
 
   void updateTraining() {
-    isClient ? clientTrainings() : tutorTrainings();
+    context.watch<MeModel>().isClient! ? clientTrainings() : tutorTrainings();
   }
 
   void _handleCellLongPress(CalendarLongPressDetails details) {
@@ -150,7 +139,7 @@ class _ListWorkoutState extends State<ListWorkout>
         context: context,
         builder: (BuildContext context) {
           return WorkoutAlertDialog(
-            id: widget.id,
+            id: context.watch<MeModel>().me!.id,
             isAuth: _isAuth,
             trainings: trainings,
             onUpdateTrainings: updateTrainings,
@@ -214,7 +203,7 @@ class _ListWorkoutState extends State<ListWorkout>
       "assets/images/icon_no.png",
       "assets/images/icon_no.png",
     ];
-    if (isClient) {
+    if (context.watch<MeModel>().isClient!) {
       List<DateTime> dates = trainings
           .map((training) => DateTime.parse(training.dateTime))
           .toList();
@@ -293,7 +282,7 @@ class _ListWorkoutState extends State<ListWorkout>
       children: [
         ListView(
           children: [
-            isClient
+            context.watch<MeModel>().isClient!
                 ? Column(
                     children: [
                       Container(
@@ -377,13 +366,7 @@ class _ListWorkoutState extends State<ListWorkout>
                         ),
                     ],
                   )
-                : TitleAndPrice(
-                    title: widget.name,
-                    status: widget.status,
-                    age: widget.age,
-                  ),
-
-            //TODO Break
+                : const TitleAndPrice(),
             Container(
               height: 55,
               alignment: Alignment.topLeft,
@@ -451,7 +434,7 @@ class _ListWorkoutState extends State<ListWorkout>
                   );
                 },
                 onTap: (CalendarTapDetails details) {
-                  if (!isClient) {
+                  if (!context.watch<MeModel>().isClient!) {
                     if (details.appointments != null &&
                         details.appointments!.isNotEmpty) {
                       Navigator.push(
@@ -468,7 +451,7 @@ class _ListWorkoutState extends State<ListWorkout>
                   }
                 },
                 onLongPress: (CalendarLongPressDetails details) {
-                  if (!isClient) {
+                  if (!context.watch<MeModel>().isClient!) {
                     var isTraining = false;
                     for (var i = 0; i < trainings.length; i++) {
                       var string_1 = details.date
@@ -482,7 +465,7 @@ class _ListWorkoutState extends State<ListWorkout>
                       }
                     }
                     if (isTraining) {
-                      if (!isClient) {
+                      if (!context.watch<MeModel>().isClient!) {
                         _showDeleteConfirmationDialog(
                             details.appointments!.first);
                       }
@@ -508,7 +491,8 @@ class _ListWorkoutState extends State<ListWorkout>
               ),
               child: IconButton(
                 onPressed: () {
-                  var url = 'https://t.me/${widget.number}';
+                  print("");
+                  var url = 'https://t.me/{widget.number}';
                   launch(url);
                 },
                 icon: const Icon(

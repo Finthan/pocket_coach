@@ -93,7 +93,7 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              Main.isAuth = false;
+                              // Main.isAuth = false;
                               _set();
                               Navigator.pop(context);
                               Navigator.pop(context);

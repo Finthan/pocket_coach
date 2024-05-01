@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../all_class.dart';
 import '../../../constants.dart';
 import '../../auth_registration/auth_registration_screen.dart';
 
@@ -152,7 +153,7 @@ class _ClientsWidget extends State<ClientsWidget>
                     'apiv': '1',
                     'action': 'set',
                     'object': 'createworkout',
-                    'id_tutor': tutorMe.id,
+                    'id_tutor': MeModel().me!.idTutor,
                     'id_client': widget.id,
                     'name_workout': nameWorkout,
                     'workout_date':

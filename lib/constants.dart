@@ -33,8 +33,6 @@ const kBlack22Color = Color.fromRGBO(34, 34, 34, 1);
 
 const kDefaultPadding = 20.0;
 
-var numberScreen = 0;
-
 var enableNotifications = true;
 var trainingReminder = true;
 var nightMode = true;

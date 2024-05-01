@@ -7,12 +7,12 @@ class Coach extends StatelessWidget {
     super.key,
     required this.image,
     required this.title,
-    required this.TypeOfTraning,
+    required this.typeOfTraning,
     required this.price,
     required this.press,
   });
 
-  final String image, title, TypeOfTraning;
+  final String image, title, typeOfTraning;
   final int price;
   final void Function() press;
 
@@ -61,7 +61,7 @@ class Coach extends StatelessWidget {
                                     kTextColor), //Theme.of(context).textTheme.bodyMedium,
                           ),
                           TextSpan(
-                            text: TypeOfTraning.toUpperCase(),
+                            text: typeOfTraning.toUpperCase(),
                             style: TextStyle(
                               color: kPrimaryColor.withOpacity(0.5),
                             ),

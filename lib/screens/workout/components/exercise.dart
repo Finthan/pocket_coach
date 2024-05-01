@@ -32,7 +32,7 @@ class _ExerciseState extends State<Exercise> {
   void initState() {
     super.initState();
 
-    _isAuth = Main.isAuth;
+    // _isAuth = Main.isAuth;
     getExercise();
   }
 

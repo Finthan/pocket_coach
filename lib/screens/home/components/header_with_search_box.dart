@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pocket_coach/all_class.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../auth_registration/auth_registration_screen.dart';
 
 class HeaderWithSearchBox extends StatefulWidget {
   const HeaderWithSearchBox({
@@ -40,24 +41,13 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              isClient
-                  ? Text(
-                      //"Привет User_${tutorMe[0].id}!",
-                      "Привет ${clientMe.name}!",
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                    )
-                  : Text(
-                      "Привет ${tutorMe.name}!",
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+              Text(
+                "Привет ${context.watch<MeModel>().me!.name}!",
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
+              ),
 
               const Spacer(),
               //Image.asset("assets/images/logo.png"),

@@ -39,8 +39,6 @@ class _ExerciseAlertDialogState extends State<ExerciseAlertDialog> {
   @override
   void initState() {
     super.initState();
-
-    _isAuth = Main.isAuth;
   }
 
   Future<List<Exercises>> getExercise() async {
@@ -48,7 +46,7 @@ class _ExerciseAlertDialogState extends State<ExerciseAlertDialog> {
       'apiv': '1',
       'action': 'get',
       'object': 'gettutorexercises',
-      'id': me.id,
+      // 'id': me.id,
     });
     var response;
     try {

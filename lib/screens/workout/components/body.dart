@@ -5,14 +5,7 @@ import 'list_workout.dart';
 class Body extends StatefulWidget {
   const Body({
     super.key,
-    required this.name,
-    required this.status,
-    required this.id,
-    required this.age,
-    required this.number,
   });
-
-  final String name, status, id, age, number;
 
   @override
   State<Body> createState() => _BodyState();
@@ -42,13 +35,7 @@ class _BodyState extends State<Body> {
         ),
         centerTitle: true,
       ),
-      body: ListWorkout(
-        id: widget.id,
-        age: widget.age,
-        number: widget.number,
-        name: widget.name,
-        status: widget.status,
-      ),
+      body: const ListWorkout(),
     );
   }
 }
