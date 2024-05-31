@@ -1,89 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../all_class.dart';
 import '../../constants.dart';
 
-class Coach extends StatelessWidget {
+class Coach extends StatefulWidget {
   const Coach({
     super.key,
-    required this.image,
-    required this.title,
-    required this.typeOfTraning,
-    required this.price,
+    required this.index,
+    required this.length,
     required this.press,
   });
 
-  final String image, title, typeOfTraning;
-  final int price;
+  final int index;
+  final int length;
   final void Function() press;
 
   @override
+  State<Coach> createState() => _CoachState();
+}
+
+class _CoachState extends State<Coach> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(
-        left: kDefaultPadding,
-        top: kDefaultPadding / 2,
-        bottom: kDefaultPadding * 2.5,
-      ),
-      //width: size.width * 0.4,
-      width: 210,
-      child: Column(
-        children: <Widget>[
-          Image.asset(image),
-          GestureDetector(
-            onTap: press,
-            child: Container(
-              padding: const EdgeInsets.all(kDefaultPadding / 2),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
+    return Consumer<MeModel>(
+      builder: (contextModel, meModel, child) {
+        return GestureDetector(
+          onTap: widget.press,
+          child: Container(
+            margin: EdgeInsets.only(
+              left: 20,
+              top: 20,
+              bottom: 20,
+              right: (widget.index == widget.length - 1) ? 20 : 0,
+            ),
+            child: Column(children: <Widget>[
+              Container(
+                height: 100,
+                width: 200,
+                padding: const EdgeInsets.all(kDefaultPadding / 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 10),
+                      blurRadius: 50,
+                      color: kPrimaryColor.withOpacity(0.23),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 10),
-                    blurRadius: 50,
-                    color: kPrimaryColor.withOpacity(0.23),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 140,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "$title\n".toUpperCase(),
-                            style: TextStyle(
-                                color:
-                                    kTextColor), //Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          TextSpan(
-                            text: typeOfTraning.toUpperCase(),
-                            style: TextStyle(
-                              color: kPrimaryColor.withOpacity(0.5),
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 140,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  "${meModel.listOfTutors![widget.index].name}\n"
+                                      .toUpperCase(),
+                              style: TextStyle(
+                                  color:
+                                      kTextColor), //Theme.of(context).textTheme.bodyMedium,
                             ),
-                          ),
-                        ],
+                            TextSpan(
+                              text: meModel
+                                  .listOfTutors![widget.index].typeOfTraining!
+                                  .toUpperCase(),
+                              style: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    '₽$price',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: kPrimaryColor),
-                  ),
-                ],
+                    const Spacer(),
+                    Text(
+                      '₽${int.parse(meModel.listOfTutors![widget.index].cost!)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: kPrimaryColor),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ]),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

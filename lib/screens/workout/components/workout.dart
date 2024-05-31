@@ -2,26 +2,25 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../../../all_class.dart';
 import '../../../constants.dart';
-import '../../../main.dart';
 
 class Workout extends StatefulWidget {
   const Workout({
     super.key,
     required this.title,
-    required this.id,
   });
 
   final String title;
-  final String id;
 
   @override
   State<Workout> createState() => _WorkoutState();
 }
 
 class _WorkoutState extends State<Workout> {
+  late MeModel meModel;
   final TextEditingController _countDoneApproaches = TextEditingController();
   final TextEditingController _weightDoneApproaches = TextEditingController();
   ConnectionState _connectionState = ConnectionState.waiting;
@@ -35,7 +34,7 @@ class _WorkoutState extends State<Workout> {
   int _currentStep = 0;
   int _currentSubStep = 0;
 
-  ApproachesList _currentData = ApproachesList(
+  ApproachesList currentData = ApproachesList(
     id: '',
     idExerciseWorkout: '',
     countList: '',
@@ -46,12 +45,10 @@ class _WorkoutState extends State<Workout> {
   int i = 0;
   int countWorkout = 0;
 
-  bool _isAuth = true;
-
   @override
   void initState() {
     super.initState();
-    // _isAuth = Main.isAuth;
+    meModel = Provider.of<MeModel>(context, listen: false);
     clientTrainings();
   }
 
@@ -60,14 +57,15 @@ class _WorkoutState extends State<Workout> {
       'apiv': '1',
       'action': 'get',
       'object': 'clientexercise',
-      'id_workout': widget.id,
+      'authhash': meModel.authhash,
+      'id_workout': meModel.idTraining,
     });
     var response;
     try {
       response = await http.get(uri);
     } catch (error) {}
     String jsonString = "";
-    if (response.statusCode == 200 && _isAuth == true) {
+    if (response.statusCode == 200 && meModel.isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
     }
@@ -91,6 +89,7 @@ class _WorkoutState extends State<Workout> {
         'apiv': '1',
         'action': 'get',
         'object': 'getapproaches',
+        'authhash': meModel.authhash,
         'id_exercise_workout': element.id,
       });
       var responseApproaches;
@@ -98,7 +97,7 @@ class _WorkoutState extends State<Workout> {
         responseApproaches = await http.get(uriApproaches);
       } catch (error) {}
       String jsonStringApproaches = "";
-      if (responseApproaches.statusCode == 200 && _isAuth == true) {
+      if (responseApproaches.statusCode == 200 && meModel.isAuth == true) {
         var decodedResponseApproaches =
             jsonDecode(utf8.decode(responseApproaches.bodyBytes)) as Map;
         jsonStringApproaches = jsonEncode(decodedResponseApproaches['data']);
@@ -139,9 +138,9 @@ class _WorkoutState extends State<Workout> {
       'apiv': '1',
       'action': 'set',
       'object': 'madeapproaches',
+      'authhash': meModel.authhash,
     });
-    var response;
-    response = await http.post(uri,
+    await http.post(uri,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -371,7 +370,7 @@ class _WorkoutState extends State<Workout> {
             );
           }
           _currentSubStep++;
-          _currentData = _data[_currentStep][_currentSubStep];
+          currentData = _data[_currentStep][_currentSubStep];
           if (information[_currentStep].length > _currentSubStep) {
             _countDoneApproaches.text =
                 information[_currentStep][_currentSubStep].countList;
@@ -417,7 +416,7 @@ class _WorkoutState extends State<Workout> {
             }
             _currentStep++;
             _currentSubStep = 0;
-            _currentData = _data[_currentStep][_currentSubStep];
+            currentData = _data[_currentStep][_currentSubStep];
           }
         });
       } else {
@@ -457,7 +456,7 @@ class _WorkoutState extends State<Workout> {
     if (_currentSubStep > 0) {
       setState(() {
         _currentSubStep--;
-        _currentData = _data[_currentStep][_currentSubStep];
+        currentData = _data[_currentStep][_currentSubStep];
         _countDoneApproaches.text =
             information[_currentStep][_currentSubStep].countList;
         _weightDoneApproaches.text =
@@ -467,7 +466,7 @@ class _WorkoutState extends State<Workout> {
       setState(() {
         _currentStep--;
         _currentSubStep = _data[_currentStep].length - 1;
-        _currentData = _data[_currentStep][_currentSubStep];
+        currentData = _data[_currentStep][_currentSubStep];
         _countDoneApproaches.text =
             information[_currentStep][_currentSubStep].countList;
         _weightDoneApproaches.text =

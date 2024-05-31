@@ -3,10 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'all_class.dart';
 import 'constants.dart';
-import 'screens/app/main_app.dart';
+import 'screens/main_app/main_app.dart';
 import 'screens/auth_registration/auth_registration_screen.dart';
 
 void main() {
@@ -33,13 +34,17 @@ class _MainState extends State<Main> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => MeModel())],
       child: Consumer<MeModel>(
-        builder: (context, meModel, _) {
-          print(1);
-          bool isAuth = meModel.isAuth ?? false;
+        builder: (contextModel, meModel, child) {
+          if (!meModel.isAuth) meModel.getAuth();
           return MaterialApp(
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
@@ -91,7 +96,11 @@ class _MainState extends State<Main> {
                 selectionHandleColor: kPrimaryColor,
               ),
             ),
-            home: isAuth ? const MainApp() : const AuthRegistrationScreen(),
+            home: meModel.isLoad
+                ? meModel.isAuth
+                    ? const MainApp()
+                    : const AuthRegistrationScreen()
+                : Container(),
           );
         },
       ),

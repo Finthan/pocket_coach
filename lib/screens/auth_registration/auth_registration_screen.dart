@@ -20,6 +20,11 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   var isRegist = false;
   final _loginTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
@@ -94,25 +99,6 @@ class _AuthRegistrationScreenState extends State<AuthRegistrationScreen> {
       });
     });
   }
-
-  // Future _setAuth() async {
-  //   var prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('auth', Main.isAuth);
-  //   if (Main.isAuth) {
-  //     await _setMe();
-  //     await _setClient();
-  //   }
-  // }
-
-  // Future _setClient() async {
-  //   var prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('client', context.watch<MeModel>().isClient!);
-  // }
-
-  // Future _setMe() async {
-  //   var prefs = await SharedPreferences.getInstance();
-  //   // prefs.setString('me', me.id);
-  // }
 
   @override
   Widget build(BuildContext context) {

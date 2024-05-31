@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../all_class.dart';
 import '../../../constants.dart';
 
 class ChatWorkoutButton extends StatelessWidget {
   const ChatWorkoutButton({
     super.key,
     required this.size,
-    required this.number,
   });
 
   final Size size;
-  final String number;
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<MeModel>(
+      builder: (contextModel, meModel, child) {
     return Row(
       children: <Widget>[
         SizedBox(
@@ -29,7 +31,7 @@ class ChatWorkoutButton extends StatelessWidget {
                 )),
                 backgroundColor: MaterialStateProperty.all(kPrimaryColor)),
             onPressed: () {
-              var url = 'https://t.me/$number';
+              var url = 'https://t.me/${meModel.listOfTutors![meModel.indexCoachMan].number}';
               launch(url);
             }, //=> _openTelegramChat()
             child: const Text(
@@ -44,5 +46,6 @@ class ChatWorkoutButton extends StatelessWidget {
         Expanded(child: Container()),
       ],
     );
+      },);
   }
 }

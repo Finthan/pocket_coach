@@ -25,7 +25,7 @@ class _BodyState extends State<Body> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           AppBarSideScreens(
-            menu: sideMenus[2],
+            menu: sideMenus[0],
             riveOnInit: (artboard) {},
           ),
           Column(

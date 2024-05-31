@@ -21,39 +21,43 @@ class _BodyHomeScreenState extends State<BodyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 40,
-              color: kPrimaryColor,
+    return Consumer<MeModel>(
+      builder: (contextModel, meModel, child) {
+        return Scaffold(
+          backgroundColor: kBackgroundColor,
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 40,
+                  color: kPrimaryColor,
+                ),
+                HeaderWithSearchBox(size: size),
+                meModel.isClient ?? false
+                    ? Column(children: [
+                        TitleWithMoreBtn(
+                          title: "Тренера",
+                          press: () {},
+                        ),
+                        CoachMan(size: size),
+                      ])
+                    : Column(children: [
+                        TitleWithMoreBtn(
+                          title: "Мои клиенты",
+                          press: () {},
+                        ),
+                        MyClientMan(size: size),
+                        TitleWithMoreBtn(
+                          title: "Остальные клиенты",
+                          press: () {},
+                        ),
+                        AllClientMan(size: size)
+                      ])
+              ],
             ),
-            HeaderWithSearchBox(size: size),
-            // context.watch<MeModel>().isClient!
-            //     ? Column(children: [
-            //         TitleWithMoreBtn(
-            //           title: "Тренера",
-            //           press: () {},
-            //         ),
-            //         CoachMan(size: size)
-            //       ])
-            //     : Column(children: [
-            //         TitleWithMoreBtn(
-            //           title: "Все клиенты",
-            //           press: () {},
-            //         ),
-            //         MyClientMan(size: size),
-            //         TitleWithMoreBtn(
-            //           title: "Остальные клиенты",
-            //           press: () {},
-            //         ),
-            //         AllClientMan(size: size)
-            //       ])
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
-import 'components/body.dart';
+import 'package:pocket_coach/user_screen/tutor_screen/components/chat_workout_button.dart';
+import 'package:pocket_coach/user_screen/tutor_screen/components/image_and_icon.dart';
+import 'package:pocket_coach/user_screen/tutor_screen/components/title_and_age.dart';
 
 class TutorScreen extends StatelessWidget {
   const TutorScreen({
     super.key,
-    required this.title,
-    required this.image,
-    required this.status,
-    required this.price,
-    required this.number,
   });
-
-  final String image, title, status, price, number;
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Body(
-        title: title,
-        status: status,
-        number: number,
-        price: price,
-        image: image,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            ImageAndIcons(size: size),
+            TitleAndPrice(size: size),
+            ChatWorkoutButton(size: size),
+          ],
+        ),
       ),
     );
   }

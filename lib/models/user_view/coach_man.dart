@@ -30,44 +30,34 @@ class _CoachMan extends State<CoachMan> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.size.width,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            for (var i = 0;
-                i < context.watch<MeModel>().listOfTutors!.length;
-                i++)
-              Coach(
-                image: "assets/images/men_${i + 1}.jpg",
-                title: context.watch<MeModel>().listOfTutors![i].name,
-                typeOfTraning:
-                    context.watch<MeModel>().listOfTutors![i].typeOfTraining!,
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TutorScreen(
-                        title: context.watch<MeModel>().listOfTutors![i].name,
-                        status: context
-                            .watch<MeModel>()
-                            .listOfTutors![i]
-                            .typeOfTraining!,
-                        number:
-                            context.watch<MeModel>().listOfTutors![i].number,
-                        image: "assets/images/men_${i + 1}.jpg",
-                        price: context.watch<MeModel>().listOfTutors![i].cost!,
-                      ),
+    return Consumer<MeModel>(
+      builder: (contextModel, meModel, child) {
+        return SizedBox(
+          width: widget.size.width,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                if (meModel.listOfTutors != null)
+                  for (var i = 0; i < meModel.listOfTutors!.length; i++)
+                    Coach(
+                      index: i,
+                      length: meModel.listOfTutors!.length,
+                      press: () {
+                        meModel.indexCoachMan = i;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TutorScreen(),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-                price:
-                    int.parse(context.watch<MeModel>().listOfTutors![i].cost!),
-              ),
-          ],
-        ),
-      ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_coach/constants.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../../../all_class.dart';
-import '../../../constants.dart';
-import '../../auth_registration/auth_registration_screen.dart';
 
 class ClientsWidget extends StatefulWidget {
   const ClientsWidget({
@@ -76,101 +73,108 @@ class _ClientsWidget extends State<ClientsWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 200),
-      child: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 18, top: 15, bottom: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Выберите дату тренировки",
-                style: TextStyle(color: kWhiteColor, fontSize: 17),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 18, right: 15),
-            child: GestureDetector(
-              onTap: _showDatePicker,
-              child: Container(
-                color: kTextColorBox,
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  getMonthName(selectDay.day, selectDay.month, selectDay.year),
-                  style: TextStyle(
-                    color: kWhiteColor,
-                    fontSize: 20,
+    return Consumer<MeModel>(
+      builder: (contextModel, meModel, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 200),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 18, top: 15, bottom: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Выберите дату тренировки",
+                    style: TextStyle(color: kWhiteColor, fontSize: 17),
                   ),
                 ),
               ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 18, top: 15, bottom: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Напишите название тренировки",
-                style: TextStyle(color: kWhiteColor, fontSize: 17),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: TextField(
-              controller: _workoutTextController,
-              decoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                hintText: "Напишите название тренировки",
-                hintStyle: TextStyle(
-                  color: kTextChat,
-                  fontSize: 15,
-                ),
-                isCollapsed: true,
-                filled: true,
-              ),
-              style: const TextStyle(color: kTextFieldColor),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-            child: TextButton(
-              style: ButtonStyle(
-                  shape: MaterialStateProperty.all(const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
+              Padding(
+                padding: const EdgeInsets.only(left: 18, right: 15),
+                child: GestureDetector(
+                  onTap: _showDatePicker,
+                  child: Container(
+                    color: kTextColorBox,
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(
+                      getMonthName(
+                          selectDay.day, selectDay.month, selectDay.year),
+                      style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 20,
+                      ),
                     ),
-                  )),
-                  backgroundColor: MaterialStateProperty.all(kPrimaryColor)),
-              onPressed: () {
-                setState(() {
-                  time = _timeTextController.text;
-                  nameWorkout = _workoutTextController.text;
-                  Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-                    'apiv': '1',
-                    'action': 'set',
-                    'object': 'createworkout',
-                    'id_tutor': MeModel().me!.idTutor,
-                    'id_client': widget.id,
-                    'name_workout': nameWorkout,
-                    'workout_date':
-                        "${selectDay.year}-${selectDay.month}-${selectDay.day}",
-                  });
-                  http.get(uri);
-                  Navigator.pop(context);
-                });
-              },
-              child: const Text(
-                "Создать тренировку",
-                style: TextStyle(color: kWhiteColor),
+                  ),
+                ),
               ),
-            ),
+              const Padding(
+                padding: EdgeInsets.only(left: 18, top: 15, bottom: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Напишите название тренировки",
+                    style: TextStyle(color: kWhiteColor, fontSize: 17),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: TextField(
+                  controller: _workoutTextController,
+                  decoration: const InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+                    hintText: "Напишите название тренировки",
+                    hintStyle: TextStyle(
+                      color: kTextChat,
+                      fontSize: 15,
+                    ),
+                    isCollapsed: true,
+                    filled: true,
+                  ),
+                  style: const TextStyle(color: kTextFieldColor),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                child: TextButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                          const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      )),
+                      backgroundColor:
+                          MaterialStateProperty.all(kPrimaryColor)),
+                  onPressed: () {
+                    setState(() {
+                      time = _timeTextController.text;
+                      nameWorkout = _workoutTextController.text;
+                      Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+                        'apiv': '1',
+                        'action': 'set',
+                        'object': 'createworkout',
+                        'id_tutor': meModel.me!.idTutor,
+                        'id_client': widget.id,
+                        'name_workout': nameWorkout,
+                        'workout_date':
+                            "${selectDay.year}-${selectDay.month}-${selectDay.day}",
+                      });
+                      http.get(uri);
+                      Navigator.pop(context);
+                    });
+                  },
+                  child: const Text(
+                    "Создать тренировку",
+                    style: TextStyle(color: kWhiteColor),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

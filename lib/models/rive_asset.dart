@@ -33,18 +33,18 @@ List<RiveAsset> buttomNavs = [
 ];
 
 List<RiveAsset> sideMenus = [
-  RiveAsset(
-    "assets/RiveAssets/icons.riv",
-    artboard: "HOME",
-    stateMachineName: "HOME_interactivity",
-    title: "Информация о питании",
-  ),
-  RiveAsset(
-    "assets/RiveAssets/icons.riv",
-    artboard: "CHAT",
-    stateMachineName: "CHAT_Interactivity",
-    title: "Помощь",
-  ),
+  // RiveAsset(
+  //   "assets/RiveAssets/icons.riv",
+  //   artboard: "HOME",
+  //   stateMachineName: "HOME_interactivity",
+  //   title: "Информация о питании",
+  // ),
+  // RiveAsset(
+  //   "assets/RiveAssets/icons.riv",
+  //   artboard: "CHAT",
+  //   stateMachineName: "CHAT_Interactivity",
+  //   title: "Помощь",
+  // ),
   RiveAsset(
     "assets/RiveAssets/icons.riv",
     artboard: "SETTINGS",
@@ -60,18 +60,18 @@ List<RiveAsset> sideMenus = [
 ];
 
 List<RiveAsset> sideScreens = [
-  RiveAsset(
-    "assets/RiveAssets/icons.riv",
-    artboard: "HOME",
-    stateMachineName: "HOME_interactivity",
-    title: "Питание",
-  ),
-  RiveAsset(
-    "assets/RiveAssets/icons.riv",
-    artboard: "CHAT",
-    stateMachineName: "CHAT_Interactivity",
-    title: "Помощь",
-  ),
+  // RiveAsset(
+  //   "assets/RiveAssets/icons.riv",
+  //   artboard: "HOME",
+  //   stateMachineName: "HOME_interactivity",
+  //   title: "Питание",
+  // ),
+  // RiveAsset(
+  //   "assets/RiveAssets/icons.riv",
+  //   artboard: "CHAT",
+  //   stateMachineName: "CHAT_Interactivity",
+  //   title: "Помощь",
+  // ),
   RiveAsset(
     "assets/RiveAssets/icons.riv",
     artboard: "SETTINGS",
