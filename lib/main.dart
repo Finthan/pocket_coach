@@ -41,67 +41,78 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => MeModel())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => MeModel()),
+      ],
       child: Consumer<MeModel>(
-        builder: (contextModel, meModel, child) {
+        builder: (context, meModel, child) {
           if (!meModel.isAuth) meModel.getAuth();
+          print("Никита ${meModel.isLoad}");
           return MaterialApp(
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              SfGlobalLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('ru'),
-            ],
-            locale: const Locale('ru'),
-            debugShowCheckedModeBanner: false,
-            title: 'Pocket coach',
-            theme: ThemeData(
-              scaffoldBackgroundColor: kBackgroundColor,
-              primaryColor: kNavBarIconColor,
-              textTheme:
-                  Theme.of(context).textTheme.apply(bodyColor: kTextFieldColor),
-              appBarTheme: const AppBarTheme(
-                centerTitle: true,
-                backgroundColor: kPrimaryColor,
-                titleTextStyle: TextStyle(
-                  color: kWhiteColor,
-                  fontSize: 24,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                SfGlobalLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('ru'),
+              ],
+              locale: const Locale('ru'),
+              debugShowCheckedModeBanner: false,
+              title: 'Pocket coach',
+              theme: ThemeData(
+                scaffoldBackgroundColor: kBackgroundColor,
+                primaryColor: kNavBarIconColor,
+                textTheme: Theme.of(context)
+                    .textTheme
+                    .apply(bodyColor: kTextFieldColor),
+                appBarTheme: const AppBarTheme(
+                  centerTitle: true,
+                  backgroundColor: kPrimaryColor,
+                  titleTextStyle: TextStyle(
+                    color: kWhiteColor,
+                    fontSize: 24,
+                  ),
+                  elevation: 4,
+                  shadowColor: Colors.black,
                 ),
-                elevation: 4,
-                shadowColor: Colors.black,
-              ),
-              inputDecorationTheme: InputDecorationTheme(
-                filled: true,
-                fillColor: kWhiteColor,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                hintStyle: const TextStyle(color: kIconMessage),
-                labelStyle: const TextStyle(color: Colors.black),
-                errorStyle: const TextStyle(color: Colors.red),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: kPrimaryColor),
-                  borderRadius: BorderRadius.circular(10),
+                inputDecorationTheme: InputDecorationTheme(
+                  filled: true,
+                  fillColor: kWhiteColor,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                  hintStyle: const TextStyle(color: kIconMessage),
+                  labelStyle: const TextStyle(color: Colors.black),
+                  errorStyle: const TextStyle(color: Colors.red),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: kTextColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: kTextColor),
-                  borderRadius: BorderRadius.circular(10),
+                textSelectionTheme: const TextSelectionThemeData(
+                  cursorColor: kPrimaryColor,
+                  selectionColor: kPrimaryColor,
+                  selectionHandleColor: kPrimaryColor,
                 ),
               ),
-              textSelectionTheme: const TextSelectionThemeData(
-                cursorColor: kPrimaryColor,
-                selectionColor: kPrimaryColor,
-                selectionHandleColor: kPrimaryColor,
-              ),
-            ),
-            home: meModel.isLoad
-                ? meModel.isAuth
-                    ? const MainApp()
-                    : const AuthRegistrationScreen()
-                : Container(),
-          );
+              // home: meModel.isLoad
+              //     ? meModel.isAuth
+              //         ? const MainApp()
+              //         : const AuthRegistrationScreen()
+              //     : meModel.isAuth
+              //         ? Container()
+              //         : const AuthRegistrationScreen(),
+
+              home: meModel.isAuth
+                  ? meModel.isLoad
+                      ? const MainApp()
+                      : Container()
+                  : const AuthRegistrationScreen());
         },
       ),
     );

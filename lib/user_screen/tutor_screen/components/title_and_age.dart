@@ -15,7 +15,7 @@ class TitleAndPrice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: kDefaultPadding,

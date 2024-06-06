@@ -22,7 +22,7 @@ class _ExerciseState extends State<Exercise> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         meModel.fetchGetExercise();
         return Scaffold(
           appBar: AppBar(

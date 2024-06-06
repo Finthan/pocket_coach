@@ -31,7 +31,7 @@ class _AllClientMan extends State<AllClientMan> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         var length = meModel.listOfMyClients != null
             ? meModel.listOfMyClients!.length
             : 0;

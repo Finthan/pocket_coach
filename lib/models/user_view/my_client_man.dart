@@ -31,7 +31,7 @@ class _MyClientManState extends State<MyClientMan> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         var length = meModel.listOfMyClients != null
             ? meModel.listOfMyClients!.length
             : 0;
@@ -85,7 +85,7 @@ class _ClientManWidgetState extends State<ClientManWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return GestureDetector(
           onTap: widget.press,
           child: Container(

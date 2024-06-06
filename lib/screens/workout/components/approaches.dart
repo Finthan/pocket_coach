@@ -24,7 +24,7 @@ class _ApproachesState extends State<Approaches> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         meModel.fetchGetApproaches();
         return Scaffold(
           appBar: AppBar(

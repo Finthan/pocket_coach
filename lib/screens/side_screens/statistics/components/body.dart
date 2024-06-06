@@ -33,7 +33,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         meModel.fetchGetMonthName();
         meModel.fetchMadeApproachesList();
         return SingleChildScrollView(

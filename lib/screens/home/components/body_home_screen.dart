@@ -22,7 +22,7 @@ class _BodyHomeScreenState extends State<BodyHomeScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return Scaffold(
           backgroundColor: kBackgroundColor,
           body: SingleChildScrollView(

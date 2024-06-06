@@ -70,7 +70,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(builder: (contextModel, meModel, child) {
+    return Consumer<MeModel>(builder: (context, meModel, child) {
       meModel.me!.cardnumber == null
           ? {
               meModel.isClient = false,

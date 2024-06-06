@@ -26,7 +26,7 @@ class _SideMenuState extends State<SideMenu> {
   RiveAsset selectedMenu = sideMenus.first;
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(builder: (contextModel, meModel, child) {
+    return Consumer<MeModel>(builder: (context, meModel, child) {
       String name = meModel.me!.name;
       String? cardnumber = meModel.me!.cardnumber;
       String? typeOfTraining = meModel.me!.typeOfTraining;

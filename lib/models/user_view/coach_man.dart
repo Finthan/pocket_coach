@@ -31,7 +31,7 @@ class _CoachMan extends State<CoachMan> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return SizedBox(
           width: widget.size.width,
           child: SingleChildScrollView(

@@ -27,7 +27,7 @@ class _ExerciseAlertDialogState extends State<ExerciseAlertDialog> {
   Widget build(BuildContext context) {
     // print("вкл");
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return AlertDialog(
           title: const Text(
             'Добавить элемент',
@@ -122,7 +122,7 @@ class _ExerciseAlertDialogState extends State<ExerciseAlertDialog> {
 
   Widget _buildContentWidget(MeModel meModel) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         meModel.fetchGetTutorExercise();
         return SizedBox(
           height: 200,

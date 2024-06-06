@@ -21,7 +21,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return Container(
           margin: const EdgeInsets.only(bottom: kDefaultPadding * 2.5),
           height: widget.size.height * 0.2,
@@ -52,7 +52,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
                   ),
 
                   const Spacer(),
-                  //Image.asset("assets/images/logo.png"),
+                  // Image.asset("assets/images/logo.png"),
                   Image.asset("assets/images/icon.png")
                 ],
               ),

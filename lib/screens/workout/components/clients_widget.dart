@@ -74,7 +74,7 @@ class _ClientsWidget extends State<ClientsWidget>
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return Padding(
           padding: const EdgeInsets.only(top: 200),
           child: Column(

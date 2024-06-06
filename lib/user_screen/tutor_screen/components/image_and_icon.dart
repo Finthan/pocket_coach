@@ -16,7 +16,7 @@ class ImageAndIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return SizedBox(
           height: (size.height * 0.7) - 84,
           child: Row(

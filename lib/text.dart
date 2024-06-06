@@ -31,7 +31,7 @@ class _WorkoutState extends State<Workout> {
   Widget build(BuildContext context) {
     final widthContext = MediaQuery.of(context).size.width;
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         meModel.fetchClientTrainings();
         return Scaffold(
           appBar: AppBar(

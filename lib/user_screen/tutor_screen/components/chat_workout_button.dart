@@ -16,36 +16,39 @@ class ChatWorkoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          width: size.width / 2,
-          height: 84,
-          child: TextButton(
-            style: ButtonStyle(
-                shape: MaterialStateProperty.all(const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
+      builder: (context, meModel, child) {
+        return Row(
+          children: <Widget>[
+            SizedBox(
+              width: size.width / 2,
+              height: 84,
+              child: TextButton(
+                style: ButtonStyle(
+                    shape:
+                        MaterialStateProperty.all(const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                      ),
+                    )),
+                    backgroundColor: MaterialStateProperty.all(kPrimaryColor)),
+                onPressed: () {
+                  var url =
+                      'https://t.me/${meModel.listOfTutors![meModel.indexCoachMan].number}';
+                  launch(url);
+                }, //=> _openTelegramChat()
+                child: const Text(
+                  "Перейти в чат",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
                   ),
-                )),
-                backgroundColor: MaterialStateProperty.all(kPrimaryColor)),
-            onPressed: () {
-              var url = 'https://t.me/${meModel.listOfTutors![meModel.indexCoachMan].number}';
-              launch(url);
-            }, //=> _openTelegramChat()
-            child: const Text(
-              "Перейти в чат",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
+                ),
               ),
             ),
-          ),
-        ),
-        Expanded(child: Container()),
-      ],
+            Expanded(child: Container()),
+          ],
+        );
+      },
     );
-      },);
   }
 }

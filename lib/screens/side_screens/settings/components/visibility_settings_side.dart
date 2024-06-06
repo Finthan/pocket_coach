@@ -24,7 +24,7 @@ class VisibilitySettingsSide extends StatefulWidget {
 class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(builder: (contextModel, meModel, child) {
+    return Consumer<MeModel>(builder: (context, meModel, child) {
       return Visibility(
         visible: widget.isActive,
         child: Padding(
@@ -83,23 +83,19 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
                     builder: (context) => AlertDialog(
                       actions: [
                         TextButton(
-                          onPressed: () {
-                            setState(() async {
-                              meModel.loadLogoutByClick();
-                              var prefs = await SharedPreferences.getInstance();
-                              prefs.remove('data');
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              AuthNotification(false).dispatch(context);
-                            });
+                          onPressed: () async {
+                            meModel.loadLogoutByClick();
+                            var prefs = await SharedPreferences.getInstance();
+                            prefs.remove('data');
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            AuthNotification(false).dispatch(context);
                           },
                           child: Text('Выйти'),
                         ),
                         TextButton(
                           onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
+                            Navigator.pop(context);
                           },
                           child: Text('Отмена'),
                         ),

@@ -35,7 +35,7 @@ class _ListWorkoutState extends State<ListWorkout>
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         meModel.fetchUpdateTraining();
 
         final DateTime todayDay = DateTime.now();

@@ -24,7 +24,7 @@ class _CoachState extends State<Coach> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         return GestureDetector(
           onTap: widget.press,
           child: Container(

@@ -22,7 +22,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(
-      builder: (contextModel, meModel, child) {
+      builder: (context, meModel, child) {
         meModel.fetchMadeApproachesList();
         List<FlSpot> spots = [];
 

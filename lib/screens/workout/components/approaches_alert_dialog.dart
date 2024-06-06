@@ -18,7 +18,7 @@ class _ApproachesAlertDialogState extends State<ApproachesAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(builder: (contextModel, meModel, child) {
+    return Consumer<MeModel>(builder: (context, meModel, child) {
       return AlertDialog(
         title: const Text(
           'Добавить элемент',

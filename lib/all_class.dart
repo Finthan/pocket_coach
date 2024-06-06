@@ -108,27 +108,29 @@ class MeModel with ChangeNotifier {
     print("auth");
     var prefs = await SharedPreferences.getInstance();
     var jsonData = prefs.getString('data');
-    print(jsonData);
-    var decodedResponse = jsonDecode(jsonData ?? "") as Map;
-    print("authhash = ${decodedResponse['authhash']}");
-    if (decodedResponse['authhash'] != null) {
-      authhash = decodedResponse['authhash'];
-      String jsonString = jsonEncode(decodedResponse['data']);
-      final json = jsonDecode(jsonString) as List<dynamic>;
-      me = Me.fromJson(json.first as Map<String, dynamic>);
-      if (me!.idClient == null) {
-        isClient = false;
-      } else {
-        isClient = true;
-      }
-      isAuth = true;
-      isLoad = true;
-      print("isLoad $isLoad");
+    print("jsonData $jsonData");
+    if (jsonData != null) {
+      var decodedResponse = jsonDecode(jsonData ?? "") as Map;
+      print("authhash = ${decodedResponse['authhash']}");
+      if (decodedResponse['authhash'] != null) {
+        authhash = decodedResponse['authhash'];
+        String jsonString = jsonEncode(decodedResponse['data']);
+        final json = jsonDecode(jsonString) as List<dynamic>;
+        me = Me.fromJson(json.first as Map<String, dynamic>);
+        if (me!.idClient == null) {
+          isClient = false;
+        } else {
+          isClient = true;
+        }
+        isAuth = true;
+        isLoad = true;
+        print("isLoad $isLoad");
 
-      print(isAuth);
-    } else {
-      isLoad = true;
-      print("isLoad $isLoad");
+        print(isAuth);
+      } else {
+        isLoad = true;
+        print("isLoad $isLoad");
+      }
     }
     notifyListeners();
   }
