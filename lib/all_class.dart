@@ -47,95 +47,95 @@ class Me {
       cardnumber: json['cardnumber'] as String?,
     );
   }
+
+  Me.empty()
+      : id = '',
+        gender = '',
+        age = '',
+        name = '';
 }
 
 class MeModel with ChangeNotifier {
-  Me? me;
-  String? authhash;
+  Me _me = Me.empty();
+  String _authhash = "";
+  bool _isAuth = false;
+  bool _isLoad = false;
+  bool _isClient = false;
+  ExerciseList _exerciseList = ExerciseList.empty();
 
-  var index;
-  var indexTrainings;
-  var indexCoachMan;
-  var itemExercise;
-  var training;
-  var idTraining;
-  var countWorkout;
-  int currentStep = 0;
-  int currentSubStep = 0;
-  List<User>? listOfTutors;
-  List<User>? listOfMyClients;
-  List<User>? listOfAllClients;
-  List<Training>? trainings;
-  List<MadeApproachesChart>? madeApproachesChart;
-  List<ExerciseList>? exercises;
-  List<ExerciseList>? data;
-  List<Exercises>? listExercises;
-  List<ApproachesList>? approachesList;
-  List<ClientExercise>? clientExercise;
-  List<List<ApproachesList>>? approachesListClient; //_data
-  List<List<MadeApproachesList>>? information; //workout.dart
-  ApproachesList? currentData; //workout.dart
-  ConnectionState connectionState = ConnectionState.waiting;
-  dynamic exerciseList;
-  int countMadeApproachesChart = 0;
-  User? myTutor;
+  Me get me => _me;
+  String get authhash => _authhash;
+  bool get isAuth => _isAuth;
+  bool get isLoad => _isLoad;
+  bool get isClient => _isClient;
+  ExerciseList get exerciseList => _exerciseList;
 
-  ConnectionState connectionStateWorkout = ConnectionState.waiting;
+  set me(Me value) {
+    _me = value;
+    notifyListeners();
+  }
 
-  TextEditingController countDoneApproaches = TextEditingController();
-  TextEditingController weightDoneApproaches = TextEditingController();
+  set authhash(String value) {
+    _authhash = value;
+    notifyListeners();
+  }
 
-  bool isAuth = false;
-  bool isLoad = false;
-  bool? isClient;
-  String? selectDayText;
+  set isAuth(bool value) {
+    _isAuth = value;
+    notifyListeners();
+  }
 
-  DateTime todayDay = DateTime.now();
-  DateTime selectDay = DateTime(DateTime.now().year, DateTime.now().month);
+  set isLoad(bool value) {
+    _isLoad = value;
+    notifyListeners();
+  }
+
+  set isClient(bool value) {
+    _isClient = value;
+    notifyListeners();
+  }
+
+  set exerciseList(ExerciseList value) {
+    _exerciseList = value;
+    notifyListeners();
+  }
 
   Future<void> loadAuthByClick(String login, String password) async {
-    Me? newData = await _auth(login, password);
-    if (newData != null) {
+    Me newData = await _auth(login, password);
+    if (newData != Me.empty()) {
       isAuth = true;
       me = newData;
-      exerciseList = 'строка не изменена';
     } else {
       isAuth = false;
     }
   }
 
   Future getAuth() async {
-    print("auth");
     var prefs = await SharedPreferences.getInstance();
-    var jsonData = prefs.getString('data');
-    print("jsonData $jsonData");
-    if (jsonData != null) {
-      var decodedResponse = jsonDecode(jsonData ?? "") as Map;
-      print("authhash = ${decodedResponse['authhash']}");
-      if (decodedResponse['authhash'] != null) {
-        authhash = decodedResponse['authhash'];
-        String jsonString = jsonEncode(decodedResponse['data']);
-        final json = jsonDecode(jsonString) as List<dynamic>;
-        me = Me.fromJson(json.first as Map<String, dynamic>);
-        if (me!.idClient == null) {
-          isClient = false;
-        } else {
-          isClient = true;
-        }
-        isAuth = true;
-        isLoad = true;
-        print("isLoad $isLoad");
-
-        print(isAuth);
+    String jsonData = prefs.getString('data') ?? "";
+    if (jsonData != "") {
+      var decodedResponse = jsonDecode(jsonData) as Map;
+      authhash = decodedResponse['authhash'] as String;
+      String jsonString = jsonEncode(decodedResponse['data']);
+      final json = jsonDecode(jsonString) as List<dynamic>;
+      me = Me.fromJson(json.first as Map<String, dynamic>);
+      if (me.idClient == null) {
+        isClient = false;
       } else {
-        isLoad = true;
-        print("isLoad $isLoad");
+        isClient = true;
       }
+      isAuth = true;
+      isLoad = true;
+
+      notifyListeners();
+    } else {
+      isAuth = false;
+      isLoad = true;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  Future<Me?> _auth(String login, String password) async {
+  Future<Me> _auth(String login, String password) async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'auth',
@@ -143,7 +143,7 @@ class MeModel with ChangeNotifier {
       'login': login,
       'pass': password,
     });
-    Me? data;
+    Me data = Me.empty();
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.wifi ||
@@ -151,7 +151,7 @@ class MeModel with ChangeNotifier {
         connectivityResult == ConnectivityResult.ethernet) {
       dynamic auth = await http.get(uri);
       var decodedResponse = jsonDecode(utf8.decode(auth.bodyBytes)) as Map;
-      print(utf8.decode(auth.bodyBytes));
+      // print(utf8.decode(auth.bodyBytes));
 
       authhash = decodedResponse['authhash'];
 
@@ -171,19 +171,19 @@ class MeModel with ChangeNotifier {
   Future<void> loadLogoutByClick() async {
     await _logout();
     isAuth = false;
-    me = null;
+    me = Me.empty();
 
     notifyListeners();
   }
 
-  Future<Me?> _logout() async {
+  Future<Me> _logout() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'auth',
       'object': 'logout',
       'authhash': authhash,
     });
-    Me? data;
+    Me data = Me.empty();
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.wifi ||
@@ -196,21 +196,17 @@ class MeModel with ChangeNotifier {
 
   Future<void> loadRegistByClick(
       Map<String, String> dataTextField, bool isRegClient) async {
-    Me? newData = await _regist(dataTextField, isRegClient);
-    if (newData != null) {
-      isAuth = true;
-      me = newData;
-      if (me!.cardnumber == null) {
-        isClient = false;
-      } else {
-        isClient = true;
-      }
+    Me newData = await _regist(dataTextField, isRegClient);
+    isAuth = true;
+    me = newData;
+    if (me.cardnumber == null) {
+      isClient = false;
     } else {
-      isAuth = false;
+      isClient = true;
     }
   }
 
-  Future<Me?> _regist(
+  Future<Me> _regist(
       Map<String, String> dataTextField, bool isRegClient) async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
@@ -230,7 +226,7 @@ class MeModel with ChangeNotifier {
       }
     });
 
-    Me? data;
+    Me data = Me.empty();
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.wifi ||
@@ -249,6 +245,65 @@ class MeModel with ChangeNotifier {
     }
     return data;
   }
+}
+
+class UsersModel with ChangeNotifier {
+  List<User> _listOfTutors = [];
+  List<User> _listOfMyClients = [];
+  List<User> _listOfAllClients = [];
+  User _myTutor = User.empty();
+  int _indexAllClients = 0;
+  int _indexCoachMan = 0;
+  int _index = 0;
+
+  late MeModel _meModel;
+
+  Me get me => _meModel.me;
+  String get authhash => _meModel.authhash;
+  bool get isAuth => _meModel.isAuth;
+  bool get isClient => _meModel.isClient;
+  List<User> get listOfTutors => _listOfTutors;
+  List<User> get listOfMyClients => _listOfMyClients;
+  List<User> get listOfAllClients => _listOfAllClients;
+  User get myTutor => _myTutor;
+  int get indexAllClients => _indexAllClients;
+  int get indexCoachMan => _indexCoachMan;
+  int get index => _index;
+
+  set listOfTutors(List<User> value) {
+    _listOfTutors = value;
+    notifyListeners();
+  }
+
+  set listOfMyClients(List<User> value) {
+    _listOfMyClients = value;
+    notifyListeners();
+  }
+
+  set listOfAllClients(List<User> value) {
+    _listOfAllClients = value;
+    notifyListeners();
+  }
+
+  set myTutor(User value) {
+    _myTutor = value;
+    notifyListeners();
+  }
+
+  set indexCoachMan(int value) {
+    _indexCoachMan = value;
+    notifyListeners();
+  }
+
+  set indexAllClients(int value) {
+    _indexAllClients = value;
+    notifyListeners();
+  }
+
+  set index(int value) {
+    _index = value;
+    notifyListeners();
+  }
 
   void fetchMyClients() {
     loadMyClients().then((_) {
@@ -256,14 +311,18 @@ class MeModel with ChangeNotifier {
     });
   }
 
+  updateWithMeModel(MeModel meModel) {
+    _meModel = meModel;
+  }
+
   Future<void> loadMyClients() async {
     var newInfo = await getMyClients();
-    if (newInfo != null) {
+    if (newInfo != [] && newInfo != listOfMyClients) {
       listOfMyClients = newInfo;
     }
   }
 
-  Future<List<User>?> getMyClients() async {
+  Future<List<User>> getMyClients() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -271,7 +330,7 @@ class MeModel with ChangeNotifier {
       'authhash': authhash,
     });
 
-    List<User>? listOfUsers;
+    List<User> listOfUsers = [];
 
     var connectivityResult = await (Connectivity().checkConnectivity());
 
@@ -286,6 +345,7 @@ class MeModel with ChangeNotifier {
             jsonDecode(utf8.decode(myClientsList.bodyBytes)) as Map;
 
         jsonString = jsonEncode(decodedResponse['data']);
+        // print(jsonString);
       }
 
       try {
@@ -309,19 +369,19 @@ class MeModel with ChangeNotifier {
 
   Future<void> loadAllClients() async {
     var newInfo = await getAllClients();
-    if (newInfo != null) {
-      listOfTutors = newInfo;
+    if (newInfo != [] && newInfo != listOfAllClients) {
+      listOfAllClients = newInfo;
     }
   }
 
-  Future<List<User>?> getAllClients() async {
+  Future<List<User>> getAllClients() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
       'object': 'allclients',
       'authhash': authhash,
     });
-    List<User>? listOfUsers;
+    List<User> listOfUsers = [];
 
     var connectivityResult = await (Connectivity().checkConnectivity());
 
@@ -335,6 +395,7 @@ class MeModel with ChangeNotifier {
         var decodedResponse =
             jsonDecode(utf8.decode(myClientsList.bodyBytes)) as Map;
         jsonString = jsonEncode(decodedResponse['data']);
+        // print(jsonString);
       }
 
       try {
@@ -357,15 +418,13 @@ class MeModel with ChangeNotifier {
   }
 
   Future<void> loadMyTutor() async {
-    // print("начало");
-    var newInfo = await getMyTutor();
-    if (newInfo != null) {
-      // print("конец");
+    User newInfo = await getMyTutor();
+    if (newInfo != myTutor) {
       myTutor = newInfo;
     }
   }
 
-  Future<User?> getMyTutor() async {
+  Future<User> getMyTutor() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -373,7 +432,7 @@ class MeModel with ChangeNotifier {
       'authhash': authhash,
     });
 
-    User? user;
+    User user = User.empty();
 
     var connectivityResult = await (Connectivity().checkConnectivity());
 
@@ -406,22 +465,20 @@ class MeModel with ChangeNotifier {
   }
 
   Future<void> loadAllTutors() async {
-    // print("началоall");
     var newInfo = await getAllTutors();
-    if (newInfo != null) {
-      // print("конецall");
+    if (newInfo != [] && newInfo != listOfTutors) {
       listOfTutors = newInfo;
     }
   }
 
-  Future<List<User>?> getAllTutors() async {
+  Future<List<User>> getAllTutors() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
       'object': 'alltutors',
       'authhash': authhash,
     });
-    List<User>? listOfUsers;
+    List<User> listOfUsers = [];
 
     var connectivityResult = await (Connectivity().checkConnectivity());
 
@@ -448,9 +505,67 @@ class MeModel with ChangeNotifier {
     }
     return listOfUsers;
   }
+}
+
+class TrainingModel with ChangeNotifier {
+  List<Training> _trainings = [];
+
+  Training _training = Training.empty();
+  ApproachesList _currentData = ApproachesList.empty();
+
+  int _indexTrainings = 0;
+  int _idTraining = 0;
+  int _countWorkout = 0;
+
+  late UsersModel _usersModel;
+
+  List<User> get listOfMyClients => _usersModel.listOfMyClients;
+
+  List<Training> get trainings => _trainings;
+
+  ApproachesList get currentData => _currentData;
+
+  User get myTutor => _usersModel.myTutor;
+  Training get training => _training;
+
+  String get authhash => _usersModel.authhash;
+
+  bool get isAuth => _usersModel.isAuth;
+  bool get isClient => _usersModel.isClient;
+
+  int get index => _usersModel.index;
+  int get indexTrainings => _indexTrainings;
+  int get idTraining => _idTraining;
+  int get countWorkout => _countWorkout;
+
+  set indexTrainings(int value) {
+    _indexTrainings = value;
+    notifyListeners();
+  }
+
+  set idTraining(int value) {
+    _idTraining = value;
+    notifyListeners();
+  }
+
+  set training(Training value) {
+    _training = value;
+    notifyListeners();
+  }
+
+  set currentData(ApproachesList value) {
+    _currentData = value;
+    notifyListeners();
+  }
+
+  updateWithUsersModel(UsersModel usersModel) {
+    _usersModel = usersModel;
+  }
 
   void updateTrainings(List<Training> newTrainings) {
-    trainings = newTrainings;
+    if (newTrainings != _trainings) {
+      _trainings = newTrainings;
+    }
     notifyListeners();
   }
 
@@ -496,7 +611,7 @@ class MeModel with ChangeNotifier {
               child: const Text('Удалить'),
               onPressed: () {
                 deleteTrainings();
-                trainings!.removeWhere((t) => t.id == appointment.id);
+                trainings.removeWhere((t) => t.id == appointment.id);
                 Navigator.of(context).pop();
               },
             ),
@@ -507,31 +622,30 @@ class MeModel with ChangeNotifier {
   }
 
   Future<void> fetchUpdateTraining() async {
-    print("fetchUpdateTraining");
     updateTraining().then((_) {
       notifyListeners();
     });
   }
 
   Future<void> updateTraining() async {
-    var newInfo =
-        (isClient! ? await getClientTrainings() : await getTutorTrainings());
-    if (newInfo != null) {
-      trainings = newInfo;
-      // print("данные получены");
+    var newInfo = (isClient //
+        ? await getClientTrainings()
+        : await getTutorTrainings());
+    if (newInfo != [] && newInfo != trainings) {
+      _trainings = newInfo;
     }
   }
 
-  Future<List<Training>?> getTutorTrainings() async {
+  Future<List<Training>> getTutorTrainings() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
       'object': 'tutorworkouts',
-      'id_client': listOfMyClients![index].id,
+      'id_client': listOfMyClients[index].id,
       'authhash': authhash,
     });
 
-    List<Training>? trainings;
+    List<Training> trainings = [];
     var responseTutor;
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.wifi ||
@@ -557,13 +671,15 @@ class MeModel with ChangeNotifier {
     return trainings;
   }
 
-  Future<List<Training>?> getClientTrainings() async {
+  Future<List<Training>> getClientTrainings() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
       'object': 'clientworkouts',
       'authhash': authhash,
     });
+
+    List<Training> trainings = [];
     var responseClient;
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.wifi ||
@@ -596,7 +712,7 @@ class MeModel with ChangeNotifier {
 
   Future<void> loadDeleteTrainings() async {
     var newInfo = await deleteTrainings();
-    trainings = newInfo;
+    _trainings = newInfo;
   }
 
   Future<List<Training>> deleteTrainings() async {
@@ -604,12 +720,12 @@ class MeModel with ChangeNotifier {
       'apiv': '1',
       'action': 'set',
       'object': 'delworkout',
-      'id_workout': trainings![indexTrainings].id,
+      'id_workout': trainings[indexTrainings].id,
       'authhash': authhash,
     });
 
     var response;
-    var trainingsLoad;
+    List<Training> trainingsLoad = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile ||
@@ -630,7 +746,7 @@ class MeModel with ChangeNotifier {
         }
       } catch (error) {}
     }
-    return trainingsLoad ?? [];
+    return trainingsLoad;
   }
 
   Future<void> fetchAddTrainings(name, time) async {
@@ -649,7 +765,7 @@ class MeModel with ChangeNotifier {
       'action': 'set',
       'object': 'createworkout',
       'authhash': authhash,
-      'id_client': listOfMyClients![index].id,
+      'id_client': listOfMyClients[index].id,
       'name_workout': name,
       'workout_date': time,
     });
@@ -675,76 +791,44 @@ class MeModel with ChangeNotifier {
       } catch (error) {}
     }
   }
+}
 
-  Future<void> fetchGetMonthName() async {
-    loadGetMonthName().then((_) {
-      notifyListeners();
-    });
-  }
+class ExerciseModel with ChangeNotifier {
+  List<ExerciseList> _exercises = [];
+  List<ExerciseList> _data = [];
+  List<Exercises> _listExercises = [];
 
-  Future<void> loadGetMonthName() async {
-    initializeDateFormatting('ru', null);
-    DateTime date = DateTime(selectDay.year, selectDay.month);
-    String monthName = DateFormat.MMMM('ru').format(date);
-    var text = capitalizeFirstLetter(monthName, selectDay.year);
-    selectDayText = text;
-  }
+  ExerciseList _itemExercise = ExerciseList.empty();
 
-  void updateMonthName() {
-    initializeDateFormatting('ru', null);
-    DateTime date = DateTime(selectDay.year, selectDay.month);
-    String monthName = DateFormat.MMMM('ru').format(date);
-    selectDayText = capitalizeFirstLetter(monthName, selectDay.year);
-  }
+  late TrainingModel _trainingModel;
 
-  String capitalizeFirstLetter(String word, int year) {
-    return "${word.substring(0, 1).toUpperCase()}${word.substring(1)} $year";
-  }
+  List<ExerciseList> get exercises => _exercises;
+  List<ExerciseList> get data => _data;
+  List<Exercises> get listExercises => _listExercises;
 
-  Future<List<MadeApproachesChart>> fetchMadeApproachesList() async {
-    var newInfo = await madeApproachesList();
-    madeApproachesChart = newInfo;
+  ExerciseList get itemExercise => _itemExercise;
+  Training get training => _trainingModel.training;
+
+  String get authhash => _trainingModel.authhash;
+
+  bool get isAuth => _trainingModel.isAuth;
+  bool get isClient => _trainingModel.isClient;
+
+  int get idTraining => _trainingModel.idTraining;
+  int get countWorkout => _trainingModel.countWorkout;
+
+  set countWorkout(int value) {
+    _trainingModel._countWorkout = value;
     notifyListeners();
-    return madeApproachesChart!;
   }
 
-  Future<List<MadeApproachesChart>> madeApproachesList() async {
-    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-      'apiv': '1',
-      'action': 'get',
-      'object': isClient! ? 'madeclientapproaches' : 'madetutorapproaches',
-      'authhash': authhash,
-    });
-    dynamic response;
-    dynamic _madeApproachesChart;
-    var connectivityResult = await (Connectivity().checkConnectivity());
+  set itemExercise(ExerciseList value) {
+    _itemExercise = value;
+    notifyListeners();
+  }
 
-    if (connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.ethernet) {
-      response = await http.get(uri);
-      String jsonString = "";
-      if (response.statusCode == 200 && isAuth == true) {
-        var decodedResponse =
-            jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-        jsonString = jsonEncode(decodedResponse['data']);
-      }
-      try {
-        final json = await jsonDecode(jsonString) as List<dynamic>;
-
-        if (json.isNotEmpty) {
-          _madeApproachesChart = json
-              .map((dynamic e) =>
-                  MadeApproachesChart.fromJson(e as Map<String, dynamic>))
-              .toList();
-          countMadeApproachesChart = madeApproachesChart!.length;
-        }
-      } catch (error) {}
-      if (countMadeApproachesChart != 0) {
-        connectionState = ConnectionState.done;
-      }
-    }
-    return _madeApproachesChart ?? [];
+  updateWithTrainingModel(TrainingModel trainingModel) {
+    _trainingModel = trainingModel;
   }
 
   void removeItem(int index, BuildContext context) {
@@ -765,7 +849,7 @@ class MeModel with ChangeNotifier {
               child: const Text('Удалить'),
               onPressed: () {
                 fetchDeleteExercise(index);
-                data!.removeAt(index);
+                data.removeAt(index);
                 Navigator.of(context).pop();
               },
             ),
@@ -784,17 +868,8 @@ class MeModel with ChangeNotifier {
     );
   }
 
-  void addApproaches(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const ApproachesAlertDialog();
-      },
-    );
-  }
-
   void updateExercise(List<ExerciseList> newExercise) {
-    data = newExercise;
+    _data = newExercise;
     notifyListeners();
   }
 
@@ -814,9 +889,9 @@ class MeModel with ChangeNotifier {
       'action': 'set',
       'object': 'delexercise',
       'authhash': authhash,
-      'id': data![index].id,
-      'id_exercise': data![index].idExercise,
-      'id_workout': data![index].idWorkout,
+      'id': data[index].id,
+      'id_exercise': data[index].idExercise,
+      'id_workout': data[index].idWorkout,
     });
 
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -826,27 +901,26 @@ class MeModel with ChangeNotifier {
       await http.get(uri);
 
       try {
-        for (var i = 0; i < data!.length; i++) {
-          data![i].ordering = (i).toString();
+        for (var i = 0; i < data.length; i++) {
+          data[i].ordering = (i).toString();
         }
-        fetchExercise();
+        fetchSetExercise();
       } catch (e) {}
     }
   }
 
-  Future<void> fetchExercise() async {
-    loadExercise().then((_) {
+  Future<void> fetchSetExercise() async {
+    loadSetExercise().then((_) {
       notifyListeners();
     });
   }
 
-  Future<void> loadExercise() async {
+  Future<void> loadSetExercise() async {
     setExercise();
   }
 
   Future<void> setExercise() async {
-    var jsonData = data!.map((exercise) => exercise.toJson()).toList();
-    // print(jsonData);
+    var jsonData = data.map((exercise) => exercise.toJson()).toList();
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -873,15 +947,15 @@ class MeModel with ChangeNotifier {
       try {
         final json = await jsonDecode(jsonString) as List<dynamic>;
         if (json.isNotEmpty) {
-          exercises = json
+          _exercises = json
               .map((dynamic e) =>
                   ExerciseList.fromJson(e as Map<String, dynamic>))
               .toList();
         }
       } catch (error) {}
       try {
-        data = exercises!;
-        exercises = [];
+        _data = exercises;
+        _exercises = [];
         fetchGetExercise();
       } catch (e) {}
     }
@@ -921,16 +995,16 @@ class MeModel with ChangeNotifier {
       try {
         final json = await jsonDecode(jsonString) as List<dynamic>;
         if (json.isNotEmpty) {
-          exercises = json
+          _exercises = json
               .map((dynamic e) =>
                   ExerciseList.fromJson(e as Map<String, dynamic>))
               .toList();
         }
       } catch (error) {}
       try {
-        data = exercises;
-        exercises = [];
-        updateTraining();
+        _data = exercises;
+        _exercises = [];
+        _trainingModel.updateTraining();
       } catch (e) {}
     }
   }
@@ -943,10 +1017,12 @@ class MeModel with ChangeNotifier {
 
   Future<void> loadGetTutorExercise() async {
     var newData = await getTutorExercise();
-    listExercises = newData;
+    if (newData != [] && newData != listExercises) {
+      _listExercises = newData;
+    }
   }
 
-  Future<List<Exercises>?> getTutorExercise() async {
+  Future<List<Exercises>> getTutorExercise() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -954,7 +1030,7 @@ class MeModel with ChangeNotifier {
       'authhash': authhash,
     });
     var response;
-    List<Exercises>? listexercises;
+    List<Exercises> listexercises = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile ||
@@ -975,7 +1051,7 @@ class MeModel with ChangeNotifier {
         }
       } catch (error) {}
     }
-    return listexercises ?? [];
+    return listexercises;
   }
 
   Future<void> fetchExercises(data) async {
@@ -1007,6 +1083,132 @@ class MeModel with ChangeNotifier {
           body: jsonEncode(jsonData));
     }
   }
+}
+
+class ApproachesModel with ChangeNotifier {
+  ConnectionState _connectionState = ConnectionState.waiting;
+
+  List<ClientExercise> _clientExercise = [];
+  List<List<ApproachesList>> _dataApproachesList = [];
+  List<List<MadeApproachesList>> _information = [];
+
+  List<MadeApproachesChart> madeApproachesChart = [];
+  List<ApproachesList> approachesList = [];
+
+  ApproachesList currentData = ApproachesList.empty();
+
+  int countMadeApproachesChart = 0;
+
+  ConnectionState connectionStateWorkout = ConnectionState.waiting;
+
+  String selectDayText = '';
+
+  DateTime todayDay = DateTime.now();
+  DateTime selectDay = DateTime(DateTime.now().year, DateTime.now().month);
+
+  late ExerciseModel _exerciseModel;
+
+  List<List<MadeApproachesList>> get information => _information;
+  List<List<ApproachesList>> get dataApproachesList => _dataApproachesList;
+
+  List<ClientExercise> get clientExercise => _clientExercise;
+
+  ExerciseList get itemExercise => _exerciseModel.itemExercise;
+
+  ConnectionState get connectionState => _connectionState;
+
+  String get authhash => _exerciseModel.authhash;
+
+  bool get isAuth => _exerciseModel.isAuth;
+  bool get isClient => _exerciseModel.isClient;
+
+  int get countWorkout => _exerciseModel.countWorkout;
+
+  int get idTraining => _exerciseModel.idTraining;
+
+  updateWithExerciseModel(ExerciseModel exerciseModel) {
+    _exerciseModel = exerciseModel;
+  }
+
+  Future<void> fetchGetMonthName() async {
+    loadGetMonthName().then((_) {
+      notifyListeners();
+    });
+  }
+
+  Future<void> loadGetMonthName() async {
+    initializeDateFormatting('ru', null);
+    DateTime date = DateTime(selectDay.year, selectDay.month);
+    String monthName = DateFormat.MMMM('ru').format(date);
+    var text = capitalizeFirstLetter(monthName, selectDay.year);
+    selectDayText = text;
+  }
+
+  void updateMonthName() {
+    initializeDateFormatting('ru', null);
+    DateTime date = DateTime(selectDay.year, selectDay.month);
+    String monthName = DateFormat.MMMM('ru').format(date);
+    selectDayText = capitalizeFirstLetter(monthName, selectDay.year);
+  }
+
+  String capitalizeFirstLetter(String word, int year) {
+    return "${word.substring(0, 1).toUpperCase()}${word.substring(1)} $year";
+  }
+
+  Future<List<MadeApproachesChart>> fetchMadeApproachesList() async {
+    var newInfo = await madeApproachesList();
+    madeApproachesChart = newInfo;
+    notifyListeners();
+    return madeApproachesChart;
+  }
+
+  Future<List<MadeApproachesChart>> madeApproachesList() async {
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'get',
+      'object': isClient ? 'madeclientapproaches' : 'madetutorapproaches',
+      'authhash': authhash,
+    });
+    dynamic response;
+    List<MadeApproachesChart> _madeApproachesChart = [];
+    var connectivityResult = await (Connectivity().checkConnectivity());
+
+    if (connectivityResult == ConnectivityResult.wifi ||
+        connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.ethernet) {
+      response = await http.get(uri);
+      String jsonString = "";
+      if (response.statusCode == 200 && isAuth == true) {
+        var decodedResponse =
+            jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+        jsonString = jsonEncode(decodedResponse['data']);
+      }
+      try {
+        final json = await jsonDecode(jsonString) as List<dynamic>;
+
+        if (json.isNotEmpty) {
+          _madeApproachesChart = json
+              .map((dynamic e) =>
+                  MadeApproachesChart.fromJson(e as Map<String, dynamic>))
+              .toList();
+          countMadeApproachesChart = madeApproachesChart.length;
+        }
+      } catch (error) {}
+      if (countMadeApproachesChart != 0) {
+        _connectionState = ConnectionState.done;
+      }
+    }
+    return _madeApproachesChart;
+  }
+
+  void addApproaches(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const ApproachesAlertDialog();
+      },
+    );
+  }
 
   Future<void> fetchSetApproaches() async {
     loadApproaches().then((_) {
@@ -1020,7 +1222,7 @@ class MeModel with ChangeNotifier {
 
   Future<void> setApproaches() async {
     var jsonData =
-        approachesList!.map((aproaches) => aproaches.toJson()).toList();
+        approachesList.map((aproaches) => aproaches.toJson()).toList();
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'set',
@@ -1028,7 +1230,6 @@ class MeModel with ChangeNotifier {
       'authhash': authhash,
     });
     var response;
-    List<ApproachesList> approaches = [];
     try {
       response = await http.post(uri,
           headers: <String, String>{
@@ -1044,14 +1245,11 @@ class MeModel with ChangeNotifier {
       }
       try {
         final json = await jsonDecode(jsonString) as List<dynamic>;
-        approaches = json
+        approachesList = json
             .map((dynamic e) =>
                 ApproachesList.fromJson(e as Map<String, dynamic>))
             .toList();
       } catch (error) {}
-      try {
-        approachesList = approaches;
-      } catch (e) {}
     } catch (error) {}
   }
 
@@ -1071,14 +1269,14 @@ class MeModel with ChangeNotifier {
       'action': 'set',
       'object': 'delapproaches',
       'authhash': authhash,
-      'id': approachesList![i].id,
-      'id_exercise_workout': approachesList![i].idExerciseWorkout,
+      'id': approachesList[i].id,
+      'id_exercise_workout': approachesList[i].idExerciseWorkout,
     });
     await http.get(uri);
 
     try {
-      for (var i = 0; i < approachesList!.length; i++) {
-        approachesList![i].numberApproaches = (i + 1).toString();
+      for (var i = 0; i < approachesList.length; i++) {
+        approachesList[i].numberApproaches = (i + 1).toString();
       }
       fetchSetApproaches();
     } catch (e) {}
@@ -1103,31 +1301,25 @@ class MeModel with ChangeNotifier {
       'id_exercise_workout': itemExercise.id,
     });
     var response;
-    List<ApproachesList> approaches = [];
 
     try {
       response = await http.get(uri);
     } catch (error) {}
     String jsonString = "";
-    // print("привет ${utf8.decode(response.bodyBytes)}");
     if (response.statusCode == 200 && isAuth == true) {
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       jsonString = jsonEncode(decodedResponse['data']);
     }
 
-    // print(jsonString);
     try {
       final json = await jsonDecode(jsonString) as List<dynamic>;
       if (json.length > 0) {
-        approaches = json
+        approachesList = json
             .map((dynamic e) =>
                 ApproachesList.fromJson(e as Map<String, dynamic>))
             .toList();
       }
     } catch (error) {}
-    try {
-      approachesList = (approaches == null) ? [] : approaches;
-    } catch (e) {}
   }
 
   void removeItemApproaches(BuildContext context, int index) {
@@ -1148,9 +1340,9 @@ class MeModel with ChangeNotifier {
               child: const Text('Удалить'),
               onPressed: () {
                 fetchDeleteApproaches(index);
-                approachesList!.removeAt(index);
-                for (var i = 0; i < approachesList!.length; i++) {
-                  approachesList![i].numberApproaches = (i + 1).toString();
+                approachesList.removeAt(index);
+                for (var i = 0; i < approachesList.length; i++) {
+                  approachesList[i].numberApproaches = (i + 1).toString();
                 }
                 Navigator.of(context).pop();
               },
@@ -1159,6 +1351,26 @@ class MeModel with ChangeNotifier {
         );
       },
     );
+  }
+
+  Future<void> fetchApproachers() async {
+    List<List<Map<String, dynamic>>> jsonData = information
+        .map<List<Map<String, dynamic>>>((infoList) => infoList
+            .map<Map<String, dynamic>>((info) => info.toJson())
+            .toList())
+        .toList();
+
+    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+      'apiv': '1',
+      'action': 'set',
+      'object': 'madeapproaches',
+      'authhash': authhash,
+    });
+    await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(jsonData));
   }
 
   Future<void> fetchClientTrainings() async {
@@ -1171,7 +1383,46 @@ class MeModel with ChangeNotifier {
     clientTrainings();
   }
 
-  Future<void> clientTrainings() async {
+  // Future<void> clientTrainings() async {
+  //   Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+  //     'apiv': '1',
+  //     'action': 'get',
+  //     'object': 'clientexercise',
+  //     'authhash': authhash,
+  //     'id_workout': idTraining,
+  //   });
+  //   var response;
+
+  //   var connectivityResult = await (Connectivity().checkConnectivity());
+  //   print(connectivityResult);
+  //   if (connectivityResult == ConnectivityResult.wifi ||
+  //       connectivityResult == ConnectivityResult.mobile ||
+  //       connectivityResult == ConnectivityResult.ethernet) {
+  //     response = await http.get(uri);
+  //     print(utf8.decode(response.bodyBytes));
+  //     String jsonString = "";
+  //     if (response.statusCode == 200 && isAuth == true) {
+  //       var decodedResponse =
+  //           jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+  //       jsonString = jsonEncode(decodedResponse['data']);
+  //     }
+
+  //     try {
+  //       final json = await jsonDecode(jsonString) as List<dynamic>;
+  //       if (json.isNotEmpty) {
+  //         _clientExercise = json
+  //             .map((dynamic e) => ClientExercise.fromJson(
+  //                   e as Map<String, dynamic>,
+  //                 ))
+  //             .toList();
+  //         _exerciseModel.countWorkout = clientExercise.length;
+  //         fetchListClient();
+  //       }
+  //     } catch (error) {}
+  //   }
+  // }
+
+  Future<List<List<ApproachesList>>> clientTrainings() async {
     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
       'apiv': '1',
       'action': 'get',
@@ -1180,49 +1431,28 @@ class MeModel with ChangeNotifier {
       'id_workout': idTraining,
     });
     var response;
-
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
-    if (connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.ethernet) {
+    try {
       response = await http.get(uri);
-      print(utf8.decode(response.bodyBytes));
-      String jsonString = "";
-      if (response.statusCode == 200 && isAuth == true) {
-        var decodedResponse =
-            jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-        jsonString = jsonEncode(decodedResponse['data']);
-      }
-
-      try {
-        final json = await jsonDecode(jsonString) as List<dynamic>;
-        if (json.isNotEmpty) {
-          clientExercise = json
-              .map((dynamic e) => ClientExercise.fromJson(
-                    e as Map<String, dynamic>,
-                  ))
-              .toList();
-          countWorkout = clientExercise!.length;
-          fetchListClient();
-        }
-      } catch (error) {}
+    } catch (error) {}
+    String jsonString = "";
+    if (response.statusCode == 200 && isAuth == true) {
+      var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+      jsonString = jsonEncode(decodedResponse['data']);
     }
-  }
+    try {
+      final json = await jsonDecode(jsonString) as List<dynamic>;
+      if (json.isNotEmpty) {
+        _clientExercise = json
+            .map((dynamic e) => ClientExercise.fromJson(
+                  e as Map<String, dynamic>,
+                ))
+            .toList();
+        _exerciseModel.countWorkout = clientExercise.length;
+      }
+    } catch (error) {}
 
-  Future<void> fetchListClient() async {
-    loadListClient().then((_) {
-      notifyListeners();
-    });
-  }
-
-  Future<void> loadListClient() async {
-    listClient();
-  }
-
-  Future<void> listClient() async {
     var index = 0;
-    for (var element in clientExercise!) {
+    for (var element in clientExercise) {
       Uri uriApproaches = Uri.http('gymapp.amadeya.net', '/api.php', {
         'apiv': '1',
         'action': 'get',
@@ -1243,9 +1473,61 @@ class MeModel with ChangeNotifier {
       try {
         final json = await jsonDecode(jsonStringApproaches) as List<dynamic>;
 
-        if (approachesListClient!.length <= index) {
-          approachesListClient!.add([]);
-          approachesListClient![index].addAll(json
+        if (json.isNotEmpty) {
+          if (_dataApproachesList.length <= index) {
+            _dataApproachesList.add([]);
+
+            _dataApproachesList[index].addAll(json
+                .map((dynamic e) =>
+                    ApproachesList.fromJson(e as Map<String, dynamic>))
+                .toList());
+          }
+          index++;
+        }
+      } catch (error) {}
+    }
+    if (clientExercise.isNotEmpty && _dataApproachesList.isNotEmpty) {
+      _connectionState = ConnectionState.done;
+    }
+    return _dataApproachesList;
+  }
+
+  Future<void> fetchListClient() async {
+    loadListClient().then((_) {
+      notifyListeners();
+    });
+  }
+
+  Future<void> loadListClient() async {
+    listClient();
+  }
+
+  Future<void> listClient() async {
+    var index = 0;
+    for (var element in clientExercise) {
+      Uri uriApproaches = Uri.http('gymapp.amadeya.net', '/api.php', {
+        'apiv': '1',
+        'action': 'get',
+        'object': 'getapproaches',
+        'authhash': authhash,
+        'id_exercise_workout': element.id,
+      });
+      var responseApproaches;
+      try {
+        responseApproaches = await http.get(uriApproaches);
+      } catch (error) {}
+      String jsonStringApproaches = "";
+      if (responseApproaches.statusCode == 200 && isAuth == true) {
+        var decodedResponseApproaches =
+            jsonDecode(utf8.decode(responseApproaches.bodyBytes)) as Map;
+        jsonStringApproaches = jsonEncode(decodedResponseApproaches['data']);
+      }
+      try {
+        final json = await jsonDecode(jsonStringApproaches) as List<dynamic>;
+
+        if (_dataApproachesList.length <= index) {
+          _dataApproachesList.add([]);
+          _dataApproachesList[index].addAll(json
               .map((dynamic e) =>
                   ApproachesList.fromJson(e as Map<String, dynamic>))
               .toList());
@@ -1255,187 +1537,25 @@ class MeModel with ChangeNotifier {
     }
   }
 
-  Future<void> fetchApproachers() async {
-    List<List<Map<String, dynamic>>> jsonData = information!
-        .map<List<Map<String, dynamic>>>((infoList) => infoList
-            .map<Map<String, dynamic>>((info) => info.toJson())
-            .toList())
-        .toList();
+//   Future<void> fetchApproachers() async {
+//     List<List<Map<String, dynamic>>> jsonData = information
+//         .map<List<Map<String, dynamic>>>((infoList) => infoList
+//             .map<Map<String, dynamic>>((info) => info.toJson())
+//             .toList())
+//         .toList();
 
-    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-      'apiv': '1',
-      'action': 'set',
-      'object': 'madeapproaches',
-      'authhash': authhash,
-    });
-    await http.post(uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(jsonData));
-  }
-
-  void Function()? onStepContinue(context) {
-    if (approachesListClient != null) {
-      if (currentSubStep < approachesListClient![currentStep].length - 1) {
-        if (weightDoneApproaches.text != '' && countDoneApproaches.text != '') {
-          if (information!.length <= currentStep) {
-            information!.add([]);
-          }
-          if (currentSubStep == information![currentStep].length) {
-            information![currentStep].add(
-              MadeApproachesList(
-                idApproaches:
-                    approachesListClient![currentStep][currentSubStep].id,
-                weight: weightDoneApproaches.text,
-                countList: countDoneApproaches.text,
-              ),
-            );
-          } else {
-            information![currentStep][currentSubStep] = MadeApproachesList(
-              idApproaches:
-                  approachesListClient![currentStep][currentSubStep].id,
-              weight: weightDoneApproaches.text,
-              countList: countDoneApproaches.text,
-            );
-          }
-          currentSubStep++;
-          currentData = approachesListClient![currentStep][currentSubStep];
-          if (information![currentStep].length > currentSubStep) {
-            countDoneApproaches.text =
-                information![currentStep][currentSubStep].countList;
-            weightDoneApproaches.text =
-                information![currentStep][currentSubStep].weight;
-          } else {
-            countDoneApproaches.clear();
-            weightDoneApproaches.clear();
-          }
-        }
-      } else {
-        if (currentStep < approachesListClient!.length - 1) {
-          if (weightDoneApproaches.text != '' &&
-              countDoneApproaches.text != '') {
-            if (currentSubStep == information![currentStep].length) {
-              information![currentStep].add(
-                MadeApproachesList(
-                  idApproaches:
-                      approachesListClient![currentStep][currentSubStep].id,
-                  weight: weightDoneApproaches.text,
-                  countList: countDoneApproaches.text,
-                ),
-              );
-            } else {
-              information![currentStep][currentSubStep] = MadeApproachesList(
-                idApproaches:
-                    approachesListClient![currentStep][currentSubStep].id,
-                weight: weightDoneApproaches.text,
-                countList: countDoneApproaches.text,
-              );
-            }
-            if ((information![currentStep].length - 1 == currentSubStep) &&
-                (information!.length > currentStep + 1)) {
-              if (information![currentStep + 1].length > 0) {
-                countDoneApproaches.text =
-                    information![currentStep + 1][0].countList;
-                weightDoneApproaches.text =
-                    information![currentStep + 1][0].weight;
-              }
-            } else {
-              countDoneApproaches.clear();
-              weightDoneApproaches.clear();
-            }
-            currentStep++;
-            currentSubStep = 0;
-            currentData = approachesListClient![currentStep][currentSubStep];
-          }
-        } else {
-          if (weightDoneApproaches.text != '' &&
-              countDoneApproaches.text != '') {
-            if (currentSubStep > information![currentStep].length - 1) {
-              information![currentStep].add(
-                MadeApproachesList(
-                  idApproaches:
-                      approachesListClient![currentStep][currentSubStep].id,
-                  weight: weightDoneApproaches.text,
-                  countList: countDoneApproaches.text,
-                ),
-              );
-            } else {
-              information![currentStep][currentSubStep] = MadeApproachesList(
-                idApproaches:
-                    approachesListClient![currentStep][currentSubStep].id,
-                weight: weightDoneApproaches.text,
-                countList: countDoneApproaches.text,
-              );
-            }
-            if (information![currentStep].length > currentSubStep) {
-              countDoneApproaches.text =
-                  information![currentStep][currentSubStep].countList;
-              weightDoneApproaches.text =
-                  information![currentStep][currentSubStep].weight;
-            } else {
-              countDoneApproaches.clear();
-              weightDoneApproaches.clear();
-            }
-            _showDialog(context);
-          }
-        }
-      }
-    }
-  }
-
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            "Закончить прохождение тренировки",
-            style: TextStyle(color: Colors.black87),
-          ),
-          content: const Text(
-            "Отменить сохранение тренировки нельзя!",
-            style: TextStyle(color: Colors.black54),
-          ),
-          actions: [
-            TextButton(
-              child: const Text("Отмена"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text("Сохранить"),
-              onPressed: () {
-                fetchApproachers();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void Function()? onStepCancel() {
-    if (currentSubStep > 0) {
-      currentSubStep--;
-      currentData = approachesListClient![currentStep][currentSubStep];
-      countDoneApproaches.text =
-          information![currentStep][currentSubStep].countList;
-      weightDoneApproaches.text =
-          information![currentStep][currentSubStep].weight;
-    } else if (currentStep > 0) {
-      currentStep--;
-      currentSubStep = approachesListClient![currentStep].length - 1;
-      currentData = approachesListClient![currentStep][currentSubStep];
-      countDoneApproaches.text =
-          information![currentStep][currentSubStep].countList;
-      weightDoneApproaches.text =
-          information![currentStep][currentSubStep].weight;
-    }
-  }
+//     Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
+//       'apiv': '1',
+//       'action': 'set',
+//       'object': 'madeapproaches',
+//       'authhash': authhash,
+//     });
+//     await http.post(uri,
+//         headers: <String, String>{
+//           'Content-Type': 'application/json; charset=UTF-8',
+//         },
+//         body: jsonEncode(jsonData));
+//   }
 }
 
 dynamic getTutorsList = 'строка не изменена';
@@ -1474,6 +1594,13 @@ class User {
       cost: json['cost'] as String?,
     );
   }
+
+  User.empty()
+      : id = '',
+        gender = '',
+        age = '',
+        number = '',
+        name = '';
 }
 
 class Training {
@@ -1544,6 +1671,14 @@ class Training {
       nameIcon: nameIcon,
     );
   }
+
+  Training.empty()
+      : id = '',
+        nameWorkout = '',
+        dateTime = '',
+        typeWorkout = '',
+        nameIcon = '',
+        colors = 0xFFFC571D;
 }
 
 class ExerciseList {
@@ -1583,6 +1718,14 @@ class ExerciseList {
       'ordering': int.parse(ordering),
     };
   }
+
+  ExerciseList.empty()
+      : id = '',
+        idWorkout = '',
+        idExercise = '',
+        nameExercise = '',
+        muscleGroup = '',
+        ordering = '';
 }
 
 class Exercises {
@@ -1646,6 +1789,13 @@ class ApproachesList {
       'count_list': int.parse(countList),
     };
   }
+
+  ApproachesList.empty()
+      : id = '',
+        idExerciseWorkout = '',
+        numberApproaches = '',
+        weight = '',
+        countList = '';
 }
 
 class MadeApproachesList {

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'all_class.dart';
 import 'constants.dart';
@@ -43,76 +42,89 @@ class _MainState extends State<Main> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => MeModel()),
+        ChangeNotifierProxyProvider<MeModel, UsersModel>(
+          create: (_) => UsersModel(),
+          update: (context, meModel, usersModel) =>
+              usersModel!..updateWithMeModel(meModel),
+        ),
+        ChangeNotifierProxyProvider<UsersModel, TrainingModel>(
+          create: (_) => TrainingModel(),
+          update: (context, usersModel, trainingModel) =>
+              trainingModel!..updateWithUsersModel(usersModel),
+        ),
+        ChangeNotifierProxyProvider<TrainingModel, ExerciseModel>(
+          create: (_) => ExerciseModel(),
+          update: (context, trainingModel, exerciseModel) =>
+              exerciseModel!..updateWithTrainingModel(trainingModel),
+        ),
+        ChangeNotifierProxyProvider<ExerciseModel, ApproachesModel>(
+          create: (_) => ApproachesModel(),
+          update: (context, exerciseModel, approachesModel) =>
+              approachesModel!..updateWithExerciseModel(exerciseModel),
+        ),
       ],
       child: Consumer<MeModel>(
         builder: (context, meModel, child) {
           if (!meModel.isAuth) meModel.getAuth();
-          print("Никита ${meModel.isLoad}");
           return MaterialApp(
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                SfGlobalLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale('ru'),
-              ],
-              locale: const Locale('ru'),
-              debugShowCheckedModeBanner: false,
-              title: 'Pocket coach',
-              theme: ThemeData(
-                scaffoldBackgroundColor: kBackgroundColor,
-                primaryColor: kNavBarIconColor,
-                textTheme: Theme.of(context)
-                    .textTheme
-                    .apply(bodyColor: kTextFieldColor),
-                appBarTheme: const AppBarTheme(
-                  centerTitle: true,
-                  backgroundColor: kPrimaryColor,
-                  titleTextStyle: TextStyle(
-                    color: kWhiteColor,
-                    fontSize: 24,
-                  ),
-                  elevation: 4,
-                  shadowColor: Colors.black,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              SfGlobalLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('ru'),
+            ],
+            locale: const Locale('ru'),
+            debugShowCheckedModeBanner: false,
+            title: 'Pocket coach',
+            theme: ThemeData(
+              scaffoldBackgroundColor: kBackgroundColor,
+              primaryColor: kNavBarIconColor,
+              textTheme:
+                  Theme.of(context).textTheme.apply(bodyColor: kTextFieldColor),
+              appBarTheme: const AppBarTheme(
+                centerTitle: true,
+                backgroundColor: kPrimaryColor,
+                titleTextStyle: TextStyle(
+                  color: kWhiteColor,
+                  fontSize: 24,
                 ),
-                inputDecorationTheme: InputDecorationTheme(
-                  filled: true,
-                  fillColor: kWhiteColor,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                  hintStyle: const TextStyle(color: kIconMessage),
-                  labelStyle: const TextStyle(color: Colors.black),
-                  errorStyle: const TextStyle(color: Colors.red),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: kPrimaryColor),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: kTextColor),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                elevation: 4,
+                shadowColor: Colors.black,
+              ),
+              inputDecorationTheme: InputDecorationTheme(
+                filled: true,
+                fillColor: kWhiteColor,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                hintStyle: const TextStyle(color: kIconMessage),
+                labelStyle: const TextStyle(color: Colors.black),
+                errorStyle: const TextStyle(color: Colors.red),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: kPrimaryColor),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                textSelectionTheme: const TextSelectionThemeData(
-                  cursorColor: kPrimaryColor,
-                  selectionColor: kPrimaryColor,
-                  selectionHandleColor: kPrimaryColor,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: kTextColor),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              // home: meModel.isLoad
-              //     ? meModel.isAuth
-              //         ? const MainApp()
-              //         : const AuthRegistrationScreen()
-              //     : meModel.isAuth
-              //         ? Container()
-              //         : const AuthRegistrationScreen(),
-
-              home: meModel.isAuth
-                  ? meModel.isLoad
-                      ? const MainApp()
-                      : Container()
-                  : const AuthRegistrationScreen());
+              textSelectionTheme: const TextSelectionThemeData(
+                cursorColor: kPrimaryColor,
+                selectionColor: kPrimaryColor,
+                selectionHandleColor: kPrimaryColor,
+              ),
+            ),
+            home: meModel.isLoad
+                ? meModel.isAuth
+                    ? const MainApp()
+                    : const AuthRegistrationScreen()
+                : meModel.isAuth
+                    ? Container()
+                    : const AuthRegistrationScreen(),
+          );
         },
       ),
     );

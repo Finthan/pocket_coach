@@ -33,7 +33,7 @@ class _BodyHomeScreenState extends State<BodyHomeScreen> {
                   color: kPrimaryColor,
                 ),
                 HeaderWithSearchBox(size: size),
-                meModel.isClient ?? false
+                meModel.isClient
                     ? Column(children: [
                         TitleWithMoreBtn(
                           title: "Тренера",

@@ -30,29 +30,28 @@ class _CoachMan extends State<CoachMan> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
         return SizedBox(
           width: widget.size.width,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                if (meModel.listOfTutors != null)
-                  for (var i = 0; i < meModel.listOfTutors!.length; i++)
-                    Coach(
-                      index: i,
-                      length: meModel.listOfTutors!.length,
-                      press: () {
-                        meModel.indexCoachMan = i;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const TutorScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                for (var i = 0; i < usersModel.listOfTutors.length; i++)
+                  Coach(
+                    index: i,
+                    length: usersModel.listOfTutors.length,
+                    press: () {
+                      usersModel.indexCoachMan = i;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TutorScreen(),
+                        ),
+                      );
+                    },
+                  ),
               ],
             ),
           ),

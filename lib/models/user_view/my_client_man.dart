@@ -30,11 +30,9 @@ class _MyClientManState extends State<MyClientMan> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
-        var length = meModel.listOfMyClients != null
-            ? meModel.listOfMyClients!.length
-            : 0;
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
+        var length = usersModel.listOfMyClients.length;
         return SizedBox(
           width: widget.size.width,
           child: SingleChildScrollView(
@@ -47,7 +45,7 @@ class _MyClientManState extends State<MyClientMan> {
                     index: i,
                     length: length,
                     press: () {
-                      meModel.index = i;
+                      usersModel.index = i;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -84,8 +82,8 @@ class ClientManWidget extends StatefulWidget {
 class _ClientManWidgetState extends State<ClientManWidget> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
         return GestureDetector(
           onTap: widget.press,
           child: Container(
@@ -121,13 +119,13 @@ class _ClientManWidgetState extends State<ClientManWidget> {
                             children: [
                               TextSpan(
                                 text:
-                                    "${meModel.listOfMyClients![widget.index].name}\n"
+                                    "${usersModel.listOfMyClients[widget.index].name}\n"
                                         .toUpperCase(),
                                 style: const TextStyle(color: kTextColor),
                               ),
                               TextSpan(
                                 text:
-                                    "${meModel.listOfMyClients![widget.index].cardnumber}\n"
+                                    "${usersModel.listOfMyClients[widget.index].cardnumber}\n"
                                         .toUpperCase(),
                                 style: TextStyle(
                                   color: kPrimaryColor.withOpacity(0.5),
@@ -139,7 +137,7 @@ class _ClientManWidgetState extends State<ClientManWidget> {
                       ),
                       const Spacer(),
                       Text(
-                        meModel.listOfMyClients![widget.index].age,
+                        usersModel.listOfMyClients[widget.index].age,
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium!

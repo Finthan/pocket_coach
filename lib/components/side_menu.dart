@@ -5,8 +5,6 @@ import 'package:rive/rive.dart';
 import '../../../constants.dart';
 import '../all_class.dart';
 import '../models/rive_asset.dart';
-import '../screens/side_screens/help/help.dart';
-import '../screens/side_screens/nutrition_information/nutrition_information.dart';
 import '../screens/side_screens/settings/settings.dart';
 import '../screens/side_screens/statistics/statistics.dart';
 import '../utils/rive_utils.dart';
@@ -27,9 +25,9 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MeModel>(builder: (context, meModel, child) {
-      String name = meModel.me!.name;
-      String? cardnumber = meModel.me!.cardnumber;
-      String? typeOfTraining = meModel.me!.typeOfTraining;
+      String name = meModel.me.name;
+      String? cardnumber = meModel.me.cardnumber;
+      String? typeOfTraining = meModel.me.typeOfTraining;
       return Scaffold(
         backgroundColor: kBackgroundSideColor,
         body: SizedBox(

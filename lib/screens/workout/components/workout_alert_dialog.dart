@@ -21,7 +21,7 @@ class _WorkoutAlertDialogState extends State<WorkoutAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(builder: (context, meModel, child) {
+    return Consumer<TrainingModel>(builder: (context, trainingModel, child) {
       String time;
       return AlertDialog(
         title: const Text('Добавить тренировку?'),
@@ -80,7 +80,7 @@ class _WorkoutAlertDialogState extends State<WorkoutAlertDialog> {
               time = widget.details.date
                   .toString()
                   .substring(0, widget.details.date.toString().length - 13);
-              meModel.fetchAddTrainings(name, time);
+              trainingModel.fetchAddTrainings(name, time);
               Navigator.of(context).pop();
             },
           ),

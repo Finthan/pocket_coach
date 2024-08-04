@@ -18,7 +18,8 @@ class _ApproachesAlertDialogState extends State<ApproachesAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(builder: (context, meModel, child) {
+    return Consumer<ApproachesModel>(
+        builder: (context, approachesModel, child) {
       return AlertDialog(
         title: const Text(
           'Добавить элемент',
@@ -110,31 +111,33 @@ class _ApproachesAlertDialogState extends State<ApproachesAlertDialog> {
             onPressed: () {
               setState(() {
                 var isNotAddNumber = true;
-                if (meModel.approachesList!.length <
+                if (approachesModel.approachesList.length <
                     int.parse(_numberApproachesController.text)) {
                   _numberApproachesController.text =
-                      (meModel.approachesList!.length + 1).toString();
+                      (approachesModel.approachesList.length + 1).toString();
                 }
-                for (var i = 0; i < meModel.approachesList!.length; i++) {
-                  if (meModel.approachesList![i].numberApproaches ==
+                for (var i = 0;
+                    i < approachesModel.approachesList.length;
+                    i++) {
+                  if (approachesModel.approachesList[i].numberApproaches ==
                       _numberApproachesController.text) {
                     isNotAddNumber = false;
                   }
                 }
                 if (isNotAddNumber) {
-                  meModel.approachesList!.add(ApproachesList(
+                  approachesModel.approachesList.add(ApproachesList(
                     id: '0',
-                    idExerciseWorkout: meModel.itemExercise.id,
+                    idExerciseWorkout: approachesModel.itemExercise.id,
                     numberApproaches: _numberApproachesController.text,
                     weight: _weightController.text,
                     countList: _countController.text.toString(),
                   ));
                 }
-                meModel.fetchSetApproaches();
+                approachesModel.fetchSetApproaches();
               });
 
-              for (int i = 0; i < meModel.approachesList!.length; i++) {
-                meModel.approachesList![i].numberApproaches =
+              for (int i = 0; i < approachesModel.approachesList.length; i++) {
+                approachesModel.approachesList[i].numberApproaches =
                     (i + 1).toString();
               }
               Navigator.of(context).pop();

@@ -23,8 +23,8 @@ class Coach extends StatefulWidget {
 class _CoachState extends State<Coach> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
         return GestureDetector(
           onTap: widget.press,
           child: Container(
@@ -59,15 +59,15 @@ class _CoachState extends State<Coach> {
                           children: [
                             TextSpan(
                               text:
-                                  "${meModel.listOfTutors![widget.index].name}\n"
+                                  "${usersModel.listOfTutors[widget.index].name}\n"
                                       .toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color:
                                       kTextColor), //Theme.of(context).textTheme.bodyMedium,
                             ),
                             TextSpan(
-                              text: meModel
-                                  .listOfTutors![widget.index].typeOfTraining!
+                              text: usersModel
+                                  .listOfTutors[widget.index].typeOfTraining!
                                   .toUpperCase(),
                               style: TextStyle(
                                 color: kPrimaryColor.withOpacity(0.5),
@@ -79,7 +79,7 @@ class _CoachState extends State<Coach> {
                     ),
                     const Spacer(),
                     Text(
-                      '₽${int.parse(meModel.listOfTutors![widget.index].cost!)}',
+                      '₽${int.parse(usersModel.listOfTutors[widget.index].cost!)}',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!

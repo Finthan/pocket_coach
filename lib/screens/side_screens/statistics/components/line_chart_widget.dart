@@ -21,16 +21,16 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   int? selectedSpotIndex;
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
-        meModel.fetchMadeApproachesList();
+    return Consumer<ApproachesModel>(
+      builder: (context, approachesModel, child) {
+        approachesModel.fetchMadeApproachesList();
         List<FlSpot> spots = [];
 
         List<double> weight = [];
         double i = 1;
 
-        for (var element in meModel.madeApproachesChart!) {
-          var date = meModel.selectDay.toString();
+        for (var element in approachesModel.madeApproachesChart) {
+          var date = approachesModel.selectDay.toString();
           String dateString = date.substring(0, date.length - 16);
           String elementDateSting =
               element.workoutDate.substring(0, element.workoutDate.length - 3);
@@ -103,7 +103,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           backgroundColor: kWhiteColor,
           lineBarsData: [barData],
           showingTooltipIndicators:
-              (meModel.madeApproachesChart! != [] && spots == [])
+              (approachesModel.madeApproachesChart != [] && spots == [])
                   ? [
                       for (int index in [2, 4])
                         ShowingTooltipIndicators(

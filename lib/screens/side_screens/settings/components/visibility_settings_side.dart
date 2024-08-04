@@ -91,17 +91,17 @@ class _VisibilitySettingsSideState extends State<VisibilitySettingsSide> {
                             Navigator.pop(context);
                             AuthNotification(false).dispatch(context);
                           },
-                          child: Text('Выйти'),
+                          child: const Text('Выйти'),
                         ),
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text('Отмена'),
+                          child: const Text('Отмена'),
                         ),
                       ],
-                      title: Text('Выйти из аккаунта?'),
-                      contentPadding: EdgeInsets.all(20.0),
+                      title: const Text('Выйти из аккаунта?'),
+                      contentPadding: const EdgeInsets.all(20.0),
                     ),
                   );
                 },

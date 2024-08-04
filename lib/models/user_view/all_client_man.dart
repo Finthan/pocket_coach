@@ -30,11 +30,9 @@ class _AllClientMan extends State<AllClientMan> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
-        var length = meModel.listOfMyClients != null
-            ? meModel.listOfMyClients!.length
-            : 0;
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
+        var length = usersModel.listOfAllClients.length;
         return SizedBox(
           width: widget.size.width,
           child: SingleChildScrollView(
@@ -45,17 +43,11 @@ class _AllClientMan extends State<AllClientMan> {
                 for (var i = 0; i < length; i++)
                   GestureDetector(
                     onTap: () {
+                      usersModel.indexAllClients = i;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ClientScreen(
-                            id: meModel.listOfMyClients![i].id,
-                            title: meModel.listOfMyClients![i].name,
-                            age: meModel.listOfMyClients![i].age,
-                            number: meModel.listOfMyClients![i].number,
-                            status: meModel.listOfMyClients![i].cardnumber!,
-                            image: 'assets/images/men_0.jpg',
-                          ),
+                          builder: (context) => const ClientScreen(),
                         ),
                       );
                     },
@@ -64,8 +56,9 @@ class _AllClientMan extends State<AllClientMan> {
                         left: 20,
                         top: 20,
                         bottom: 20,
-                        right:
-                            (i == meModel.listOfMyClients!.length - 1) ? 20 : 0,
+                        right: (i == usersModel.listOfMyClients.length - 1)
+                            ? 20
+                            : 0,
                       ),
                       child: Column(
                         children: <Widget>[
@@ -94,14 +87,14 @@ class _AllClientMan extends State<AllClientMan> {
                                       children: [
                                         TextSpan(
                                           text:
-                                              "${meModel.listOfMyClients![i].name}\n"
+                                              "${usersModel.listOfMyClients[i].name}\n"
                                                   .toUpperCase(),
                                           style: const TextStyle(
                                               color: kTextColor),
                                         ),
                                         TextSpan(
                                           text:
-                                              "${meModel.listOfMyClients![i].cardnumber}\n"
+                                              "${usersModel.listOfMyClients[i].cardnumber}\n"
                                                   .toUpperCase(),
                                           style: TextStyle(
                                             color:
@@ -114,7 +107,7 @@ class _AllClientMan extends State<AllClientMan> {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  meModel.listOfMyClients![i].age,
+                                  usersModel.listOfMyClients[i].age,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!

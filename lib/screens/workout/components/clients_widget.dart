@@ -9,10 +9,7 @@ import '../../../all_class.dart';
 class ClientsWidget extends StatefulWidget {
   const ClientsWidget({
     super.key,
-    required this.id,
   });
-
-  final String id;
 
   @override
   State<ClientsWidget> createState() => _ClientsWidget();
@@ -73,8 +70,9 @@ class _ClientsWidget extends State<ClientsWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
+        int index = usersModel.indexAllClients;
         return Padding(
           padding: const EdgeInsets.only(top: 200),
           child: Column(
@@ -99,7 +97,7 @@ class _ClientsWidget extends State<ClientsWidget>
                     child: Text(
                       getMonthName(
                           selectDay.day, selectDay.month, selectDay.year),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: kWhiteColor,
                         fontSize: 20,
                       ),
@@ -155,8 +153,8 @@ class _ClientsWidget extends State<ClientsWidget>
                         'apiv': '1',
                         'action': 'set',
                         'object': 'createworkout',
-                        'id_tutor': meModel.me!.idTutor,
-                        'id_client': widget.id,
+                        'id_tutor': usersModel.me.idTutor,
+                        'id_client': usersModel.listOfAllClients[index].id,
                         'name_workout': nameWorkout,
                         'workout_date':
                             "${selectDay.year}-${selectDay.month}-${selectDay.day}",

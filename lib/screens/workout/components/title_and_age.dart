@@ -20,15 +20,15 @@ class TitleAndPrice extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: context.watch<MeModel>().me!.name,
+                  text: context.watch<MeModel>().me.name,
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: "",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                     fontWeight: FontWeight.w300,
@@ -39,7 +39,7 @@ class TitleAndPrice extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            context.watch<MeModel>().me!.age,
+            context.watch<MeModel>().me.age,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Colors.white,
                 ),

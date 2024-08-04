@@ -70,17 +70,15 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(builder: (context, meModel, child) {
-      meModel.me!.cardnumber == null
+    return Consumer<UsersModel>(builder: (context, usersModel, child) {
+      usersModel.me.cardnumber == null
           ? {
-              meModel.isClient = false,
-              meModel.fetchMyClients(),
-              meModel.fetchAllClients(),
+              usersModel.fetchMyClients(),
+              usersModel.fetchAllClients(),
             }
           : {
-              meModel.isClient = true,
-              meModel.fetchMyTutor(),
-              meModel.fetchAllTutors(),
+              usersModel.fetchMyTutor(),
+              usersModel.fetchAllTutors(),
             };
       return Scaffold(
         backgroundColor: kBackgroundSideColor,
@@ -106,7 +104,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(
                         Radius.circular(isSideMenuClosed ? 0 : 25)),
-                    child: meModel.isClient!
+                    child: usersModel.isClient
                         ? navBarButton[numberScreen]
                         : const HomeScreen(),
                   ),
@@ -141,7 +139,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
             ),
           ],
         ),
-        bottomNavigationBar: meModel.isClient ?? false
+        bottomNavigationBar: usersModel.isClient
             ? Transform.translate(
                 offset: Offset(0, 100 * animation.value),
                 child: Container(

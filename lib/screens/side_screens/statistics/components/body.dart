@@ -32,10 +32,10 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
-        meModel.fetchGetMonthName();
-        meModel.fetchMadeApproachesList();
+    return Consumer<ApproachesModel>(
+      builder: (context, approachesModel, child) {
+        approachesModel.fetchGetMonthName();
+        approachesModel.fetchMadeApproachesList();
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -62,29 +62,31 @@ class _BodyState extends State<Body> {
                     child: GestureDetector(
                       onTap: () {
                         final initialDateTime = DateTime(
-                            meModel.selectDay.year, meModel.selectDay.month, 1);
+                            approachesModel.selectDay.year,
+                            approachesModel.selectDay.month,
+                            1);
                         DatePicker.showDatePicker(
                           context,
                           pickerMode: DateTimePickerMode.date,
                           initialDateTime: initialDateTime,
                           minDateTime: DateTime(
-                            meModel.todayDay.year - 1,
+                            approachesModel.todayDay.year - 1,
                           ),
                           maxDateTime: DateTime(
-                            meModel.todayDay.year,
-                            meModel.todayDay.month,
+                            approachesModel.todayDay.year,
+                            approachesModel.todayDay.month,
                           ),
                           onConfirm: (dateTime, _) {
-                            meModel.selectDay = DateTime(
+                            approachesModel.selectDay = DateTime(
                               dateTime.year,
                               dateTime.month,
                             );
-                            meModel.fetchGetMonthName();
+                            approachesModel.fetchGetMonthName();
                           },
                         );
                       },
                       child: Text(
-                        meModel.selectDayText!,
+                        approachesModel.selectDayText,
                         style: const TextStyle(
                           color: kWhiteColor,
                           fontSize: 20,
@@ -103,18 +105,15 @@ class _BodyState extends State<Body> {
                 ],
               ),
               Container(
-                height: 500,
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 20,
-                ),
-                child: meModel.madeApproachesChart != null
-                    ? LineChartWidget(
-                        selectDay: meModel.selectDay,
-                      )
-                    : null,
-              ),
+                  height: 500,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 20,
+                  ),
+                  child: LineChartWidget(
+                    selectDay: approachesModel.selectDay,
+                  )),
             ],
           ),
         );

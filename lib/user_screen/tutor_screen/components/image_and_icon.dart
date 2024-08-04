@@ -15,8 +15,8 @@ class ImageAndIcons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
         return SizedBox(
           height: (size.height * 0.7) - 84,
           child: Row(
@@ -70,7 +70,7 @@ class ImageAndIcons extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         fit: BoxFit.contain,
                         image: AssetImage(
-                            "assets/images/men_${meModel.indexCoachMan + 1}.jpg"))),
+                            "assets/images/men_${usersModel.indexCoachMan + 1}.jpg"))),
               ),
             ],
           ),

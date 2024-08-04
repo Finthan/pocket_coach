@@ -15,8 +15,8 @@ class ChatWorkoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
         return Row(
           children: <Widget>[
             SizedBox(
@@ -33,7 +33,7 @@ class ChatWorkoutButton extends StatelessWidget {
                     backgroundColor: MaterialStateProperty.all(kPrimaryColor)),
                 onPressed: () {
                   var url =
-                      'https://t.me/${meModel.listOfTutors![meModel.indexCoachMan].number}';
+                      'https://t.me/${usersModel.listOfTutors[usersModel.indexCoachMan].number}';
                   launch(url);
                 }, //=> _openTelegramChat()
                 child: const Text(

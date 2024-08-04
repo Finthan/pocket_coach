@@ -34,9 +34,9 @@ class _ListWorkoutState extends State<ListWorkout>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
-        meModel.fetchUpdateTraining();
+    return Consumer<TrainingModel>(
+      builder: (context, trainingModel, child) {
+        trainingModel.fetchUpdateTraining();
 
         final DateTime todayDay = DateTime.now();
         var weekList = ["", "", ""];
@@ -54,19 +54,19 @@ class _ListWorkoutState extends State<ListWorkout>
             "assets/images/icon_no.png",
           },
         ];
-        if (meModel.isClient! && meModel.trainings != null) {
-          List<DateTime> dates = meModel.trainings!
+        if (trainingModel.isClient && trainingModel.trainings != []) {
+          List<DateTime> dates = trainingModel.trainings
               .map((training) => DateTime.parse(training.dateTime))
               .toList();
 
           dates.sort();
 
           List<Training> sortedTrainings = dates.map((date) {
-            return meModel.trainings!.firstWhere(
+            return trainingModel.trainings.firstWhere(
                 (training) => DateTime.parse(training.dateTime) == date);
           }).toList();
-          meModel.trainings!
-              .replaceRange(0, meModel.trainings!.length, sortedTrainings);
+          trainingModel.trainings
+              .replaceRange(0, trainingModel.trainings.length, sortedTrainings);
 
           int? day;
           int? month;
@@ -75,26 +75,22 @@ class _ListWorkoutState extends State<ListWorkout>
           for (var i = 0; i < 3; i++) {
             day = 0;
             month = 0;
-            for (var j = 0; j < meModel.trainings!.length; j++) {
-              if (todayDay.year <=
-                      DateTime.parse(meModel.trainings![j].dateTime).year &&
-                  todayDay.month <=
-                      DateTime.parse(meModel.trainings![j].dateTime).month &&
-                  todayDay.day <=
-                      DateTime.parse(meModel.trainings![j].dateTime).day &&
-                  week[0] !=
-                      DateTime.parse(meModel.trainings![j].dateTime).weekday &&
-                  week[1] !=
-                      DateTime.parse(meModel.trainings![j].dateTime).weekday) {
-                trainingWeek = DateTime.parse(meModel.trainings![j].dateTime);
-                week[i] =
-                    DateTime.parse(meModel.trainings![j].dateTime).weekday;
-                id.add(meModel.trainings![j].id);
-                day = DateTime.parse(meModel.trainings![j].dateTime).day;
-                month = DateTime.parse(meModel.trainings![j].dateTime).month;
+            for (var j = 0; j < trainingModel.trainings.length; j++) {
+              var dateTime =
+                  DateTime.parse(trainingModel.trainings[j].dateTime);
+              if (todayDay.year <= dateTime.year &&
+                  todayDay.month <= dateTime.month &&
+                  todayDay.day <= dateTime.day &&
+                  week[0] != dateTime.weekday &&
+                  week[1] != dateTime.weekday) {
+                trainingWeek = dateTime;
+                week[i] = dateTime.weekday;
+                id.add(trainingModel.trainings[j].id);
+                day = dateTime.day;
+                month = dateTime.month;
                 nameIconWorkout[i] = {
-                  meModel.trainings![j].nameWorkout,
-                  meModel.trainings![j].nameIcon
+                  trainingModel.trainings[j].nameWorkout,
+                  trainingModel.trainings[j].nameIcon
                 };
                 break;
               }
@@ -138,7 +134,7 @@ class _ListWorkoutState extends State<ListWorkout>
           children: [
             ListView(
               children: [
-                meModel.isClient ?? false
+                trainingModel.isClient
                     ? Column(
                         children: [
                           Container(
@@ -167,7 +163,7 @@ class _ListWorkoutState extends State<ListWorkout>
                             GestureDetector(
                               onTap: () {
                                 if (i == 0) {
-                                  meModel.idTraining = id[i];
+                                  trainingModel.idTraining = id[i];
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -251,7 +247,7 @@ class _ListWorkoutState extends State<ListWorkout>
                   child: SfCalendar(
                     firstDayOfWeek: 1,
                     view: CalendarView.month,
-                    dataSource: TrainingDataSource(meModel.trainings ?? []),
+                    dataSource: TrainingDataSource(trainingModel.trainings),
                     headerStyle: const CalendarHeaderStyle(
                       textStyle: TextStyle(
                         color: kWhiteColor,
@@ -291,10 +287,10 @@ class _ListWorkoutState extends State<ListWorkout>
                       );
                     },
                     onTap: (CalendarTapDetails details) {
-                      if (!meModel.isClient!) {
+                      if (!trainingModel.isClient) {
                         if (details.appointments != null &&
                             details.appointments!.isNotEmpty) {
-                          meModel.training =
+                          trainingModel.training =
                               details.appointments!.first as Training;
                           Navigator.push(
                             context,
@@ -306,28 +302,32 @@ class _ListWorkoutState extends State<ListWorkout>
                       }
                     },
                     onLongPress: (CalendarLongPressDetails details) {
-                      if (!meModel.isClient!) {
+                      if (!trainingModel.isClient) {
                         var isTraining = false;
-                        for (var i = 0; i < meModel.trainings!.length; i++) {
+                        for (var i = 0;
+                            i < trainingModel.trainings.length;
+                            i++) {
                           var string_1 = details.date.toString().substring(
                                 0,
                                 details.date.toString().length - 4,
                               );
-                          var string_2 = meModel.trainings![i].dateTime
+                          var string_2 = trainingModel.trainings[i].dateTime
                               .substring(
-                                  0, meModel.trainings![i].dateTime.length - 1);
+                                  0,
+                                  trainingModel.trainings[i].dateTime.length -
+                                      1);
                           if (string_1 == string_2) {
                             isTraining = true;
-                            meModel.indexTrainings = i;
+                            trainingModel.indexTrainings = i;
                           }
                         }
                         if (isTraining) {
-                          if (!meModel.isClient!) {
-                            meModel.showDeleteConfirmationDialog(
+                          if (!trainingModel.isClient) {
+                            trainingModel.showDeleteConfirmationDialog(
                                 details.appointments!.first, context);
                           }
                         } else {
-                          meModel.handleCellLongPress(details, context);
+                          trainingModel.handleCellLongPress(details, context);
                         }
                       }
                     },
@@ -349,7 +349,7 @@ class _ListWorkoutState extends State<ListWorkout>
                   child: IconButton(
                     onPressed: () {
                       var url =
-                          'https://t.me/${meModel.isClient! ? meModel.myTutor!.number : meModel.listOfMyClients![meModel.index].number}';
+                          'https://t.me/${trainingModel.isClient ? trainingModel.myTutor.number : trainingModel.listOfMyClients[trainingModel.index].number}';
                       launch(url);
                     },
                     icon: const Icon(

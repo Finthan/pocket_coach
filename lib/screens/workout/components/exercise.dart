@@ -21,12 +21,12 @@ class _ExerciseState extends State<Exercise> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
-        meModel.fetchGetExercise();
+    return Consumer<ExerciseModel>(
+      builder: (context, exerciseModel, child) {
+        exerciseModel.fetchGetExercise();
         return Scaffold(
           appBar: AppBar(
-            title: Text(meModel.training.nameWorkout),
+            title: Text(exerciseModel.training.nameWorkout),
             leading: IconButton(
               splashRadius: 20,
               icon: const Icon(
@@ -42,7 +42,7 @@ class _ExerciseState extends State<Exercise> {
                 splashRadius: 20,
                 icon: const Icon(Icons.add),
                 onPressed: () {
-                  meModel.addExercise(context);
+                  exerciseModel.addExercise(context);
                 },
               ),
             ],
@@ -60,15 +60,16 @@ class _ExerciseState extends State<Exercise> {
                   if (newIndex > oldIndex) {
                     newIndex -= 1;
                   }
-                  final item = meModel.data!.removeAt(oldIndex);
-                  meModel.data!.insert(newIndex, item);
-                  for (int i = 0; i < meModel.data!.length; i++) {
-                    meModel.data![i].ordering = i.toString();
+                  final item = exerciseModel.data.removeAt(oldIndex);
+                  exerciseModel.data.insert(newIndex, item);
+                  for (int i = 0; i < exerciseModel.data.length; i++) {
+                    exerciseModel.data[i].ordering = i.toString();
                   }
                 });
-                meModel.fetchExercise();
+
+                exerciseModel.fetchSetExercise();
               },
-              children: (meModel.data ?? [])
+              children: exerciseModel.data
                   .asMap()
                   .map((index, item) => MapEntry(
                         index,
@@ -84,7 +85,7 @@ class _ExerciseState extends State<Exercise> {
                               IconButton(
                                 splashRadius: 20,
                                 icon: const Icon(Icons.delete),
-                                onPressed: () => meModel.removeItem(
+                                onPressed: () => exerciseModel.removeItem(
                                   index,
                                   context,
                                 ),
@@ -94,7 +95,7 @@ class _ExerciseState extends State<Exercise> {
                           ),
                           onTap: () {
                             if (item.id != "0") {
-                              meModel.itemExercise = item;
+                              exerciseModel.itemExercise = item;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

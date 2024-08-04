@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 
 class AuthTextField extends StatefulWidget {
-  AuthTextField({
+  const AuthTextField({
     super.key,
     required TextEditingController loginTextController,
     required bool isFocused,
@@ -13,7 +13,7 @@ class AuthTextField extends StatefulWidget {
         _isFocused = isFocused;
 
   final TextEditingController _loginTextController;
-  bool _isFocused;
+  final bool _isFocused;
   final String label;
   final ValueChanged<bool> onFocusChanged;
 

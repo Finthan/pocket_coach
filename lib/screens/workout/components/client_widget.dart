@@ -26,54 +26,51 @@ class ClientWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            child: Container(
-              height: 100,
-              width: 200,
-              padding: const EdgeInsets.all(kDefaultPadding / 2),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10)),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 10),
-                    blurRadius: 50,
-                    color: kPrimaryColor.withOpacity(0.23),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 140,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "$title\n".toUpperCase(),
-                            style: const TextStyle(color: kTextColor),
+            height: 100,
+            width: 200,
+            padding: const EdgeInsets.all(kDefaultPadding / 2),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 10),
+                  blurRadius: 50,
+                  color: kPrimaryColor.withOpacity(0.23),
+                ),
+              ],
+            ),
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 140,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "$title\n".toUpperCase(),
+                          style: const TextStyle(color: kTextColor),
+                        ),
+                        TextSpan(
+                          text: cardnumber.toUpperCase(),
+                          style: TextStyle(
+                            color: kPrimaryColor.withOpacity(0.5),
                           ),
-                          TextSpan(
-                            text: cardnumber.toUpperCase(),
-                            style: TextStyle(
-                              color: kPrimaryColor.withOpacity(0.5),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  const Spacer(),
-                  Text(
-                    '$age',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: kPrimaryColor),
-                  ),
-                ],
-              ),
+                ),
+                const Spacer(),
+                Text(
+                  age,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: kPrimaryColor),
+                ),
+              ],
             ),
           ),
           GestureDetector(
@@ -95,7 +92,7 @@ class ClientWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
+                child: const Row(
                   children: [
                     Text("Выбрать пользователя"),
                   ],

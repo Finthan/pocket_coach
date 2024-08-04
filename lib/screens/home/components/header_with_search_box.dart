@@ -44,7 +44,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    "Привет ${meModel.me!.name}!",
+                    "Привет ${meModel.me.name}!",
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

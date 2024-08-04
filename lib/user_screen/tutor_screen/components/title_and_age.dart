@@ -14,8 +14,8 @@ class TitleAndPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
+    return Consumer<UsersModel>(
+      builder: (context, usersModel, child) {
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: kDefaultPadding,
@@ -34,7 +34,7 @@ class TitleAndPrice extends StatelessWidget {
                         children: [
                           TextSpan(
                             text:
-                                "${meModel.listOfTutors![meModel.indexCoachMan].name}\n",
+                                "${usersModel.listOfTutors[usersModel.indexCoachMan].name}\n",
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium!
@@ -44,7 +44,8 @@ class TitleAndPrice extends StatelessWidget {
                                 ),
                           ),
                           TextSpan(
-                            text: meModel.listOfTutors![meModel.indexCoachMan]
+                            text: usersModel
+                                .listOfTutors[usersModel.indexCoachMan]
                                 .typeOfTraining!,
                             style: const TextStyle(
                               fontSize: 20,
@@ -57,7 +58,7 @@ class TitleAndPrice extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      '₽${meModel.listOfTutors![meModel.indexCoachMan].cost!}',
+                      '₽${usersModel.listOfTutors[usersModel.indexCoachMan].cost!}',
                       style:
                           Theme.of(context).textTheme.headlineSmall!.copyWith(
                                 color: Colors.white,

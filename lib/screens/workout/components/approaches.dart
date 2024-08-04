@@ -23,12 +23,12 @@ class _ApproachesState extends State<Approaches> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeModel>(
-      builder: (context, meModel, child) {
-        meModel.fetchGetApproaches();
+    return Consumer<ApproachesModel>(
+      builder: (context, approachesModel, child) {
+        approachesModel.fetchGetApproaches();
         return Scaffold(
           appBar: AppBar(
-            title: Text(meModel.itemExercise.nameExercise),
+            title: Text(approachesModel.itemExercise.nameExercise),
             leading: IconButton(
               splashRadius: 20,
               icon: const Icon(
@@ -44,7 +44,7 @@ class _ApproachesState extends State<Approaches> {
                 splashRadius: 20,
                 icon: const Icon(Icons.add),
                 onPressed: () {
-                  meModel.addApproaches(context);
+                  approachesModel.addApproaches(context);
                 },
               ),
             ],
@@ -62,45 +62,46 @@ class _ApproachesState extends State<Approaches> {
                   if (newIndex > oldIndex) {
                     newIndex -= 1;
                   }
-                  final item = meModel.approachesList!.removeAt(oldIndex);
-                  meModel.approachesList!.insert(newIndex, item);
-                  for (int i = 0; i < meModel.approachesList!.length; i++) {
-                    meModel.approachesList![i].numberApproaches =
+                  final item =
+                      approachesModel.approachesList.removeAt(oldIndex);
+                  approachesModel.approachesList.insert(newIndex, item);
+                  for (int i = 0;
+                      i < approachesModel.approachesList.length;
+                      i++) {
+                    approachesModel.approachesList[i].numberApproaches =
                         (i + 1).toString();
                   }
-                  meModel.fetchSetApproaches();
+                  approachesModel.fetchSetApproaches();
                 });
               },
-              children: (meModel.approachesList != null)
-                  ? meModel.approachesList!
-                      .asMap()
-                      .map((index, item) => MapEntry(
-                            index,
-                            ListTile(
-                              textColor: Colors.white,
-                              iconColor: Colors.white,
-                              key: Key('$item$index'),
-                              title: Text(
-                                  "Номер подхода: ${item.numberApproaches}"),
-                              subtitle: Text(
-                                  "Вес: ${item.weight} Количество повторений: ${item.countList}"),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    splashRadius: 20,
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () => meModel
-                                        .removeItemApproaches(context, index),
-                                  ),
-                                  const Icon(Icons.menu),
-                                ],
+              children: approachesModel.approachesList
+                  .asMap()
+                  .map((index, item) => MapEntry(
+                        index,
+                        ListTile(
+                          textColor: Colors.white,
+                          iconColor: Colors.white,
+                          key: Key('$item$index'),
+                          title:
+                              Text("Номер подхода: ${item.numberApproaches}"),
+                          subtitle: Text(
+                              "Вес: ${item.weight} Количество повторений: ${item.countList}"),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                splashRadius: 20,
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => approachesModel
+                                    .removeItemApproaches(context, index),
                               ),
-                            ),
-                          ))
-                      .values
-                      .toList()
-                  : [],
+                              const Icon(Icons.menu),
+                            ],
+                          ),
+                        ),
+                      ))
+                  .values
+                  .toList(),
             ),
           ),
         );

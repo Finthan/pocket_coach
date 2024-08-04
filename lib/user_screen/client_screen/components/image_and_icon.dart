@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../constants.dart';
-import 'icon_card.dart';
 
 class ImageAndIcons extends StatelessWidget {
   const ImageAndIcons({
     super.key,
     required this.size,
-    required this.image,
   });
 
   final Size size;
-  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +65,9 @@ class ImageAndIcons extends StatelessWidget {
                 image: DecorationImage(
                     alignment: Alignment.centerLeft,
                     fit: BoxFit.contain,
-                    image: AssetImage(image))),
+                    image: AssetImage(
+                      'assets/images/men_0.jpg',
+                    ))),
           ),
         ],
       ),

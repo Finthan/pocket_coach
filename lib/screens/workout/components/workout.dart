@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../../../all_class.dart';
@@ -20,131 +17,22 @@ class Workout extends StatefulWidget {
 }
 
 class _WorkoutState extends State<Workout> {
-  late MeModel meModel;
+  late TrainingModel trainingModel;
+  late ApproachesModel approachesModel;
   final TextEditingController _countDoneApproaches = TextEditingController();
   final TextEditingController _weightDoneApproaches = TextEditingController();
-  ConnectionState _connectionState = ConnectionState.waiting;
-
-  List<ClientExercise> clientExercise = [];
-
-  final List<List<ApproachesList>> _data = [];
-
-  List<List<MadeApproachesList>> information = [];
 
   int _currentStep = 0;
   int _currentSubStep = 0;
 
-  ApproachesList currentData = ApproachesList(
-    id: '',
-    idExerciseWorkout: '',
-    countList: '',
-    numberApproaches: '',
-    weight: '',
-  );
-
   int i = 0;
-  int countWorkout = 0;
 
   @override
   void initState() {
     super.initState();
-    meModel = Provider.of<MeModel>(context, listen: false);
-    clientTrainings();
-  }
-
-  Future<List<List<ApproachesList>>> clientTrainings() async {
-    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-      'apiv': '1',
-      'action': 'get',
-      'object': 'clientexercise',
-      'authhash': meModel.authhash,
-      'id_workout': meModel.idTraining,
-    });
-    var response;
-    try {
-      response = await http.get(uri);
-    } catch (error) {}
-    String jsonString = "";
-    if (response.statusCode == 200 && meModel.isAuth == true) {
-      var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-      jsonString = jsonEncode(decodedResponse['data']);
-    }
-    try {
-      final json = await jsonDecode(jsonString) as List<dynamic>;
-      if (json.isNotEmpty) {
-        setState(() {
-          clientExercise = json
-              .map((dynamic e) => ClientExercise.fromJson(
-                    e as Map<String, dynamic>,
-                  ))
-              .toList();
-          countWorkout = clientExercise.length;
-        });
-      }
-    } catch (error) {}
-
-    var index = 0;
-    for (var element in clientExercise) {
-      Uri uriApproaches = Uri.http('gymapp.amadeya.net', '/api.php', {
-        'apiv': '1',
-        'action': 'get',
-        'object': 'getapproaches',
-        'authhash': meModel.authhash,
-        'id_exercise_workout': element.id,
-      });
-      var responseApproaches;
-      try {
-        responseApproaches = await http.get(uriApproaches);
-      } catch (error) {}
-      String jsonStringApproaches = "";
-      if (responseApproaches.statusCode == 200 && meModel.isAuth == true) {
-        var decodedResponseApproaches =
-            jsonDecode(utf8.decode(responseApproaches.bodyBytes)) as Map;
-        jsonStringApproaches = jsonEncode(decodedResponseApproaches['data']);
-      }
-      try {
-        final json = await jsonDecode(jsonStringApproaches) as List<dynamic>;
-
-        if (json.isNotEmpty) {
-          if (_data.length <= index) {
-            _data.add([]);
-            setState(() {
-              _data[index].addAll(json
-                  .map((dynamic e) =>
-                      ApproachesList.fromJson(e as Map<String, dynamic>))
-                  .toList());
-            });
-          }
-          index++;
-        }
-      } catch (error) {}
-    }
-    setState(() {
-      if (clientExercise.isNotEmpty && _data.isNotEmpty) {
-        _connectionState = ConnectionState.done;
-      }
-    });
-    return _data;
-  }
-
-  Future<void> fetchApproachers() async {
-    List<List<Map<String, dynamic>>> jsonData = information
-        .map<List<Map<String, dynamic>>>((infoList) => infoList
-            .map<Map<String, dynamic>>((info) => info.toJson())
-            .toList())
-        .toList();
-
-    Uri uri = Uri.http('gymapp.amadeya.net', '/api.php', {
-      'apiv': '1',
-      'action': 'set',
-      'object': 'madeapproaches',
-      'authhash': meModel.authhash,
-    });
-    await http.post(uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(jsonData));
+    trainingModel = Provider.of<TrainingModel>(context, listen: false);
+    approachesModel = Provider.of<ApproachesModel>(context, listen: false);
+    approachesModel.fetchClientTrainings();
   }
 
   void _showDialog() {
@@ -170,7 +58,7 @@ class _WorkoutState extends State<Workout> {
             TextButton(
               child: const Text("Сохранить"),
               onPressed: () {
-                fetchApproachers();
+                approachesModel.fetchApproachers();
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
@@ -196,10 +84,10 @@ class _WorkoutState extends State<Workout> {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: clientTrainings(),
+        future: approachesModel.clientTrainings(),
         builder: (BuildContext context,
             AsyncSnapshot<List<List<ApproachesList>>> snapshot) {
-          if (_connectionState == ConnectionState.waiting) {
+          if (approachesModel.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else {
             return Stepper(
@@ -207,14 +95,15 @@ class _WorkoutState extends State<Workout> {
               onStepContinue: _onStepContinue,
               onStepCancel: _onStepCancel,
               steps: [
-                for (i = 0; i < countWorkout; i++)
+                for (i = 0; i < trainingModel.countWorkout; i++)
                   Step(
-                    state: _currentStep > i && _currentStep < countWorkout
+                    state: _currentStep > i &&
+                            _currentStep < trainingModel.countWorkout
                         ? StepState.complete
                         : StepState.disabled,
                     isActive: _currentStep == i,
                     title: Text(
-                      clientExercise[i].nameExercise,
+                      approachesModel.clientExercise[i].nameExercise,
                       style: const TextStyle(color: kWhiteColor),
                     ),
                     content: Row(
@@ -227,7 +116,7 @@ class _WorkoutState extends State<Workout> {
                               width: widthContext * 0.35,
                               padding: const EdgeInsets.only(top: 15),
                               child: Text(
-                                "Подход ${_data[_currentStep][_currentSubStep].numberApproaches}",
+                                "Подход ${approachesModel.dataApproachesList[_currentStep][_currentSubStep].numberApproaches}",
                                 style: const TextStyle(
                                   color: kNavBarIconColor,
                                   fontSize: 16,
@@ -238,7 +127,7 @@ class _WorkoutState extends State<Workout> {
                               width: widthContext * 0.35,
                               padding: const EdgeInsets.only(top: 15),
                               child: Text(
-                                "Количество повторений ${_data[_currentStep][_currentSubStep].countList}",
+                                "Количество повторений ${approachesModel.dataApproachesList[_currentStep][_currentSubStep].countList}",
                                 style: const TextStyle(
                                   color: kWhiteColor,
                                 ),
@@ -252,7 +141,7 @@ class _WorkoutState extends State<Workout> {
                                 bottom: 15,
                               ),
                               child: Text(
-                                "Вес ${_data[_currentStep][_currentSubStep].weight}",
+                                "Вес ${approachesModel.dataApproachesList[_currentStep][_currentSubStep].weight}",
                                 style: const TextStyle(color: kWhiteColor),
                               ),
                             ),
@@ -262,7 +151,7 @@ class _WorkoutState extends State<Workout> {
                           children: [
                             SizedBox(
                               width: widthContext * 0.43,
-                              child: Text(
+                              child: const Text(
                                 'Введите количество выполненых повторений',
                                 style: TextStyle(color: kNavBarIconColor),
                               ),
@@ -321,9 +210,14 @@ class _WorkoutState extends State<Workout> {
                       width: 125,
                       child: ElevatedButton(
                         onPressed: _onStepContinue,
-                        child: Text((_currentStep == _data.length - 1) &&
+                        child: Text((_currentStep ==
+                                    approachesModel.dataApproachesList.length -
+                                        1) &&
                                 (_currentSubStep ==
-                                    _data[_currentStep].length - 1)
+                                    approachesModel
+                                            .dataApproachesList[_currentStep]
+                                            .length -
+                                        1)
                             ? 'Готово'
                             : 'Продолжить'),
                       ),
@@ -347,35 +241,42 @@ class _WorkoutState extends State<Workout> {
   }
 
   void _onStepContinue() {
-    if (_currentSubStep < _data[_currentStep].length - 1) {
+    if (_currentSubStep <
+        approachesModel.dataApproachesList[_currentStep].length - 1) {
       setState(() {
         if (_weightDoneApproaches.text != '' &&
             _countDoneApproaches.text != '') {
-          if (information.length <= _currentStep) {
-            information.add([]);
+          if (approachesModel.information.length <= _currentStep) {
+            approachesModel.information.add([]);
           }
-          if (_currentSubStep == information[_currentStep].length) {
-            information[_currentStep].add(
+          if (_currentSubStep ==
+              approachesModel.information[_currentStep].length) {
+            approachesModel.information[_currentStep].add(
               MadeApproachesList(
-                idApproaches: _data[_currentStep][_currentSubStep].id,
+                idApproaches: approachesModel
+                    .dataApproachesList[_currentStep][_currentSubStep].id,
                 weight: _weightDoneApproaches.text,
                 countList: _countDoneApproaches.text,
               ),
             );
           } else {
-            information[_currentStep][_currentSubStep] = MadeApproachesList(
-              idApproaches: _data[_currentStep][_currentSubStep].id,
+            approachesModel.information[_currentStep][_currentSubStep] =
+                MadeApproachesList(
+              idApproaches: approachesModel
+                  .dataApproachesList[_currentStep][_currentSubStep].id,
               weight: _weightDoneApproaches.text,
               countList: _countDoneApproaches.text,
             );
           }
           _currentSubStep++;
-          currentData = _data[_currentStep][_currentSubStep];
-          if (information[_currentStep].length > _currentSubStep) {
-            _countDoneApproaches.text =
-                information[_currentStep][_currentSubStep].countList;
-            _weightDoneApproaches.text =
-                information[_currentStep][_currentSubStep].weight;
+          trainingModel.currentData =
+              approachesModel.dataApproachesList[_currentStep][_currentSubStep];
+          if (approachesModel.information[_currentStep].length >
+              _currentSubStep) {
+            _countDoneApproaches.text = approachesModel
+                .information[_currentStep][_currentSubStep].countList;
+            _weightDoneApproaches.text = approachesModel
+                .information[_currentStep][_currentSubStep].weight;
           } else {
             _countDoneApproaches.clear();
             _weightDoneApproaches.clear();
@@ -383,32 +284,37 @@ class _WorkoutState extends State<Workout> {
         }
       });
     } else {
-      if (_currentStep < _data.length - 1) {
+      if (_currentStep < approachesModel.dataApproachesList.length - 1) {
         setState(() {
           if (_weightDoneApproaches.text != '' &&
               _countDoneApproaches.text != '') {
-            if (_currentSubStep == information[_currentStep].length) {
-              information[_currentStep].add(
+            if (_currentSubStep ==
+                approachesModel.information[_currentStep].length) {
+              approachesModel.information[_currentStep].add(
                 MadeApproachesList(
-                  idApproaches: _data[_currentStep][_currentSubStep].id,
+                  idApproaches: approachesModel
+                      .dataApproachesList[_currentStep][_currentSubStep].id,
                   weight: _weightDoneApproaches.text,
                   countList: _countDoneApproaches.text,
                 ),
               );
             } else {
-              information[_currentStep][_currentSubStep] = MadeApproachesList(
-                idApproaches: _data[_currentStep][_currentSubStep].id,
+              approachesModel.information[_currentStep][_currentSubStep] =
+                  MadeApproachesList(
+                idApproaches: approachesModel
+                    .dataApproachesList[_currentStep][_currentSubStep].id,
                 weight: _weightDoneApproaches.text,
                 countList: _countDoneApproaches.text,
               );
             }
-            if ((information[_currentStep].length - 1 == _currentSubStep) &&
-                (information.length > _currentStep + 1)) {
-              if (information[_currentStep + 1].length > 0) {
+            if ((approachesModel.information[_currentStep].length - 1 ==
+                    _currentSubStep) &&
+                (approachesModel.information.length > _currentStep + 1)) {
+              if (approachesModel.information[_currentStep + 1].isNotEmpty) {
                 _countDoneApproaches.text =
-                    information[_currentStep + 1][0].countList;
+                    approachesModel.information[_currentStep + 1][0].countList;
                 _weightDoneApproaches.text =
-                    information[_currentStep + 1][0].weight;
+                    approachesModel.information[_currentStep + 1][0].weight;
               }
             } else {
               _countDoneApproaches.clear();
@@ -416,32 +322,38 @@ class _WorkoutState extends State<Workout> {
             }
             _currentStep++;
             _currentSubStep = 0;
-            currentData = _data[_currentStep][_currentSubStep];
+            trainingModel.currentData = approachesModel
+                .dataApproachesList[_currentStep][_currentSubStep];
           }
         });
       } else {
         if (_weightDoneApproaches.text != '' &&
             _countDoneApproaches.text != '') {
-          if (_currentSubStep > information[_currentStep].length - 1) {
-            information[_currentStep].add(
+          if (_currentSubStep >
+              approachesModel.information[_currentStep].length - 1) {
+            approachesModel.information[_currentStep].add(
               MadeApproachesList(
-                idApproaches: _data[_currentStep][_currentSubStep].id,
+                idApproaches: approachesModel
+                    .dataApproachesList[_currentStep][_currentSubStep].id,
                 weight: _weightDoneApproaches.text,
                 countList: _countDoneApproaches.text,
               ),
             );
           } else {
-            information[_currentStep][_currentSubStep] = MadeApproachesList(
-              idApproaches: _data[_currentStep][_currentSubStep].id,
+            approachesModel.information[_currentStep][_currentSubStep] =
+                MadeApproachesList(
+              idApproaches: approachesModel
+                  .dataApproachesList[_currentStep][_currentSubStep].id,
               weight: _weightDoneApproaches.text,
               countList: _countDoneApproaches.text,
             );
           }
-          if (information[_currentStep].length > _currentSubStep) {
-            _countDoneApproaches.text =
-                information[_currentStep][_currentSubStep].countList;
-            _weightDoneApproaches.text =
-                information[_currentStep][_currentSubStep].weight;
+          if (approachesModel.information[_currentStep].length >
+              _currentSubStep) {
+            _countDoneApproaches.text = approachesModel
+                .information[_currentStep][_currentSubStep].countList;
+            _weightDoneApproaches.text = approachesModel
+                .information[_currentStep][_currentSubStep].weight;
           } else {
             _countDoneApproaches.clear();
             _weightDoneApproaches.clear();
@@ -456,21 +368,24 @@ class _WorkoutState extends State<Workout> {
     if (_currentSubStep > 0) {
       setState(() {
         _currentSubStep--;
-        currentData = _data[_currentStep][_currentSubStep];
-        _countDoneApproaches.text =
-            information[_currentStep][_currentSubStep].countList;
+        trainingModel.currentData =
+            approachesModel.dataApproachesList[_currentStep][_currentSubStep];
+        _countDoneApproaches.text = approachesModel
+            .information[_currentStep][_currentSubStep].countList;
         _weightDoneApproaches.text =
-            information[_currentStep][_currentSubStep].weight;
+            approachesModel.information[_currentStep][_currentSubStep].weight;
       });
     } else if (_currentStep > 0) {
       setState(() {
         _currentStep--;
-        _currentSubStep = _data[_currentStep].length - 1;
-        currentData = _data[_currentStep][_currentSubStep];
-        _countDoneApproaches.text =
-            information[_currentStep][_currentSubStep].countList;
+        _currentSubStep =
+            approachesModel.dataApproachesList[_currentStep].length - 1;
+        trainingModel.currentData =
+            approachesModel.dataApproachesList[_currentStep][_currentSubStep];
+        _countDoneApproaches.text = approachesModel
+            .information[_currentStep][_currentSubStep].countList;
         _weightDoneApproaches.text =
-            information[_currentStep][_currentSubStep].weight;
+            approachesModel.information[_currentStep][_currentSubStep].weight;
       });
     }
   }
